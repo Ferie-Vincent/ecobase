@@ -1,12 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { BarChart3, Users, Globe, Home } from "lucide-react";
+import { BarChart3, Users, Globe, Home, TrendingUp } from "lucide-react";
 
 const navItems = [
   { path: "/", label: "Accueil", icon: Home },
   { path: "/integration", label: "Intégration Africaine", icon: Globe },
   { path: "/diaspora", label: "Ivoiriens de l'Extérieur", icon: Users },
-  { path: "/circulation", label: "Libre Circulation", icon: BarChart3 }
+  { path: "/circulation", label: "Libre Circulation", icon: BarChart3 },
+  { path: "/performance", label: "Performance", icon: TrendingUp }
 ];
 
 export const Navigation = () => {

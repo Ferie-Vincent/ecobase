@@ -201,7 +201,8 @@ export const structuresData = [
       "Direction Politiques Commerce et Libre Circulation",
       "Direction Accueil, Orientation et Suivi Réinsertion",
       "Direction Mobilisation Compétences et Ressources",
-      "Direction Action Sociale"
+      "Direction Action Sociale",
+      "Direction Générale de l'Intégration Africaine (DGIA)"
     ]
   },
   {
@@ -213,17 +214,166 @@ export const structuresData = [
       "Direction Générale des Douanes",
       "Direction Commerce Extérieur",
       "CNPS",
-      "ONECI"
+      "ONECI",
+      "INS (Institut National de la Statistique)"
     ]
   },
   {
     category: "Institutions Internationales",
     structures: [
       "CEDEAO",
+      "Union Africaine (UA)",
       "Banque Africaine de Développement",
       "Organisation Internationale Migration",
       "Office Français de l'Immigration",
-      "AVSI"
+      "AVSI",
+      "UNTRADE"
     ]
+  }
+];
+
+export const performanceIndicators = {
+  administration: [
+    {
+      objectif: "Promouvoir une administration moderne et performante",
+      indicateurs: [
+        {
+          nom: "Taux de réalisation des activités planifiées",
+          reference: "68%",
+          cible2022: "69%",
+          cible2023: "70%",
+          cible2024: "72%"
+        },
+        {
+          nom: "Taux de digitalisation des services du Ministère",
+          reference: "20%",
+          cible2022: "25%",
+          cible2023: "28%",
+          cible2024: "32%"
+        },
+        {
+          nom: "Nombre de partenaires mobilisés",
+          reference: "5",
+          cible2022: "5",
+          cible2023: "6",
+          cible2024: "7"
+        },
+        {
+          nom: "Taux de participation aux réunions régionales",
+          reference: "33%",
+          cible2022: "40%",
+          cible2023: "45%",
+          cible2024: "50%"
+        }
+      ]
+    },
+    {
+      objectif: "Système performant de planification et suivi-évaluation",
+      indicateurs: [
+        {
+          nom: "Proportion des Directions avec plans d'actions",
+          reference: "26%",
+          cible2022: "30%",
+          cible2023: "35%",
+          cible2024: "40%"
+        },
+        {
+          nom: "Proportion des services rédigeant des rapports trimestriels",
+          reference: "13%",
+          cible2022: "20%",
+          cible2023: "25%",
+          cible2024: "30%"
+        },
+        {
+          nom: "Taux d'exécution des dépenses en biens et services",
+          reference: "89%",
+          cible2022: "90%",
+          cible2023: "95%",
+          cible2024: "95%"
+        }
+      ]
+    }
+  ],
+  integrationAfricaine: [
+    {
+      objectif: "Promouvoir une meilleure intégration africaine",
+      indicateurs: [
+        {
+          nom: "Indice d'intégration Régionale en Afrique (IIRA)",
+          reference: "0.55",
+          cible2022: "0.6",
+          cible2023: "0.64",
+          cible2024: "0.67"
+        }
+      ]
+    },
+    {
+      objectif: "Renforcer le rôle de la CI en matière d'intégration",
+      indicateurs: [
+        {
+          nom: "Taux de pénétration des produits ivoiriens sur marchés africains",
+          reference: "3%",
+          cible2022: "3.5%",
+          cible2023: "4.2%",
+          cible2024: "5%"
+        },
+        {
+          nom: "Nombre d'entreprises ivoiriennes assistées sur marchés africains",
+          reference: "5",
+          cible2022: "8",
+          cible2023: "12",
+          cible2024: "15"
+        }
+      ]
+    },
+    {
+      objectif: "Contribution de l'intégration au développement économique",
+      indicateurs: [
+        {
+          nom: "Nombre d'agréments d'entreprises au SLE CEDEAO",
+          reference: "20",
+          cible2022: "25",
+          cible2023: "30",
+          cible2024: "35"
+        },
+        {
+          nom: "Taux de mise en œuvre de la stratégie APE intérimaires",
+          reference: "45%",
+          cible2022: "55%",
+          cible2023: "65%",
+          cible2024: "75%"
+        }
+      ]
+    }
+  ]
+};
+
+export const projectsData = [
+  {
+    id: 1,
+    titre: "Administration Générale",
+    dateDebut: "2021-01-10",
+    dateFin: "2021-12-31",
+    leader: "Service Planification",
+    niveau: 51,
+    statut: "En cours"
+  },
+  {
+    id: 2,
+    titre: "Intégration Régionale",
+    dateDebut: "2021-01-10",
+    dateFin: "2021-12-28",
+    leader: "DGIA",
+    niveau: 78,
+    statut: "En cours"
+  },
+  {
+    id: 3,
+    titre: "Mobilisation de la Diaspora",
+    dateDebut: "2021-02-01",
+    dateFin: "2021-11-30",
+    leader: "Direction Mobilisation Compétences",
+    niveau: 62,
+    statut: "En cours"
   }
 ];

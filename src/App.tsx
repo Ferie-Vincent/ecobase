@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Integration from "./pages/Integration";
 import Diaspora from "./pages/Diaspora";
 import Circulation from "./pages/Circulation";
+import Performance from "./pages/Performance";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/integration" element={<Integration />} />
           <Route path="/diaspora" element={<Diaspora />} />
           <Route path="/circulation" element={<Circulation />} />
+          <Route path="/performance" element={<Performance />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
