@@ -1,11 +1,16 @@
 import { IndicatorCard } from "@/components/IndicatorCard";
-import { circulationIndicators, studentsData } from "@/data/mockData";
+import { circulationIndicatorsByYear, studentsData } from "@/data/mockData";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { YearSelector } from "@/components/YearSelector";
+import { useState } from "react";
 
 const Circulation = () => {
   const categories = ["Population", "Transport"];
+  const availableYears = Object.keys(circulationIndicatorsByYear).sort().reverse();
+  const [selectedYear, setSelectedYear] = useState(availableYears[0]);
+  const circulationIndicators = circulationIndicatorsByYear[selectedYear];
   
   return (
     <div className="min-h-screen bg-background">
@@ -19,6 +24,13 @@ const Circulation = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 space-y-8">
+        {/* Year Selector */}
+        <YearSelector 
+          selectedYear={selectedYear} 
+          onYearChange={setSelectedYear} 
+          availableYears={availableYears}
+        />
+
         {/* Filter by Category */}
         <div className="flex flex-wrap gap-3">
           <Badge variant="outline" className="text-sm cursor-pointer hover:bg-muted">

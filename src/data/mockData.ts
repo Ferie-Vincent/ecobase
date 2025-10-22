@@ -25,147 +25,157 @@ export const dashboardStats = {
   }
 };
 
-export const integrationIndicators = [
-  {
-    name: "Résilience climatique",
-    value: 67.5,
-    unit: "%",
-    trend: "+5.2%",
-    category: "CILSS"
-  },
-  {
-    name: "Développement Capital Humain",
-    value: 0.68,
-    unit: "indice",
-    trend: "+0.04",
-    category: "Social"
-  },
-  {
-    name: "Entreprises SLEC agréées",
-    value: 245,
-    unit: "entreprises",
-    trend: "+18",
-    category: "Commerce"
-  },
-  {
-    name: "Produits SLEC agréés",
-    value: 1834,
-    unit: "produits",
-    trend: "+127",
-    category: "Commerce"
-  },
-  {
-    name: "Exportations SLEC",
-    value: 45.6,
-    unit: "Mds FCFA",
-    trend: "+12.3%",
-    category: "Commerce"
-  },
-  {
-    name: "Part exportations SLE",
-    value: 34.2,
-    unit: "%",
-    trend: "+3.1%",
-    category: "Commerce"
-  }
-];
+export const integrationIndicatorsByYear: Record<string, Array<{
+  name: string;
+  value: number;
+  unit: string;
+  trend: string;
+  category: string;
+}>> = {
+  "2020": [
+    { name: "Résilience climatique", value: 58.3, unit: "%", trend: "+2.1%", category: "CILSS" },
+    { name: "Développement Capital Humain", value: 0.60, unit: "indice", trend: "+0.02", category: "Social" },
+    { name: "Entreprises SLEC agréées", value: 189, unit: "entreprises", trend: "+12", category: "Commerce" },
+    { name: "Produits SLEC agréés", value: 1456, unit: "produits", trend: "+98", category: "Commerce" },
+    { name: "Exportations SLEC", value: 32.4, unit: "Mds FCFA", trend: "+8.2%", category: "Commerce" },
+    { name: "Part exportations SLE", value: 26.8, unit: "%", trend: "+1.8%", category: "Commerce" }
+  ],
+  "2021": [
+    { name: "Résilience climatique", value: 61.2, unit: "%", trend: "+2.9%", category: "CILSS" },
+    { name: "Développement Capital Humain", value: 0.63, unit: "indice", trend: "+0.03", category: "Social" },
+    { name: "Entreprises SLEC agréées", value: 207, unit: "entreprises", trend: "+18", category: "Commerce" },
+    { name: "Produits SLEC agréés", value: 1589, unit: "produits", trend: "+133", category: "Commerce" },
+    { name: "Exportations SLEC", value: 37.8, unit: "Mds FCFA", trend: "+9.5%", category: "Commerce" },
+    { name: "Part exportations SLE", value: 29.3, unit: "%", trend: "+2.5%", category: "Commerce" }
+  ],
+  "2022": [
+    { name: "Résilience climatique", value: 64.1, unit: "%", trend: "+2.9%", category: "CILSS" },
+    { name: "Développement Capital Humain", value: 0.65, unit: "indice", trend: "+0.02", category: "Social" },
+    { name: "Entreprises SLEC agréées", value: 227, unit: "entreprises", trend: "+20", category: "Commerce" },
+    { name: "Produits SLEC agréés", value: 1707, unit: "produits", trend: "+118", category: "Commerce" },
+    { name: "Exportations SLEC", value: 41.3, unit: "Mds FCFA", trend: "+10.8%", category: "Commerce" },
+    { name: "Part exportations SLE", value: 31.1, unit: "%", trend: "+1.8%", category: "Commerce" }
+  ],
+  "2023": [
+    { name: "Résilience climatique", value: 67.5, unit: "%", trend: "+3.4%", category: "CILSS" },
+    { name: "Développement Capital Humain", value: 0.68, unit: "indice", trend: "+0.03", category: "Social" },
+    { name: "Entreprises SLEC agréées", value: 245, unit: "entreprises", trend: "+18", category: "Commerce" },
+    { name: "Produits SLEC agréés", value: 1834, unit: "produits", trend: "+127", category: "Commerce" },
+    { name: "Exportations SLEC", value: 45.6, unit: "Mds FCFA", trend: "+12.3%", category: "Commerce" },
+    { name: "Part exportations SLE", value: 34.2, unit: "%", trend: "+3.1%", category: "Commerce" }
+  ],
+  "2024": [
+    { name: "Résilience climatique", value: 70.8, unit: "%", trend: "+3.3%", category: "CILSS" },
+    { name: "Développement Capital Humain", value: 0.71, unit: "indice", trend: "+0.03", category: "Social" },
+    { name: "Entreprises SLEC agréées", value: 268, unit: "entreprises", trend: "+23", category: "Commerce" },
+    { name: "Produits SLEC agréés", value: 1978, unit: "produits", trend: "+144", category: "Commerce" },
+    { name: "Exportations SLEC", value: 51.2, unit: "Mds FCFA", trend: "+13.5%", category: "Commerce" },
+    { name: "Part exportations SLE", value: 37.6, unit: "%", trend: "+3.4%", category: "Commerce" }
+  ]
+};
 
-export const diasporaIndicators = [
-  {
-    name: "Sensibilisés immigration clandestine",
-    value: 12450,
-    unit: "personnes",
-    trend: "+2340",
-    category: "Sensibilisation"
-  },
-  {
-    name: "Sensibilisés insertion CI",
-    value: 9870,
-    unit: "personnes",
-    trend: "+1890",
-    category: "Sensibilisation"
-  },
-  {
-    name: "Ivoiriens réinsérés",
-    value: 3890,
-    unit: "personnes",
-    trend: "+456",
-    category: "Réinsertion"
-  },
-  {
-    name: "Intégrés Fonction Publique",
-    value: 567,
-    unit: "personnes",
-    trend: "+89",
-    category: "Emploi"
-  },
-  {
-    name: "Transferts d'argent / PIB",
-    value: 8.4,
-    unit: "%",
-    trend: "+0.6%",
-    category: "Économie"
-  },
-  {
-    name: "Enregistrés CNPS",
-    value: 8920,
-    unit: "personnes",
-    trend: "+1240",
-    category: "Social"
-  },
-  {
-    name: "Ivoiriens assistés",
-    value: 4560,
-    unit: "personnes",
-    trend: "+678",
-    category: "Assistance"
-  }
-];
+export const diasporaIndicatorsByYear: Record<string, Array<{
+  name: string;
+  value: number;
+  unit: string;
+  trend: string;
+  category: string;
+}>> = {
+  "2020": [
+    { name: "Sensibilisés immigration clandestine", value: 8920, unit: "personnes", trend: "+1450", category: "Sensibilisation" },
+    { name: "Sensibilisés insertion CI", value: 7120, unit: "personnes", trend: "+980", category: "Sensibilisation" },
+    { name: "Ivoiriens réinsérés", value: 2780, unit: "personnes", trend: "+290", category: "Réinsertion" },
+    { name: "Intégrés Fonction Publique", value: 389, unit: "personnes", trend: "+45", category: "Emploi" },
+    { name: "Transferts d'argent / PIB", value: 6.8, unit: "%", trend: "+0.4%", category: "Économie" },
+    { name: "Enregistrés CNPS", value: 6340, unit: "personnes", trend: "+720", category: "Social" },
+    { name: "Ivoiriens assistés", value: 3120, unit: "personnes", trend: "+380", category: "Assistance" }
+  ],
+  "2021": [
+    { name: "Sensibilisés immigration clandestine", value: 10230, unit: "personnes", trend: "+1310", category: "Sensibilisation" },
+    { name: "Sensibilisés insertion CI", value: 8340, unit: "personnes", trend: "+1220", category: "Sensibilisation" },
+    { name: "Ivoiriens réinsérés", value: 3210, unit: "personnes", trend: "+430", category: "Réinsertion" },
+    { name: "Intégrés Fonction Publique", value: 456, unit: "personnes", trend: "+67", category: "Emploi" },
+    { name: "Transferts d'argent / PIB", value: 7.4, unit: "%", trend: "+0.6%", category: "Économie" },
+    { name: "Enregistrés CNPS", value: 7450, unit: "personnes", trend: "+1110", category: "Social" },
+    { name: "Ivoiriens assistés", value: 3680, unit: "personnes", trend: "+560", category: "Assistance" }
+  ],
+  "2022": [
+    { name: "Sensibilisés immigration clandestine", value: 11340, unit: "personnes", trend: "+1110", category: "Sensibilisation" },
+    { name: "Sensibilisés insertion CI", value: 9010, unit: "personnes", trend: "+670", category: "Sensibilisation" },
+    { name: "Ivoiriens réinsérés", value: 3520, unit: "personnes", trend: "+310", category: "Réinsertion" },
+    { name: "Intégrés Fonction Publique", value: 512, unit: "personnes", trend: "+56", category: "Emploi" },
+    { name: "Transferts d'argent / PIB", value: 7.9, unit: "%", trend: "+0.5%", category: "Économie" },
+    { name: "Enregistrés CNPS", value: 8120, unit: "personnes", trend: "+670", category: "Social" },
+    { name: "Ivoiriens assistés", value: 4050, unit: "personnes", trend: "+370", category: "Assistance" }
+  ],
+  "2023": [
+    { name: "Sensibilisés immigration clandestine", value: 12450, unit: "personnes", trend: "+1110", category: "Sensibilisation" },
+    { name: "Sensibilisés insertion CI", value: 9870, unit: "personnes", trend: "+860", category: "Sensibilisation" },
+    { name: "Ivoiriens réinsérés", value: 3890, unit: "personnes", trend: "+370", category: "Réinsertion" },
+    { name: "Intégrés Fonction Publique", value: 567, unit: "personnes", trend: "+55", category: "Emploi" },
+    { name: "Transferts d'argent / PIB", value: 8.4, unit: "%", trend: "+0.5%", category: "Économie" },
+    { name: "Enregistrés CNPS", value: 8920, unit: "personnes", trend: "+800", category: "Social" },
+    { name: "Ivoiriens assistés", value: 4560, unit: "personnes", trend: "+510", category: "Assistance" }
+  ],
+  "2024": [
+    { name: "Sensibilisés immigration clandestine", value: 13780, unit: "personnes", trend: "+1330", category: "Sensibilisation" },
+    { name: "Sensibilisés insertion CI", value: 10890, unit: "personnes", trend: "+1020", category: "Sensibilisation" },
+    { name: "Ivoiriens réinsérés", value: 4320, unit: "personnes", trend: "+430", category: "Réinsertion" },
+    { name: "Intégrés Fonction Publique", value: 634, unit: "personnes", trend: "+67", category: "Emploi" },
+    { name: "Transferts d'argent / PIB", value: 9.1, unit: "%", trend: "+0.7%", category: "Économie" },
+    { name: "Enregistrés CNPS", value: 9870, unit: "personnes", trend: "+950", category: "Social" },
+    { name: "Ivoiriens assistés", value: 5120, unit: "personnes", trend: "+560", category: "Assistance" }
+  ]
+};
 
-export const circulationIndicators = [
-  {
-    name: "Ressortissants africains en CI",
-    value: 28.5,
-    unit: "% population",
-    trend: "+1.2%",
-    category: "Population"
-  },
-  {
-    name: "Trafic ferroviaire UEMOA",
-    value: 145000,
-    unit: "voyageurs",
-    trend: "+8900",
-    category: "Transport"
-  },
-  {
-    name: "Voyageurs aériens UEMOA",
-    value: 342000,
-    unit: "voyageurs",
-    trend: "+23400",
-    category: "Transport"
-  },
-  {
-    name: "Voyageurs aériens CEDEAO",
-    value: 589000,
-    unit: "voyageurs",
-    trend: "+45600",
-    category: "Transport"
-  },
-  {
-    name: "Trafic routier UEMOA",
-    value: 2340000,
-    unit: "voyageurs",
-    trend: "+156000",
-    category: "Transport"
-  },
-  {
-    name: "Trafic routier CEDEAO",
-    value: 3450000,
-    unit: "voyageurs",
-    trend: "+234000",
-    category: "Transport"
-  }
-];
+export const circulationIndicatorsByYear: Record<string, Array<{
+  name: string;
+  value: number;
+  unit: string;
+  trend: string;
+  category: string;
+}>> = {
+  "2020": [
+    { name: "Ressortissants africains en CI", value: 25.3, unit: "% population", trend: "+0.8%", category: "Population" },
+    { name: "Trafic ferroviaire UEMOA", value: 118000, unit: "voyageurs", trend: "+5200", category: "Transport" },
+    { name: "Voyageurs aériens UEMOA", value: 276000, unit: "voyageurs", trend: "+12800", category: "Transport" },
+    { name: "Voyageurs aériens CEDEAO", value: 467000, unit: "voyageurs", trend: "+28900", category: "Transport" },
+    { name: "Trafic routier UEMOA", value: 1890000, unit: "voyageurs", trend: "+98000", category: "Transport" },
+    { name: "Trafic routier CEDEAO", value: 2780000, unit: "voyageurs", trend: "+145000", category: "Transport" }
+  ],
+  "2021": [
+    { name: "Ressortissants africains en CI", value: 26.4, unit: "% population", trend: "+1.1%", category: "Population" },
+    { name: "Trafic ferroviaire UEMOA", value: 128000, unit: "voyageurs", trend: "+10000", category: "Transport" },
+    { name: "Voyageurs aériens UEMOA", value: 298000, unit: "voyageurs", trend: "+22000", category: "Transport" },
+    { name: "Voyageurs aériens CEDEAO", value: 512000, unit: "voyageurs", trend: "+45000", category: "Transport" },
+    { name: "Trafic routier UEMOA", value: 2070000, unit: "voyageurs", trend: "+180000", category: "Transport" },
+    { name: "Trafic routier CEDEAO", value: 3020000, unit: "voyageurs", trend: "+240000", category: "Transport" }
+  ],
+  "2022": [
+    { name: "Ressortissants africains en CI", value: 27.2, unit: "% population", trend: "+0.8%", category: "Population" },
+    { name: "Trafic ferroviaire UEMOA", value: 135000, unit: "voyageurs", trend: "+7000", category: "Transport" },
+    { name: "Voyageurs aériens UEMOA", value: 318000, unit: "voyageurs", trend: "+20000", category: "Transport" },
+    { name: "Voyageurs aériens CEDEAO", value: 548000, unit: "voyageurs", trend: "+36000", category: "Transport" },
+    { name: "Trafic routier UEMOA", value: 2190000, unit: "voyageurs", trend: "+120000", category: "Transport" },
+    { name: "Trafic routier CEDEAO", value: 3210000, unit: "voyageurs", trend: "+190000", category: "Transport" }
+  ],
+  "2023": [
+    { name: "Ressortissants africains en CI", value: 28.5, unit: "% population", trend: "+1.3%", category: "Population" },
+    { name: "Trafic ferroviaire UEMOA", value: 145000, unit: "voyageurs", trend: "+10000", category: "Transport" },
+    { name: "Voyageurs aériens UEMOA", value: 342000, unit: "voyageurs", trend: "+24000", category: "Transport" },
+    { name: "Voyageurs aériens CEDEAO", value: 589000, unit: "voyageurs", trend: "+41000", category: "Transport" },
+    { name: "Trafic routier UEMOA", value: 2340000, unit: "voyageurs", trend: "+150000", category: "Transport" },
+    { name: "Trafic routier CEDEAO", value: 3450000, unit: "voyageurs", trend: "+240000", category: "Transport" }
+  ],
+  "2024": [
+    { name: "Ressortissants africains en CI", value: 29.7, unit: "% population", trend: "+1.2%", category: "Population" },
+    { name: "Trafic ferroviaire UEMOA", value: 156000, unit: "voyageurs", trend: "+11000", category: "Transport" },
+    { name: "Voyageurs aériens UEMOA", value: 368000, unit: "voyageurs", trend: "+26000", category: "Transport" },
+    { name: "Voyageurs aériens CEDEAO", value: 634000, unit: "voyageurs", trend: "+45000", category: "Transport" },
+    { name: "Trafic routier UEMOA", value: 2520000, unit: "voyageurs", trend: "+180000", category: "Transport" },
+    { name: "Trafic routier CEDEAO", value: 3720000, unit: "voyageurs", trend: "+270000", category: "Transport" }
+  ]
+};
 
 export const studentsData = [
   { region: "UEMOA", total: 45600, economie: 12300, droit: 15400, culture: 8900, autres: 9000 },

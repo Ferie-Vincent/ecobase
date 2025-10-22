@@ -1,10 +1,15 @@
 import { IndicatorCard } from "@/components/IndicatorCard";
-import { integrationIndicators } from "@/data/mockData";
+import { integrationIndicatorsByYear } from "@/data/mockData";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { YearSelector } from "@/components/YearSelector";
+import { useState } from "react";
 
 const Integration = () => {
   const categories = ["Commerce", "Social", "CILSS"];
+  const availableYears = Object.keys(integrationIndicatorsByYear).sort().reverse();
+  const [selectedYear, setSelectedYear] = useState(availableYears[0]);
+  const integrationIndicators = integrationIndicatorsByYear[selectedYear];
   
   return (
     <div className="min-h-screen bg-background">
@@ -18,6 +23,13 @@ const Integration = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 space-y-8">
+        {/* Year Selector */}
+        <YearSelector 
+          selectedYear={selectedYear} 
+          onYearChange={setSelectedYear} 
+          availableYears={availableYears}
+        />
+
         {/* Filter by Category */}
         <div className="flex flex-wrap gap-3">
           <Badge variant="outline" className="text-sm cursor-pointer hover:bg-muted">

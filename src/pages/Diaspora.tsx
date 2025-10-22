@@ -1,19 +1,32 @@
 import { IndicatorCard } from "@/components/IndicatorCard";
-import { diasporaIndicators } from "@/data/mockData";
+import { diasporaIndicatorsByYear } from "@/data/mockData";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { YearSelector } from "@/components/YearSelector";
+import { useState, useMemo } from "react";
 
 const Diaspora = () => {
   const categories = ["Sensibilisation", "Réinsertion", "Emploi", "Économie", "Social", "Assistance"];
+  const availableYears = Object.keys(diasporaIndicatorsByYear).sort().reverse();
+  const [selectedYear, setSelectedYear] = useState(availableYears[0]);
+  const diasporaIndicators = diasporaIndicatorsByYear[selectedYear];
   
-  const categoryData = [
-    { name: "Sensibilisation", value: 22320, color: "hsl(var(--primary))" },
-    { name: "Réinsertion", value: 3890, color: "hsl(var(--secondary))" },
-    { name: "Emploi", value: 567, color: "hsl(var(--accent))" },
-    { name: "Social", value: 8920, color: "hsl(27 80% 60%)" },
-    { name: "Assistance", value: 4560, color: "hsl(142 60% 50%)" }
-  ];
+  const categoryData = useMemo(() => {
+    const sensibilisation = diasporaIndicators.filter(i => i.category === "Sensibilisation").reduce((sum, i) => sum + i.value, 0);
+    const reinsertion = diasporaIndicators.find(i => i.category === "Réinsertion")?.value || 0;
+    const emploi = diasporaIndicators.find(i => i.category === "Emploi")?.value || 0;
+    const social = diasporaIndicators.find(i => i.category === "Social")?.value || 0;
+    const assistance = diasporaIndicators.find(i => i.category === "Assistance")?.value || 0;
+    
+    return [
+      { name: "Sensibilisation", value: sensibilisation, color: "hsl(var(--primary))" },
+      { name: "Réinsertion", value: reinsertion, color: "hsl(var(--secondary))" },
+      { name: "Emploi", value: emploi, color: "hsl(var(--accent))" },
+      { name: "Social", value: social, color: "hsl(27 80% 60%)" },
+      { name: "Assistance", value: assistance, color: "hsl(142 60% 50%)" }
+    ];
+  }, [diasporaIndicators]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -27,6 +40,13 @@ const Diaspora = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 space-y-8">
+        {/* Year Selector */}
+        <YearSelector 
+          selectedYear={selectedYear} 
+          onYearChange={setSelectedYear} 
+          availableYears={availableYears}
+        />
+
         {/* Filter by Category */}
         <div className="flex flex-wrap gap-3">
           <Badge variant="outline" className="text-sm cursor-pointer hover:bg-muted">
@@ -89,7 +109,7 @@ const Diaspora = () => {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium text-muted-foreground">Transferts d'argent / PIB</span>
-                  <span className="text-2xl font-bold text-primary">8.4%</span>
+                  <span className="text-2xl font-bold text-primary">{diasporaIndicators.find(i => i.name === "Transferts d'argent / PIB")?.value}%</span>
                 </div>
                 <p className="text-xs text-muted-foreground">
                   Les transferts de la diaspora représentent une part significative du PIB national
@@ -99,7 +119,7 @@ const Diaspora = () => {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium text-muted-foreground">Enregistrés CNPS</span>
-                  <span className="text-2xl font-bold text-secondary">8,920</span>
+                  <span className="text-2xl font-bold text-secondary">{diasporaIndicators.find(i => i.name === "Enregistrés CNPS")?.value.toLocaleString('fr-FR')}</span>
                 </div>
                 <p className="text-xs text-muted-foreground">
                   Ivoiriens de l'extérieur cotisant au régime social
@@ -109,7 +129,7 @@ const Diaspora = () => {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium text-muted-foreground">Intégrés Fonction Publique</span>
-                  <span className="text-2xl font-bold text-accent">567</span>
+                  <span className="text-2xl font-bold text-accent">{diasporaIndicators.find(i => i.name === "Intégrés Fonction Publique")?.value}</span>
                 </div>
                 <p className="text-xs text-muted-foreground">
                   Membres de la diaspora ayant rejoint la fonction publique
@@ -128,17 +148,17 @@ const Diaspora = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-4 bg-muted rounded-lg">
                 <h4 className="font-semibold text-foreground mb-2">Immigration Clandestine</h4>
-                <p className="text-3xl font-bold text-primary mb-1">12,450</p>
+                <p className="text-3xl font-bold text-primary mb-1">{diasporaIndicators.find(i => i.name === "Sensibilisés immigration clandestine")?.value.toLocaleString('fr-FR')}</p>
                 <p className="text-sm text-muted-foreground">Personnes sensibilisées</p>
               </div>
               <div className="p-4 bg-muted rounded-lg">
                 <h4 className="font-semibold text-foreground mb-2">Insertion en CI</h4>
-                <p className="text-3xl font-bold text-secondary mb-1">9,870</p>
+                <p className="text-3xl font-bold text-secondary mb-1">{diasporaIndicators.find(i => i.name === "Sensibilisés insertion CI")?.value.toLocaleString('fr-FR')}</p>
                 <p className="text-sm text-muted-foreground">Personnes informées</p>
               </div>
               <div className="p-4 bg-muted rounded-lg">
                 <h4 className="font-semibold text-foreground mb-2">Réinsertion Réussie</h4>
-                <p className="text-3xl font-bold text-accent mb-1">3,890</p>
+                <p className="text-3xl font-bold text-accent mb-1">{diasporaIndicators.find(i => i.name === "Ivoiriens réinsérés")?.value.toLocaleString('fr-FR')}</p>
                 <p className="text-sm text-muted-foreground">Ivoiriens réinsérés</p>
               </div>
             </div>

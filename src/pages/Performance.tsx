@@ -4,8 +4,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { performanceIndicators, projectsData } from "@/data/mockData";
 import { TrendingUp, Calendar, User, BarChart3 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { YearSelector } from "@/components/YearSelector";
+import { useState } from "react";
 
 const Performance = () => {
+  const [selectedYear, setSelectedYear] = useState("2024");
+  const availableYears = ["2020", "2021", "2022", "2023", "2024"];
   return (
     <div className="min-h-screen bg-background">
       <div className="bg-gradient-to-br from-primary via-primary/90 to-primary/80 text-white py-12">
@@ -18,6 +22,13 @@ const Performance = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 space-y-8">
+        {/* Year Selector */}
+        <YearSelector 
+          selectedYear={selectedYear} 
+          onYearChange={setSelectedYear} 
+          availableYears={availableYears}
+        />
+
         {/* Projets en cours */}
         <section>
           <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
@@ -80,9 +91,9 @@ const Performance = () => {
                         <tr className="border-b border-border">
                           <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Indicateur</th>
                           <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Référence</th>
-                          <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">2022</th>
-                          <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">2023</th>
-                          <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">2024</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2022" ? "text-primary" : "text-muted-foreground"}`}>2022</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2023" ? "text-primary" : "text-muted-foreground"}`}>2023</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2024" ? "text-primary" : "text-muted-foreground"}`}>2024</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -90,9 +101,9 @@ const Performance = () => {
                           <tr key={i} className="border-b border-border hover:bg-muted/50 transition-colors">
                             <td className="py-3 px-4 text-sm text-foreground">{ind.nom}</td>
                             <td className="text-center py-3 px-4 text-sm font-medium">{ind.reference}</td>
-                            <td className="text-center py-3 px-4 text-sm font-medium text-primary">{ind.cible2022}</td>
-                            <td className="text-center py-3 px-4 text-sm font-medium text-primary">{ind.cible2023}</td>
-                            <td className="text-center py-3 px-4 text-sm font-medium text-secondary">{ind.cible2024}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2022" ? "text-primary font-bold" : ""}`}>{ind.cible2022}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2023" ? "text-primary font-bold" : ""}`}>{ind.cible2023}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2024" ? "text-secondary font-bold" : ""}`}>{ind.cible2024}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -112,9 +123,9 @@ const Performance = () => {
                         <tr className="border-b border-border">
                           <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Indicateur</th>
                           <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Référence</th>
-                          <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">2022</th>
-                          <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">2023</th>
-                          <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">2024</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2022" ? "text-primary" : "text-muted-foreground"}`}>2022</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2023" ? "text-primary" : "text-muted-foreground"}`}>2023</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2024" ? "text-primary" : "text-muted-foreground"}`}>2024</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -122,9 +133,9 @@ const Performance = () => {
                           <tr key={i} className="border-b border-border hover:bg-muted/50 transition-colors">
                             <td className="py-3 px-4 text-sm text-foreground">{ind.nom}</td>
                             <td className="text-center py-3 px-4 text-sm font-medium">{ind.reference}</td>
-                            <td className="text-center py-3 px-4 text-sm font-medium text-primary">{ind.cible2022}</td>
-                            <td className="text-center py-3 px-4 text-sm font-medium text-primary">{ind.cible2023}</td>
-                            <td className="text-center py-3 px-4 text-sm font-medium text-secondary">{ind.cible2024}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2022" ? "text-primary font-bold" : ""}`}>{ind.cible2022}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2023" ? "text-primary font-bold" : ""}`}>{ind.cible2023}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2024" ? "text-secondary font-bold" : ""}`}>{ind.cible2024}</td>
                           </tr>
                         ))}
                       </tbody>
