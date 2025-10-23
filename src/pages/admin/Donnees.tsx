@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CreateDonneeModal } from "@/components/admin/modals/CreateDonneeModal";
 import {
   Table,
   TableBody,
@@ -17,6 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function Donnees() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { hasRole } = useAuth();
 
   const filteredDonnees = donnees.filter(d => {
@@ -47,7 +49,7 @@ export default function Donnees() {
           <p className="text-muted-foreground">Saisie, imports et gestion des valeurs</p>
         </div>
         {hasRole(["SPSE_ADMIN", "DIRECTION"]) && (
-          <Button>
+          <Button onClick={() => setIsCreateModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Saisir des données
           </Button>
@@ -157,6 +159,8 @@ export default function Donnees() {
           </Table>
         </CardContent>
       </Card>
+
+      <CreateDonneeModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
     </div>
   );
 }

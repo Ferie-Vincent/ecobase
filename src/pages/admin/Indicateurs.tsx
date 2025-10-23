@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CreateIndicateurModal } from "@/components/admin/modals/CreateIndicateurModal";
 import {
   Table,
   TableBody,
@@ -16,6 +17,7 @@ import { indicateurs } from "@/data/seedData";
 
 export default function Indicateurs() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const filteredIndicateurs = indicateurs.filter(ind =>
     ind.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -42,7 +44,7 @@ export default function Indicateurs() {
           <h1 className="text-3xl font-bold text-foreground">Indicateurs</h1>
           <p className="text-muted-foreground">Gestion des indicateurs ECOBASE</p>
         </div>
-        <Button>
+        <Button onClick={() => setIsCreateModalOpen(true)}>
           <Plus className="h-4 w-4 mr-2" />
           Nouvel indicateur
         </Button>
@@ -107,6 +109,8 @@ export default function Indicateurs() {
           </Table>
         </CardContent>
       </Card>
+
+      <CreateIndicateurModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
     </div>
   );
 }

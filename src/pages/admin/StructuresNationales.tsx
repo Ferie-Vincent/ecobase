@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CreateOrganisationModal } from "@/components/admin/modals/CreateOrganisationModal";
 import {
   Table,
   TableBody,
@@ -12,40 +11,32 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, Plus, Eye, FileEdit, Globe } from "lucide-react";
+import { Search, Plus, Eye, FileEdit } from "lucide-react";
 import { organisations } from "@/data/seedData";
 import { useAuth } from "@/contexts/AuthContext";
 
-export default function Organisations() {
+export default function StructuresNationales() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { hasRole } = useAuth();
 
-  const filteredOrganisations = organisations.filter(org =>
+  const structuresNationales = organisations.filter(org => org.type === "Nationale");
+  
+  const filteredStructures = structuresNationales.filter(org =>
     org.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
     org.sigle.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const getTypeBadge = (type: string) => {
-    const variants: Record<string, "default" | "secondary" | "outline"> = {
-      "Régionale": "default",
-      "Internationale": "secondary",
-      "Nationale": "outline"
-    };
-    return <Badge variant={variants[type] || "outline"}>{type}</Badge>;
-  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Organisations régionales & internationales</h1>
-          <p className="text-muted-foreground">Gestion des organisations partenaires</p>
+          <h1 className="text-3xl font-bold text-foreground">Structures nationales</h1>
+          <p className="text-muted-foreground">Ministères, directions et services nationaux</p>
         </div>
         {hasRole("SPSE_ADMIN") && (
-          <Button onClick={() => setIsCreateModalOpen(true)}>
+          <Button>
             <Plus className="h-4 w-4 mr-2" />
-            Nouvelle organisation
+            Nouvelle structure
           </Button>
         )}
       </div>
@@ -56,13 +47,13 @@ export default function Organisations() {
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Rechercher une organisation..."
+                placeholder="Rechercher une structure..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-9"
               />
             </div>
-            <Badge variant="outline">{filteredOrganisations.length} résultats</Badge>
+            <Badge variant="outline">{filteredStructures.length} résultats</Badge>
           </div>
         </CardHeader>
         <CardContent>
@@ -71,38 +62,25 @@ export default function Organisations() {
               <TableRow>
                 <TableHead>Nom</TableHead>
                 <TableHead>Sigle</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Siège</TableHead>
+                <TableHead>Responsable</TableHead>
+                <TableHead>Contact</TableHead>
                 <TableHead>Statut</TableHead>
-                <TableHead>Pays membres</TableHead>
-                <TableHead>Représentant</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredOrganisations.map((org) => (
-                <TableRow key={org.id}>
-                  <TableCell className="font-medium">{org.nom}</TableCell>
+              {filteredStructures.map((structure) => (
+                <TableRow key={structure.id}>
+                  <TableCell className="font-medium">{structure.nom}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{org.sigle}</Badge>
+                    <Badge variant="outline">{structure.sigle}</Badge>
                   </TableCell>
-                  <TableCell>{getTypeBadge(org.type)}</TableCell>
-                  <TableCell>{org.siege || "-"}</TableCell>
+                  <TableCell className="text-sm">{structure.responsable || "-"}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{structure.contact || "-"}</TableCell>
                   <TableCell>
-                    <Badge variant={org.statut === "Actif" ? "default" : "outline"}>
-                      {org.statut}
+                    <Badge variant={structure.statut === "Actif" ? "default" : "outline"}>
+                      {structure.statut}
                     </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {org.pays_membres_ids ? (
-                      <Badge variant="secondary" className="gap-1">
-                        <Globe className="h-3 w-3" />
-                        {org.pays_membres_ids.length}
-                      </Badge>
-                    ) : "-"}
-                  </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {org.representant_national || "-"}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
@@ -122,8 +100,6 @@ export default function Organisations() {
           </Table>
         </CardContent>
       </Card>
-
-      <CreateOrganisationModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
     </div>
   );
 }

@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CreateOrganisationModal } from "@/components/admin/modals/CreateOrganisationModal";
 import {
   Table,
   TableBody,
@@ -12,40 +11,34 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, Plus, Eye, FileEdit, Globe } from "lucide-react";
+import { Search, Plus, Eye, FileEdit, CheckCircle } from "lucide-react";
 import { organisations } from "@/data/seedData";
 import { useAuth } from "@/contexts/AuthContext";
 
-export default function Organisations() {
+export default function Partenaires() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { hasRole } = useAuth();
 
-  const filteredOrganisations = organisations.filter(org =>
+  const partenaires = organisations.filter(org => 
+    org.type === "Internationale" || org.type === "PTF"
+  );
+  
+  const filteredPartenaires = partenaires.filter(org =>
     org.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
     org.sigle.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const getTypeBadge = (type: string) => {
-    const variants: Record<string, "default" | "secondary" | "outline"> = {
-      "Régionale": "default",
-      "Internationale": "secondary",
-      "Nationale": "outline"
-    };
-    return <Badge variant={variants[type] || "outline"}>{type}</Badge>;
-  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Organisations régionales & internationales</h1>
-          <p className="text-muted-foreground">Gestion des organisations partenaires</p>
+          <h1 className="text-3xl font-bold text-foreground">Partenaires Techniques & Financiers</h1>
+          <p className="text-muted-foreground">Organisations internationales et partenaires au développement</p>
         </div>
         {hasRole("SPSE_ADMIN") && (
-          <Button onClick={() => setIsCreateModalOpen(true)}>
+          <Button>
             <Plus className="h-4 w-4 mr-2" />
-            Nouvelle organisation
+            Nouveau partenaire
           </Button>
         )}
       </div>
@@ -56,13 +49,13 @@ export default function Organisations() {
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Rechercher une organisation..."
+                placeholder="Rechercher un partenaire..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-9"
               />
             </div>
-            <Badge variant="outline">{filteredOrganisations.length} résultats</Badge>
+            <Badge variant="outline">{filteredPartenaires.length} résultats</Badge>
           </div>
         </CardHeader>
         <CardContent>
@@ -73,36 +66,36 @@ export default function Organisations() {
                 <TableHead>Sigle</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Siège</TableHead>
+                <TableHead>Convention</TableHead>
                 <TableHead>Statut</TableHead>
-                <TableHead>Pays membres</TableHead>
-                <TableHead>Représentant</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredOrganisations.map((org) => (
-                <TableRow key={org.id}>
-                  <TableCell className="font-medium">{org.nom}</TableCell>
+              {filteredPartenaires.map((partenaire) => (
+                <TableRow key={partenaire.id}>
+                  <TableCell className="font-medium">{partenaire.nom}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{org.sigle}</Badge>
-                  </TableCell>
-                  <TableCell>{getTypeBadge(org.type)}</TableCell>
-                  <TableCell>{org.siege || "-"}</TableCell>
-                  <TableCell>
-                    <Badge variant={org.statut === "Actif" ? "default" : "outline"}>
-                      {org.statut}
-                    </Badge>
+                    <Badge variant="outline">{partenaire.sigle}</Badge>
                   </TableCell>
                   <TableCell>
-                    {org.pays_membres_ids ? (
-                      <Badge variant="secondary" className="gap-1">
-                        <Globe className="h-3 w-3" />
-                        {org.pays_membres_ids.length}
+                    <Badge variant="secondary">{partenaire.type}</Badge>
+                  </TableCell>
+                  <TableCell>{partenaire.siege || "-"}</TableCell>
+                  <TableCell>
+                    {partenaire.convention ? (
+                      <Badge variant="default" className="gap-1">
+                        <CheckCircle className="h-3 w-3" />
+                        Oui
                       </Badge>
-                    ) : "-"}
+                    ) : (
+                      <Badge variant="outline">Non</Badge>
+                    )}
                   </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {org.representant_national || "-"}
+                  <TableCell>
+                    <Badge variant={partenaire.statut === "Actif" ? "default" : "outline"}>
+                      {partenaire.statut}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
@@ -122,8 +115,6 @@ export default function Organisations() {
           </Table>
         </CardContent>
       </Card>
-
-      <CreateOrganisationModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
     </div>
   );
 }
