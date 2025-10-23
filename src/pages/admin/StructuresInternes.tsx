@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CreateStructureModal } from "@/components/admin/modals/CreateStructureModal";
 import { structures_internes } from "@/data/seedData";
 import { Plus, Users } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function StructuresInternes() {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { hasRole } = useAuth();
 
   const getTypeBadge = (type: string) => {
@@ -25,7 +28,7 @@ export default function StructuresInternes() {
           <p className="text-muted-foreground">SPSE, DGPI, DGIE et directions techniques</p>
         </div>
         {hasRole("SPSE_ADMIN") && (
-          <Button>
+          <Button onClick={() => setIsCreateModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nouvelle structure
           </Button>
@@ -69,6 +72,8 @@ export default function StructuresInternes() {
           </Card>
         ))}
       </div>
+
+      <CreateStructureModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} type="interne" />
     </div>
   );
 }

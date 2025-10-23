@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CreateProgrammeModal } from "@/components/admin/modals/CreateProgrammeModal";
 import { programmes } from "@/data/seedData";
 import { Plus, Calendar, DollarSign } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Programmes() {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { hasRole } = useAuth();
 
   const getStatutBadge = (statut: string) => {
@@ -25,7 +28,7 @@ export default function Programmes() {
           <p className="text-muted-foreground">Gestion des programmes de développement</p>
         </div>
         {hasRole(["SPSE_ADMIN", "DIRECTION"]) && (
-          <Button>
+          <Button onClick={() => setIsCreateModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nouveau programme
           </Button>
@@ -83,6 +86,8 @@ export default function Programmes() {
           </Card>
         ))}
       </div>
+
+      <CreateProgrammeModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CreateUtilisateurModal } from "@/components/admin/modals/CreateUtilisateurModal";
 import {
   Table,
   TableBody,
@@ -17,6 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function Utilisateurs() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { hasRole } = useAuth();
 
   const filteredUtilisateurs = utilisateurs.filter(u =>
@@ -47,7 +49,7 @@ export default function Utilisateurs() {
           <p className="text-muted-foreground">Gestion des accès au backoffice</p>
         </div>
         {hasRole("SPSE_ADMIN") && (
-          <Button>
+          <Button onClick={() => setIsCreateModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nouvel utilisateur
           </Button>
@@ -143,6 +145,8 @@ export default function Utilisateurs() {
           </Table>
         </CardContent>
       </Card>
+
+      <CreateUtilisateurModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
     </div>
   );
 }

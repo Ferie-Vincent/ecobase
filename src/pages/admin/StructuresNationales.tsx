@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CreateStructureModal } from "@/components/admin/modals/CreateStructureModal";
 import {
   Table,
   TableBody,
@@ -17,6 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function StructuresNationales() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { hasRole } = useAuth();
 
   const structuresNationales = organisations.filter(org => org.type === "Nationale");
@@ -34,7 +36,7 @@ export default function StructuresNationales() {
           <p className="text-muted-foreground">Ministères, directions et services nationaux</p>
         </div>
         {hasRole("SPSE_ADMIN") && (
-          <Button>
+          <Button onClick={() => setIsCreateModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nouvelle structure
           </Button>
@@ -100,6 +102,8 @@ export default function StructuresNationales() {
           </Table>
         </CardContent>
       </Card>
+
+      <CreateStructureModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} type="nationale" />
     </div>
   );
 }

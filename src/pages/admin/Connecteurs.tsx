@@ -1,12 +1,15 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { CreateConnecteurModal } from "@/components/admin/modals/CreateConnecteurModal";
 import { connecteurs, regles_calcul } from "@/data/seedData";
 import { Plus, Activity, AlertCircle, CheckCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Connecteurs() {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { hasRole } = useAuth();
 
   return (
@@ -17,7 +20,7 @@ export default function Connecteurs() {
           <p className="text-muted-foreground">Gestion des API et règles de calcul</p>
         </div>
         {hasRole("SPSE_ADMIN") && (
-          <Button>
+          <Button onClick={() => setIsCreateModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nouveau connecteur
           </Button>
@@ -113,6 +116,8 @@ export default function Connecteurs() {
           </div>
         </CardContent>
       </Card>
+
+      <CreateConnecteurModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
     </div>
   );
 }

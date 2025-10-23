@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CreatePartenaireModal } from "@/components/admin/modals/CreatePartenaireModal";
 import {
   Table,
   TableBody,
@@ -17,6 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function Partenaires() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { hasRole } = useAuth();
 
   const partenaires = organisations.filter(org => 
@@ -36,7 +38,7 @@ export default function Partenaires() {
           <p className="text-muted-foreground">Organisations internationales et partenaires au développement</p>
         </div>
         {hasRole("SPSE_ADMIN") && (
-          <Button>
+          <Button onClick={() => setIsCreateModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nouveau partenaire
           </Button>
@@ -115,6 +117,8 @@ export default function Partenaires() {
           </Table>
         </CardContent>
       </Card>
+
+      <CreatePartenaireModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
     </div>
   );
 }

@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CreatePaysModal } from "@/components/admin/modals/CreatePaysModal";
 import { pays, organisations } from "@/data/seedData";
 import { Plus, Globe } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Pays() {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { hasRole } = useAuth();
 
   const getPaysOrganisations = (code: string) => {
@@ -22,7 +25,7 @@ export default function Pays() {
           <p className="text-muted-foreground">Pays membres des organisations régionales</p>
         </div>
         {hasRole("SPSE_ADMIN") && (
-          <Button>
+          <Button onClick={() => setIsCreateModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Associer un pays
           </Button>
@@ -72,6 +75,8 @@ export default function Pays() {
           );
         })}
       </div>
+
+      <CreatePaysModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
     </div>
   );
 }
