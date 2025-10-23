@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { YearSelector } from "@/components/YearSelector";
+import { TimelineChart } from "@/components/TimelineChart";
 import { useState, useMemo } from "react";
 
 const Diaspora = () => {
@@ -27,6 +28,18 @@ const Diaspora = () => {
       { name: "Assistance", value: assistance, color: "hsl(142 60% 50%)" }
     ];
   }, [diasporaIndicators]);
+
+  const timelineData = useMemo(() => {
+    return Object.keys(diasporaIndicatorsByYear).sort().map(year => {
+      const yearData = diasporaIndicatorsByYear[year];
+      return {
+        year,
+        sensibilises: yearData.find(i => i.name === "Sensibilisés immigration clandestine")?.value || 0,
+        reinseres: yearData.find(i => i.name === "Ivoiriens réinsérés")?.value || 0,
+        transfertsPIB: yearData.find(i => i.name === "Transferts d'argent / PIB")?.value || 0,
+      };
+    });
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,6 +71,19 @@ const Diaspora = () => {
             </Badge>
           ))}
         </div>
+
+        {/* Timeline Chart */}
+        <section>
+          <TimelineChart
+            title="Évolution des Indicateurs de la Diaspora"
+            data={timelineData}
+            lines={[
+              { dataKey: "sensibilises", name: "Sensibilisés", color: "hsl(var(--primary))" },
+              { dataKey: "reinseres", name: "Réinsérés", color: "hsl(var(--secondary))" },
+              { dataKey: "transfertsPIB", name: "Transferts/PIB (%)", color: "hsl(var(--accent))" }
+            ]}
+          />
+        </section>
 
         {/* Indicators Grid */}
         <section>

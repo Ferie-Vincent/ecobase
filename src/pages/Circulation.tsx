@@ -4,13 +4,26 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { YearSelector } from "@/components/YearSelector";
-import { useState } from "react";
+import { TimelineChart } from "@/components/TimelineChart";
+import { useState, useMemo } from "react";
 
 const Circulation = () => {
   const categories = ["Population", "Transport"];
   const availableYears = Object.keys(circulationIndicatorsByYear).sort().reverse();
   const [selectedYear, setSelectedYear] = useState(availableYears[0]);
   const circulationIndicators = circulationIndicatorsByYear[selectedYear];
+  
+  const timelineData = useMemo(() => {
+    return Object.keys(circulationIndicatorsByYear).sort().map(year => {
+      const yearData = circulationIndicatorsByYear[year];
+      return {
+        year,
+        africains: yearData.find(i => i.name === "Ressortissants africains en CI")?.value || 0,
+        aerienCEDEAO: (yearData.find(i => i.name === "Voyageurs aériens CEDEAO")?.value || 0) / 1000,
+        routierCEDEAO: (yearData.find(i => i.name === "Trafic routier CEDEAO")?.value || 0) / 1000,
+      };
+    });
+  }, []);
   
   return (
     <div className="min-h-screen bg-background">
@@ -42,6 +55,19 @@ const Circulation = () => {
             </Badge>
           ))}
         </div>
+
+        {/* Timeline Chart */}
+        <section>
+          <TimelineChart
+            title="Évolution de la Circulation et Mobilité"
+            data={timelineData}
+            lines={[
+              { dataKey: "africains", name: "Ressortissants africains (%)", color: "hsl(var(--primary))" },
+              { dataKey: "aerienCEDEAO", name: "Aérien CEDEAO (milliers)", color: "hsl(var(--secondary))" },
+              { dataKey: "routierCEDEAO", name: "Routier CEDEAO (milliers)", color: "hsl(var(--accent))" }
+            ]}
+          />
+        </section>
 
         {/* Indicators Grid */}
         <section>

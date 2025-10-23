@@ -3,13 +3,26 @@ import { integrationIndicatorsByYear } from "@/data/mockData";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { YearSelector } from "@/components/YearSelector";
-import { useState } from "react";
+import { TimelineChart } from "@/components/TimelineChart";
+import { useState, useMemo } from "react";
 
 const Integration = () => {
   const categories = ["Commerce", "Social", "CILSS"];
   const availableYears = Object.keys(integrationIndicatorsByYear).sort().reverse();
   const [selectedYear, setSelectedYear] = useState(availableYears[0]);
   const integrationIndicators = integrationIndicatorsByYear[selectedYear];
+  
+  const timelineData = useMemo(() => {
+    return Object.keys(integrationIndicatorsByYear).sort().map(year => {
+      const yearData = integrationIndicatorsByYear[year];
+      return {
+        year,
+        entreprises: yearData.find(i => i.name === "Entreprises SLEC agréées")?.value || 0,
+        produits: yearData.find(i => i.name === "Produits SLEC agréés")?.value || 0,
+        exportations: yearData.find(i => i.name === "Exportations SLEC")?.value || 0,
+      };
+    });
+  }, []);
   
   return (
     <div className="min-h-screen bg-background">
@@ -41,6 +54,19 @@ const Integration = () => {
             </Badge>
           ))}
         </div>
+
+        {/* Timeline Chart */}
+        <section>
+          <TimelineChart
+            title="Évolution des Indicateurs d'Intégration"
+            data={timelineData}
+            lines={[
+              { dataKey: "entreprises", name: "Entreprises SLEC", color: "hsl(var(--primary))" },
+              { dataKey: "produits", name: "Produits SLEC", color: "hsl(var(--secondary))" },
+              { dataKey: "exportations", name: "Exportations (Mds FCFA)", color: "hsl(var(--accent))" }
+            ]}
+          />
+        </section>
 
         {/* Indicators Grid */}
         <section>

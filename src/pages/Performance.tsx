@@ -5,11 +5,33 @@ import { performanceIndicators, projectsData } from "@/data/mockData";
 import { TrendingUp, Calendar, User, BarChart3 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { YearSelector } from "@/components/YearSelector";
-import { useState } from "react";
+import { TimelineChart } from "@/components/TimelineChart";
+import { useState, useMemo } from "react";
 
 const Performance = () => {
   const [selectedYear, setSelectedYear] = useState("2024");
   const availableYears = ["2020", "2021", "2022", "2023", "2024"];
+
+  const timelineData = useMemo(() => {
+    // Évolution du taux de réalisation des activités et digitalisation
+    const firstSection = performanceIndicators.administration[0];
+    return [
+      { year: "Référence", realisation: 68, digitalisation: 20, partenaires: 5 },
+      { year: "2022", realisation: 69, digitalisation: 25, partenaires: 5 },
+      { year: "2023", realisation: 70, digitalisation: 28, partenaires: 6 },
+      { year: "2024", realisation: 72, digitalisation: 32, partenaires: 7 },
+    ];
+  }, []);
+
+  const integrationTimelineData = useMemo(() => {
+    return [
+      { year: "Référence", iira: 0.55, penetration: 3.0, agrements: 20 },
+      { year: "2022", iira: 0.60, penetration: 3.5, agrements: 25 },
+      { year: "2023", iira: 0.64, penetration: 4.2, agrements: 30 },
+      { year: "2024", iira: 0.67, penetration: 5.0, agrements: 35 },
+    ];
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <div className="bg-gradient-to-br from-primary via-primary/90 to-primary/80 text-white py-12">
@@ -28,6 +50,32 @@ const Performance = () => {
           onYearChange={setSelectedYear} 
           availableYears={availableYears}
         />
+
+        {/* Timeline Chart - Administration */}
+        <section>
+          <TimelineChart
+            title="Évolution des Indicateurs d'Administration"
+            data={timelineData}
+            lines={[
+              { dataKey: "realisation", name: "Taux réalisation (%)", color: "hsl(var(--primary))" },
+              { dataKey: "digitalisation", name: "Digitalisation (%)", color: "hsl(var(--secondary))" },
+              { dataKey: "partenaires", name: "Partenaires mobilisés", color: "hsl(var(--accent))" }
+            ]}
+          />
+        </section>
+
+        {/* Timeline Chart - Integration */}
+        <section>
+          <TimelineChart
+            title="Évolution des Indicateurs d'Intégration Africaine"
+            data={integrationTimelineData}
+            lines={[
+              { dataKey: "iira", name: "IIRA (indice)", color: "hsl(var(--primary))" },
+              { dataKey: "penetration", name: "Pénétration marchés (%)", color: "hsl(var(--secondary))" },
+              { dataKey: "agrements", name: "Agréments SLE", color: "hsl(var(--accent))" }
+            ]}
+          />
+        </section>
 
         {/* Projets en cours */}
         <section>
