@@ -13,25 +13,27 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Navigation />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/integration" element={<Integration />} />
-          <Route path="/diaspora" element={<Diaspora />} />
-          <Route path="/circulation" element={<Circulation />} />
-          <Route path="/performance" element={<Performance />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/integration" element={<Integration />} />
+            <Route path="/diaspora" element={<Diaspora />} />
+            <Route path="/circulation" element={<Circulation />} />
+            <Route path="/performance" element={<Performance />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
