@@ -109,13 +109,20 @@ export function CreateIndicateurModal({ open, onOpenChange }: CreateIndicateurMo
 
             <div className="space-y-2">
               <Label htmlFor="unite">Unité *</Label>
-              <Input
-                id="unite"
-                placeholder="ex: Milliards FCFA, %, Nombre"
-                value={formData.unite}
-                onChange={(e) => setFormData({ ...formData, unite: e.target.value })}
-                required
-              />
+              <Select value={formData.unite} onValueChange={(value) => setFormData({ ...formData, unite: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionner" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Milliards FCFA">Milliards FCFA</SelectItem>
+                  <SelectItem value="Millions FCFA">Millions FCFA</SelectItem>
+                  <SelectItem value="Pourcentage">Pourcentage</SelectItem>
+                  <SelectItem value="Nombre">Nombre</SelectItem>
+                  <SelectItem value="Jours">Jours</SelectItem>
+                  <SelectItem value="Points">Points</SelectItem>
+                  <SelectItem value="Ratio">Ratio</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
@@ -134,13 +141,20 @@ export function CreateIndicateurModal({ open, onOpenChange }: CreateIndicateurMo
 
             <div className="space-y-2">
               <Label htmlFor="source">Source *</Label>
-              <Input
-                id="source"
-                placeholder="ex: DGCE/DOUANES"
-                value={formData.source}
-                onChange={(e) => setFormData({ ...formData, source: e.target.value })}
-                required
-              />
+              <Select value={formData.source} onValueChange={(value) => setFormData({ ...formData, source: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionner" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="DGCE/DOUANES">DGCE/DOUANES</SelectItem>
+                  <SelectItem value="SPSE">SPSE</SelectItem>
+                  <SelectItem value="INS">INS (Institut National de la Statistique)</SelectItem>
+                  <SelectItem value="Direction de la Diaspora">Direction de la Diaspora</SelectItem>
+                  <SelectItem value="BCEAO">BCEAO</SelectItem>
+                  <SelectItem value="Ministère du Commerce">Ministère du Commerce</SelectItem>
+                  <SelectItem value="Ministère de l'Intégration">Ministère de l'Intégration</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
