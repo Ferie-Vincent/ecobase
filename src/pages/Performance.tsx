@@ -6,6 +6,7 @@ import { TrendingUp, Calendar, User, BarChart3 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { YearSelector } from "@/components/YearSelector";
 import { TimelineChart } from "@/components/TimelineChart";
+import { Footer } from "@/components/Footer";
 import { useState, useMemo } from "react";
 
 const Performance = () => {
@@ -208,6 +209,8 @@ const Performance = () => {
           </Card>
         </section>
       </div>
+
+      <Footer />
     </div>
   );
 };

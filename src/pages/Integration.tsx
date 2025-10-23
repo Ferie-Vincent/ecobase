@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { YearSelector } from "@/components/YearSelector";
 import { TimelineChart } from "@/components/TimelineChart";
+import { Footer } from "@/components/Footer";
 import { useState, useMemo } from "react";
 
 const Integration = () => {
@@ -123,6 +124,8 @@ const Integration = () => {
           </Card>
         </section>
       </div>
+
+      <Footer />
     </div>
   );
 };

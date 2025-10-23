@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { YearSelector } from "@/components/YearSelector";
 import { TimelineChart } from "@/components/TimelineChart";
+import { Footer } from "@/components/Footer";
 import { useState, useMemo } from "react";
 
 const Circulation = () => {
@@ -175,6 +176,8 @@ const Circulation = () => {
           </div>
         </section>
       </div>
+
+      <Footer />
     </div>
   );
 };

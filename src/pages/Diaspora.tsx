@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { YearSelector } from "@/components/YearSelector";
 import { TimelineChart } from "@/components/TimelineChart";
+import { Footer } from "@/components/Footer";
 import { useState, useMemo } from "react";
 
 const Diaspora = () => {
@@ -191,6 +192,8 @@ const Diaspora = () => {
           </Card>
         </section>
       </div>
+
+      <Footer />
     </div>
   );
 };
