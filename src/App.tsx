@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navigation } from "./components/Navigation";
 import { AuthProvider } from "./contexts/AuthContext";
-import Dashboard from "./pages/Dashboard";
+import Index from "./pages/Index";
 import Integration from "./pages/Integration";
 import Diaspora from "./pages/Diaspora";
 import Circulation from "./pages/Circulation";
@@ -40,7 +40,7 @@ const App = () => {
                     <BrowserRouter>
                         <Routes>
                             {/* Public routes */}
-                            <Route path="/" element={<><Navigation /><Dashboard /></>} />
+                            <Route path="/" element={<><Navigation /><Index /></>} />
                             <Route path="/integration" element={<><Navigation /><Integration /></>} />
                             <Route path="/diaspora" element={<><Navigation /><Diaspora /></>} />
                             <Route path="/circulation" element={<><Navigation /><Circulation /></>} />
