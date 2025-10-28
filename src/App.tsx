@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navigation } from "./components/Navigation";
 import { AuthProvider } from "./contexts/AuthContext";
 import Dashboard from "./pages/Dashboard";
-import About from "./pages/About";
 import Integration from "./pages/Integration";
 import Diaspora from "./pages/Diaspora";
 import Circulation from "./pages/Circulation";
@@ -42,7 +41,6 @@ const App = () => {
                         <Routes>
                             {/* Public routes */}
                             <Route path="/" element={<><Navigation /><Dashboard /></>} />
-                            <Route path="/about" element={<><Navigation /><About /></>} />
                             <Route path="/integration" element={<><Navigation /><Integration /></>} />
                             <Route path="/diaspora" element={<><Navigation /><Diaspora /></>} />
                             <Route path="/circulation" element={<><Navigation /><Circulation /></>} />

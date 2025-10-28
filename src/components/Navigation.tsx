@@ -1,12 +1,11 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { BarChart3, Users, Globe, Home, TrendingUp, LogIn, LogOut, Building2 } from "lucide-react";
+import { BarChart3, Users, Globe, Home, TrendingUp, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { path: "/", label: "Accueil", icon: Home },
-  { path: "/about", label: "Le Ministère", icon: Building2 },
   { path: "/integration", label: "Intégration Africaine", icon: Globe },
   { path: "/diaspora", label: "Ivoiriens de l'Extérieur", icon: Users },
   { path: "/circulation", label: "Libre Circulation", icon: BarChart3 },
