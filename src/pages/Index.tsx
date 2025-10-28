@@ -1,10 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Database, Users, TrendingUp, FileText, BookOpen, Building2, Network, Users2, Target } from "lucide-react";
+import { Database, Users, TrendingUp, FileText, BookOpen, Building2, Network, Users2, Target, BarChart3, Globe2 } from "lucide-react";
 import { metadata, organizations, pillars } from "@/data/metadata";
 import { indicators } from "@/data/indicators";
 import integrationPolicyImage from "@/assets/integration-policy.jpg";
 import diasporaPolicyImage from "@/assets/diaspora-policy.jpg";
+import { StatCard } from "@/components/StatCard";
+import { dashboardStats, tradeEvolution, regionalWeights } from "@/data/mockData";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 const Index = () => {
   const indicatorsByPillar = {
@@ -98,40 +101,154 @@ const Index = () => {
           </CardContent>
         </Card>
 
-        {/* Stats Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <Card className="card-hover">
-            <CardHeader>
-              <Database className="w-8 h-8 text-primary mb-2" />
-              <CardTitle>{indicators.length}</CardTitle>
-              <CardDescription>Indicateurs catalogués</CardDescription>
-            </CardHeader>
+        {/* Key Statistics */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-6">Statistiques Clés</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <StatCard
+              title="Entreprises SLEC"
+              value={dashboardStats.integration.slecEnterprises}
+              unit="entreprises"
+              trend="+18"
+              icon={<BarChart3 className="h-6 w-6 text-primary" />}
+              variant="primary"
+            />
+            <StatCard
+              title="Ivoiriens Réinsérés"
+              value={dashboardStats.diaspora.reinserted}
+              unit="personnes"
+              trend="+456"
+              icon={<Users2 className="h-6 w-6 text-secondary" />}
+              variant="secondary"
+            />
+            <StatCard
+              title="Transferts d'argent / PIB"
+              value={dashboardStats.diaspora.transfertsGDP}
+              unit="%"
+              trend="+0.6%"
+              icon={<TrendingUp className="h-6 w-6 text-primary" />}
+            />
+            <StatCard
+              title="Trafic Routier CEDEAO"
+              value={(dashboardStats.circulation.roadCEDEAO / 1000000).toFixed(1)}
+              unit="M voyageurs"
+              trend="+234K"
+              icon={<Globe2 className="h-6 w-6 text-secondary" />}
+            />
+          </div>
+        </section>
+
+        {/* Commerce Evolution */}
+        <section className="mb-12">
+          <Card className="p-6">
+            <h3 className="text-xl font-bold text-foreground mb-6">Évolution du Commerce (Milliards FCFA)</h3>
+            <ResponsiveContainer width="100%" height={350}>
+              <LineChart data={tradeEvolution}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="year" stroke="hsl(var(--muted-foreground))" />
+                <YAxis stroke="hsl(var(--muted-foreground))" />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px'
+                  }}
+                />
+                <Legend />
+                <Line type="monotone" dataKey="exports" stroke="hsl(var(--primary))" strokeWidth={3} name="Exportations" />
+                <Line type="monotone" dataKey="imports" stroke="hsl(var(--secondary))" strokeWidth={3} name="Importations" />
+                <Line type="monotone" dataKey="intraAfrica" stroke="hsl(var(--accent))" strokeWidth={3} name="Intra-Afrique" />
+              </LineChart>
+            </ResponsiveContainer>
           </Card>
-          
-          <Card className="card-hover">
-            <CardHeader>
-              <Users className="w-8 h-8 text-primary mb-2" />
-              <CardTitle>{organizations.length}</CardTitle>
-              <CardDescription>Organisations partenaires</CardDescription>
-            </CardHeader>
-          </Card>
-          
-          <Card className="card-hover">
-            <CardHeader>
-              <TrendingUp className="w-8 h-8 text-primary mb-2" />
-              <CardTitle>{pillars.length}</CardTitle>
-              <CardDescription>Piliers stratégiques</CardDescription>
-            </CardHeader>
-          </Card>
-          
-          <Card className="card-hover">
-            <CardHeader>
-              <FileText className="w-8 h-8 text-primary mb-2" />
-              <CardTitle>MERISE</CardTitle>
-              <CardDescription>Méthodologie de conception</CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
+        </section>
+
+        {/* Regional Weights */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-foreground mb-6">Poids de la Côte d'Ivoire dans les Régions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="p-6">
+              <h4 className="text-sm font-semibold text-muted-foreground mb-4">PIB Régional</h4>
+              <div className="space-y-3">
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-sm font-medium">UEMOA</span>
+                    <span className="text-sm font-bold text-primary">{regionalWeights.pibUEMOA}%</span>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-primary to-primary/80" style={{ width: `${regionalWeights.pibUEMOA}%` }} />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-sm font-medium">CEDEAO</span>
+                    <span className="text-sm font-bold text-primary">{regionalWeights.pibCEDEAO}%</span>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-primary to-primary/80" style={{ width: `${regionalWeights.pibCEDEAO}%` }} />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-sm font-medium">Afrique</span>
+                    <span className="text-sm font-bold text-primary">{regionalWeights.pibAfrica}%</span>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-primary to-primary/80" style={{ width: `${regionalWeights.pibAfrica * 10}%` }} />
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-6">
+              <h4 className="text-sm font-semibold text-muted-foreground mb-4">Exportations</h4>
+              <div className="space-y-3">
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-sm font-medium">CEDEAO</span>
+                    <span className="text-sm font-bold text-secondary">{regionalWeights.exportsCEDEAO}%</span>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-secondary to-secondary/80" style={{ width: `${regionalWeights.exportsCEDEAO}%` }} />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-sm font-medium">Afrique</span>
+                    <span className="text-sm font-bold text-secondary">{regionalWeights.exportsAfrica}%</span>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-secondary to-secondary/80" style={{ width: `${regionalWeights.exportsAfrica * 10}%` }} />
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-6">
+              <h4 className="text-sm font-semibold text-muted-foreground mb-4">Importations</h4>
+              <div className="space-y-3">
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-sm font-medium">CEDEAO</span>
+                    <span className="text-sm font-bold text-accent">{regionalWeights.importsCEDEAO}%</span>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-accent to-accent/80" style={{ width: `${regionalWeights.importsCEDEAO}%` }} />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-sm font-medium">Afrique</span>
+                    <span className="text-sm font-bold text-accent">{regionalWeights.importsAfrica}%</span>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-accent to-accent/80" style={{ width: `${regionalWeights.importsAfrica * 10}%` }} />
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </section>
 
         {/* Pillars Section */}
         <div className="mb-12">
@@ -295,29 +412,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Cadre juridique */}
-        <Card className="mb-12">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-              <FileText className="w-6 h-6 text-primary" />
-              Cadre Juridique
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="prose prose-sm max-w-none">
-              <p className="text-muted-foreground mb-4">
-                L'organisation et les attributions du ministère sont définies par le{" "}
-                <strong>Décret N° 2023-973 du 06 décembre 2023</strong> portant organisation du Ministère Délégué 
-                auprès du Ministère des Affaires Étrangères, de l'Intégration Africaine et des Ivoiriens de l'Extérieur, 
-                chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur.
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Ce décret abroge le décret n° 2022-987 du 21 décembre 2022 et définit la structure complète 
-                du ministère incluant le Cabinet, les Directions Générales, les Services et Directions rattachés.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
