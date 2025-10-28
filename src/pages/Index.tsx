@@ -51,10 +51,10 @@ const Index = () => {
         </div>
 
         {/* Missions du ministère */}
-        <Card className="mb-12">
+        <Card className="mb-12 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
           <CardHeader>
             <CardTitle className="flex items-center gap-3 text-3xl">
-              <Target className="w-8 h-8 text-primary" />
+              <Target className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
               Nos Missions
             </CardTitle>
             <CardDescription className="text-base">
@@ -64,15 +64,15 @@ const Index = () => {
           <CardContent className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               {/* Mission 1 - Intégration */}
-              <div className="relative overflow-hidden rounded-lg">
+              <div className="group relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
                 <img 
                   src={integrationPolicyImage} 
                   alt="Politique d'Intégration Africaine" 
-                  className="w-full h-64 object-cover"
+                  className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end">
-                  <div className="p-6 text-white">
-                    <h3 className="text-2xl font-bold mb-2">Intégration Africaine</h3>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end transition-all duration-300 group-hover:from-black/90 group-hover:via-black/50">
+                  <div className="p-6 text-white transform transition-transform duration-300 group-hover:translate-y-[-8px]">
+                    <h3 className="text-2xl font-bold mb-2 transition-colors duration-300 group-hover:text-primary">Intégration Africaine</h3>
                     <p className="text-sm text-white/90">
                       Promouvoir l'intégration régionale, harmoniser les politiques sectorielles, 
                       et renforcer la coopération économique et commerciale au sein de la CEDEAO et de l'UEMOA
@@ -82,15 +82,15 @@ const Index = () => {
               </div>
 
               {/* Mission 2 - Diaspora */}
-              <div className="relative overflow-hidden rounded-lg">
+              <div className="group relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
                 <img 
                   src={diasporaPolicyImage} 
                   alt="Gestion des Ivoiriens de l'Extérieur" 
-                  className="w-full h-64 object-cover"
+                  className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end">
-                  <div className="p-6 text-white">
-                    <h3 className="text-2xl font-bold mb-2">Ivoiriens de l'Extérieur</h3>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end transition-all duration-300 group-hover:from-black/90 group-hover:via-black/50">
+                  <div className="p-6 text-white transform transition-transform duration-300 group-hover:translate-y-[-8px]">
+                    <h3 className="text-2xl font-bold mb-2 transition-colors duration-300 group-hover:text-secondary">Ivoiriens de l'Extérieur</h3>
                     <p className="text-sm text-white/90">
                       Accompagner et coordonner les initiatives visant le regroupement et l'organisation 
                       des Ivoiriens de l'extérieur, faciliter leur réinsertion et mobiliser leurs compétences
@@ -105,20 +105,20 @@ const Index = () => {
         {/* Pillars Section */}
         <div className="mb-12">
           <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-            <BookOpen className="w-8 h-8 text-primary" />
+            <BookOpen className="w-8 h-8 text-primary transition-transform duration-300 hover:rotate-12" />
             Piliers Stratégiques
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {pillars.map((pillar) => (
-              <Card key={pillar.id} className="card-hover">
+              <Card key={pillar.id} className="transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/50 cursor-pointer group">
                 <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
+                  <CardTitle className="flex items-center justify-between transition-colors duration-300 group-hover:text-primary">
                     {pillar.label}
-                    <Badge variant="secondary">
+                    <Badge variant="secondary" className="transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
                       {indicatorsByPillar[pillar.id as keyof typeof indicatorsByPillar]} indicateurs
                     </Badge>
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="transition-colors duration-300 group-hover:text-foreground">
                     {pillar.id === "INT" && "Mesure de l'intégration régionale et du commerce intra-africain"}
                     {pillar.id === "DIA" && "Suivi des Ivoiriens de l'extérieur et de la diaspora"}
                     {pillar.id === "MACRO" && "Indicateurs macroéconomiques et transversaux"}
@@ -168,8 +168,11 @@ const Index = () => {
 
         {/* Commerce Evolution */}
         <section className="mb-12">
-          <Card className="p-6">
-            <h3 className="text-xl font-bold text-foreground mb-6">Évolution du Commerce (Milliards FCFA)</h3>
+          <Card className="p-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30">
+            <h3 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
+              <TrendingUp className="w-6 h-6 text-primary transition-transform duration-300 hover:scale-110" />
+              Évolution du Commerce (Milliards FCFA)
+            </h3>
             <ResponsiveContainer width="100%" height={350}>
               <LineChart data={tradeEvolution}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -193,10 +196,13 @@ const Index = () => {
 
         {/* Regional Weights */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Poids de la Côte d'Ivoire dans les Régions</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+            <Globe2 className="w-7 h-7 text-primary transition-transform duration-300 hover:rotate-180" />
+            Poids de la Côte d'Ivoire dans les Régions
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="p-6">
-              <h4 className="text-sm font-semibold text-muted-foreground mb-4">PIB Régional</h4>
+            <Card className="p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/40 group cursor-pointer">
+              <h4 className="text-sm font-semibold text-muted-foreground mb-4 transition-colors duration-300 group-hover:text-primary">PIB Régional</h4>
               <div className="space-y-3">
                 <div>
                   <div className="flex justify-between mb-1">
@@ -228,8 +234,8 @@ const Index = () => {
               </div>
             </Card>
 
-            <Card className="p-6">
-              <h4 className="text-sm font-semibold text-muted-foreground mb-4">Exportations</h4>
+            <Card className="p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-secondary/10 hover:border-secondary/40 group cursor-pointer">
+              <h4 className="text-sm font-semibold text-muted-foreground mb-4 transition-colors duration-300 group-hover:text-secondary">Exportations</h4>
               <div className="space-y-3">
                 <div>
                   <div className="flex justify-between mb-1">
@@ -252,8 +258,8 @@ const Index = () => {
               </div>
             </Card>
 
-            <Card className="p-6">
-              <h4 className="text-sm font-semibold text-muted-foreground mb-4">Importations</h4>
+            <Card className="p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-accent/10 hover:border-accent/40 group cursor-pointer">
+              <h4 className="text-sm font-semibold text-muted-foreground mb-4 transition-colors duration-300 group-hover:text-accent">Importations</h4>
               <div className="space-y-3">
                 <div>
                   <div className="flex justify-between mb-1">
@@ -281,16 +287,16 @@ const Index = () => {
         {/* Organizations Section */}
         <div>
           <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-            <Users className="w-8 h-8 text-primary" />
+            <Users className="w-8 h-8 text-primary transition-transform duration-300 hover:scale-110" />
             Organisations Contributeurs
           </h2>
-          <Card>
+          <Card className="transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
             <CardContent className="pt-6">
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {organizations.map((org) => (
-                  <div key={org.id} className="p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
-                    <p className="font-semibold text-sm">{org.id}</p>
-                    <p className="text-xs text-muted-foreground">{org.name}</p>
+                  <div key={org.id} className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:border-primary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
+                    <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-primary">{org.id}</p>
+                    <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
                   </div>
                 ))}
               </div>
@@ -301,16 +307,16 @@ const Index = () => {
         {/* Structure organisationnelle */}
         <div className="mb-12">
           <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-            <Building2 className="w-8 h-8 text-primary" />
+            <Building2 className="w-8 h-8 text-primary transition-transform duration-300 hover:scale-110" />
             Structure Organisationnelle
           </h2>
 
           <div className="grid gap-6">
             {/* DGPI */}
-            <Card className="card-hover border-l-4 border-l-primary">
+            <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 border-l-4 border-l-primary hover:border-l-primary/80 cursor-pointer group">
               <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <Network className="w-6 h-6 text-primary" />
+                <CardTitle className="flex items-center gap-3 transition-colors duration-300 group-hover:text-primary">
+                  <Network className="w-6 h-6 text-primary transition-transform duration-300 group-hover:rotate-12" />
                   Direction Générale des Politiques d'Intégration (DGPI)
                 </CardTitle>
                 <CardDescription>
@@ -329,13 +335,13 @@ const Index = () => {
                     </ul>
                   </div>
                   <div className="grid md:grid-cols-3 gap-3">
-                    <div className="p-3 rounded-lg bg-muted/50">
+                    <div className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20">
                       <p className="font-semibold text-sm">Direction des Politiques Communautaires Macroéconomiques et Financières</p>
                     </div>
-                    <div className="p-3 rounded-lg bg-muted/50">
+                    <div className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20">
                       <p className="font-semibold text-sm">Direction des Politiques Communautaires du Commerce et de la Libre Circulation</p>
                     </div>
-                    <div className="p-3 rounded-lg bg-muted/50">
+                    <div className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20">
                       <p className="font-semibold text-sm">Direction des Politiques de la Promotion Humaine et du Développement Durable</p>
                     </div>
                   </div>
@@ -344,10 +350,10 @@ const Index = () => {
             </Card>
 
             {/* DGIE */}
-            <Card className="card-hover border-l-4 border-l-secondary">
+            <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-secondary/10 border-l-4 border-l-secondary hover:border-l-secondary/80 cursor-pointer group">
               <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <Users2 className="w-6 h-6 text-primary" />
+                <CardTitle className="flex items-center gap-3 transition-colors duration-300 group-hover:text-secondary">
+                  <Users2 className="w-6 h-6 text-primary transition-transform duration-300 group-hover:scale-110" />
                   Direction Générale des Ivoiriens de l'Extérieur (DGIE)
                 </CardTitle>
                 <CardDescription>
@@ -366,13 +372,13 @@ const Index = () => {
                     </ul>
                   </div>
                   <div className="grid md:grid-cols-3 gap-3">
-                    <div className="p-3 rounded-lg bg-muted/50">
+                    <div className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary/20">
                       <p className="font-semibold text-sm">Direction de l'Accueil, de l'Orientation et du Suivi des Actions de Réinsertion</p>
                     </div>
-                    <div className="p-3 rounded-lg bg-muted/50">
+                    <div className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary/20">
                       <p className="font-semibold text-sm">Direction de la Mobilisation des Compétences et des Ressources</p>
                     </div>
-                    <div className="p-3 rounded-lg bg-muted/50">
+                    <div className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary/20">
                       <p className="font-semibold text-sm">Direction de l'Action Sociale</p>
                     </div>
                   </div>
@@ -381,10 +387,10 @@ const Index = () => {
             </Card>
 
             {/* SPSE */}
-            <Card className="card-hover border-l-4 border-l-accent bg-gradient-subtle">
+            <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-accent/10 border-l-4 border-l-accent hover:border-l-accent/80 bg-gradient-subtle cursor-pointer group">
               <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <FileText className="w-6 h-6 text-primary" />
+                <CardTitle className="flex items-center gap-3 transition-colors duration-300 group-hover:text-accent">
+                  <FileText className="w-6 h-6 text-primary transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
                   Service Planification & Suivi-Évaluation (SPSE)
                 </CardTitle>
                 <CardDescription>
