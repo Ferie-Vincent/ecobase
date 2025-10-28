@@ -20,8 +20,17 @@ const Index = () => {
             ECOBASE
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Base de données socio-économiques et techniques sur l'intégration africaine et la gestion des Ivoiriens de l'extérieur
+            Plateforme de données pour le suivi et l'évaluation des politiques publiques
           </p>
+          <div className="max-w-4xl mx-auto mb-6">
+            <p className="text-base text-foreground/90 leading-relaxed">
+              ECOBASE est la base de données officielle du{" "}
+              <strong>Ministère Délégué chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur</strong>.
+              Elle centralise les indicateurs socio-économiques et techniques permettant le suivi et l'évaluation 
+              de deux politiques majeures : <strong>l'Intégration Africaine</strong> et la{" "}
+              <strong>Gestion des Ivoiriens de l'Extérieur</strong>.
+            </p>
+          </div>
           <div className="flex gap-2 justify-center flex-wrap">
             <Badge variant="outline" className="text-sm">
               Version {metadata.version}
@@ -127,10 +136,23 @@ const Index = () => {
               permettant le suivi et l'évaluation des politiques d'intégration régionale et de gestion de la diaspora.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Propriétaire: {metadata.owner_org}
-            </p>
+          <CardContent className="space-y-3">
+            <div>
+              <p className="text-sm font-semibold mb-1">Propriétaire</p>
+              <p className="text-sm text-muted-foreground">
+                {metadata.owner_org}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold mb-1">Gestionnaire de la plateforme</p>
+              <p className="text-sm text-muted-foreground">
+                Service Planification & Suivi-Evaluation (SPSE)
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Le SPSE assure la collecte, la validation et la diffusion des statistiques et indicateurs 
+                sectoriels en lien avec les missions du ministère.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
