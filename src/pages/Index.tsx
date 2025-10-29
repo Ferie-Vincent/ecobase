@@ -1,9 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Database, Users, TrendingUp, FileText, BookOpen, Building2, Network, Users2, Target, BarChart3, Globe2, Landmark, Sprout, CircleDollarSign, Plane, Coins, Flag } from "lucide-react";
-import { metadata, organizations, pillars } from "@/data/metadata";
+import { Database, Users, TrendingUp, FileText, BookOpen, Building2, Network, Users2, Target, BarChart3, Globe2, Landmark, Sprout, CircleDollarSign, Plane, Coins, Flag, BanknoteIcon, Ship } from "lucide-react";
+import { metadata, pillars } from "@/data/metadata";
 import { indicators } from "@/data/indicators";
+import { organisations } from "@/data/seedData";
 import integrationPolicyImage from "@/assets/integration-policy.jpg";
 import diasporaPolicyImage from "@/assets/diaspora-policy.jpg";
 import { StatCard } from "@/components/StatCard";
@@ -17,21 +18,19 @@ const Index = () => {
     MACRO: indicators.filter(i => i.pillar === "MACRO").length
   };
 
-  // Helper function to get icon for organization
-  const getOrgIcon = (orgId: string) => {
+  // Helper function to get icon for organization based on sigle
+  const getOrgIcon = (sigle: string) => {
     const iconMap: { [key: string]: any } = {
-      'INS': BarChart3,
-      'MINEF': Landmark,
-      'MINADER': Sprout,
-      'BM': Building2,
-      'FMI': CircleDollarSign,
-      'BAD': TrendingUp,
-      'OIM': Plane,
       'CEDEAO': Globe2,
       'UEMOA': Coins,
-      'UA': Flag
+      'BAD': TrendingUp,
+      'OIM': Plane,
+      'DBDES': Landmark,
+      'DGCE': Ship,
+      'DGD': Building2,
+      'CNPS': BanknoteIcon
     };
-    return iconMap[orgId] || Building2;
+    return iconMap[sigle] || Building2;
   };
 
   return (
@@ -453,27 +452,55 @@ const Index = () => {
             Partenaires Techniques
           </h2>
           
-          {/* National */}
+          {/* Nationales */}
           <Card className="mb-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 bg-card/60 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-3 text-xl">
                 <Building2 className="w-6 h-6 text-primary transition-transform duration-300 hover:scale-110" />
-                National
+                Nationales
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {organizations.filter(org => ['INS', 'MINEF', 'MINADER'].includes(org.id)).map((org) => {
-                  const IconComponent = getOrgIcon(org.id);
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {organisations.filter(org => org.type === "Nationale").map((org) => {
+                  const IconComponent = getOrgIcon(org.sigle);
                   return (
                     <div key={org.id} className="p-4 rounded-lg bg-muted/50 hover:bg-primary/10 hover:border-primary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
                       <div className="flex items-center gap-3 mb-2">
                         <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
                           <IconComponent className="w-5 h-5 text-primary" />
                         </div>
-                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-primary">{org.id}</p>
+                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-primary">{org.sigle}</p>
                       </div>
-                      <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
+                      <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.nom}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Régionales */}
+          <Card className="mb-6 transition-all duration-300 hover:shadow-xl hover:shadow-accent/10 bg-card/60 backdrop-blur-sm border-border/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <Network className="w-6 h-6 text-accent transition-transform duration-300 hover:scale-110" />
+                Régionales
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4">
+                {organisations.filter(org => org.type === "Régionale").map((org) => {
+                  const IconComponent = getOrgIcon(org.sigle);
+                  return (
+                    <div key={org.id} className="p-4 rounded-lg bg-muted/50 hover:bg-accent/10 hover:border-accent/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="p-2 rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
+                          <IconComponent className="w-5 h-5 text-accent" />
+                        </div>
+                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-accent">{org.sigle}</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.nom}</p>
                     </div>
                   );
                 })}
@@ -482,7 +509,7 @@ const Index = () => {
           </Card>
 
           {/* Internationales */}
-          <Card className="mb-6 transition-all duration-300 hover:shadow-xl hover:shadow-secondary/10 bg-card/60 backdrop-blur-sm border-border/50">
+          <Card className="transition-all duration-300 hover:shadow-xl hover:shadow-secondary/10 bg-card/60 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-3 text-xl">
                 <Globe2 className="w-6 h-6 text-secondary transition-transform duration-300 hover:rotate-180" />
@@ -490,46 +517,18 @@ const Index = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {organizations.filter(org => ['BM', 'FMI', 'BAD', 'OIM'].includes(org.id)).map((org) => {
-                  const IconComponent = getOrgIcon(org.id);
+              <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4">
+                {organisations.filter(org => org.type === "Internationale").map((org) => {
+                  const IconComponent = getOrgIcon(org.sigle);
                   return (
                     <div key={org.id} className="p-4 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:border-secondary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
                       <div className="flex items-center gap-3 mb-2">
                         <div className="p-2 rounded-lg bg-secondary/10 group-hover:bg-secondary/20 transition-colors">
                           <IconComponent className="w-5 h-5 text-secondary" />
                         </div>
-                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-secondary">{org.id}</p>
+                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-secondary">{org.sigle}</p>
                       </div>
-                      <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Organisations communautaires */}
-          <Card className="transition-all duration-300 hover:shadow-xl hover:shadow-accent/10 bg-card/60 backdrop-blur-sm border-border/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-xl">
-                <Network className="w-6 h-6 text-accent transition-transform duration-300 hover:scale-110" />
-                Organisations Communautaires
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {organizations.filter(org => ['CEDEAO', 'UEMOA', 'UA'].includes(org.id)).map((org) => {
-                  const IconComponent = getOrgIcon(org.id);
-                  return (
-                    <div key={org.id} className="p-4 rounded-lg bg-muted/50 hover:bg-accent/10 hover:border-accent/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2 rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
-                          <IconComponent className="w-5 h-5 text-accent" />
-                        </div>
-                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-accent">{org.id}</p>
-                      </div>
-                      <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
+                      <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.nom}</p>
                     </div>
                   );
                 })}
