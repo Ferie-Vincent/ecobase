@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Database, Users, TrendingUp, FileText, BookOpen, Building2, Network, Users2, Target, BarChart3, Globe2 } from "lucide-react";
 import { metadata, organizations, pillars } from "@/data/metadata";
 import { indicators } from "@/data/indicators";
@@ -49,106 +50,229 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Missions du ministère */}
+        {/* Accordion: Missions + Documents + Structure */}
         <Card className="mb-12 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3 text-3xl">
-              <Target className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
-              Nos Missions
-            </CardTitle>
-            <CardDescription className="text-base">
-              Le ministère assure deux missions stratégiques complémentaires
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Mission 1 - Intégration */}
-              <div className="group relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
-                <img 
-                  src={integrationPolicyImage} 
-                  alt="Politique d'Intégration Africaine" 
-                  className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end transition-all duration-300 group-hover:from-black/90 group-hover:via-black/50">
-                  <div className="p-6 text-white transform transition-transform duration-300 group-hover:translate-y-[-8px]">
-                    <h3 className="text-2xl font-bold mb-2 transition-colors duration-300 group-hover:text-primary">Intégration Africaine</h3>
-                    <p className="text-sm text-white/90">
-                      Promouvoir l'intégration régionale, harmoniser les politiques sectorielles, 
-                      et renforcer la coopération économique et commerciale au sein de la CEDEAO et de l'UEMOA
-                    </p>
-                  </div>
+          <Accordion type="single" collapsible className="w-full">
+            {/* Nos Missions */}
+            <AccordionItem value="missions">
+              <AccordionTrigger className="px-6 text-xl font-bold hover:no-underline">
+                <div className="flex items-center gap-3">
+                  <Target className="w-7 h-7 text-primary transition-transform duration-300" />
+                  Nos Missions
                 </div>
-              </div>
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <p className="text-base text-muted-foreground mb-6">
+                  Le ministère assure deux missions stratégiques complémentaires
+                </p>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Mission 1 - Intégration */}
+                  <div className="group relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
+                    <img 
+                      src={integrationPolicyImage} 
+                      alt="Politique d'Intégration Africaine" 
+                      className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end transition-all duration-300 group-hover:from-black/90 group-hover:via-black/50">
+                      <div className="p-6 text-white transform transition-transform duration-300 group-hover:translate-y-[-8px]">
+                        <h3 className="text-2xl font-bold mb-2 transition-colors duration-300 group-hover:text-primary">Intégration Africaine</h3>
+                        <p className="text-sm text-white/90">
+                          Promouvoir l'intégration régionale, harmoniser les politiques sectorielles, 
+                          et renforcer la coopération économique et commerciale au sein de la CEDEAO et de l'UEMOA
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-              {/* Mission 2 - Diaspora */}
-              <div className="group relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
-                <img 
-                  src={diasporaPolicyImage} 
-                  alt="Gestion des Ivoiriens de l'Extérieur" 
-                  className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end transition-all duration-300 group-hover:from-black/90 group-hover:via-black/50">
-                  <div className="p-6 text-white transform transition-transform duration-300 group-hover:translate-y-[-8px]">
-                    <h3 className="text-2xl font-bold mb-2 transition-colors duration-300 group-hover:text-secondary">Ivoiriens de l'Extérieur</h3>
-                    <p className="text-sm text-white/90">
-                      Accompagner et coordonner les initiatives visant le regroupement et l'organisation 
-                      des Ivoiriens de l'extérieur, faciliter leur réinsertion et mobiliser leurs compétences
-                    </p>
+                  {/* Mission 2 - Diaspora */}
+                  <div className="group relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
+                    <img 
+                      src={diasporaPolicyImage} 
+                      alt="Gestion des Ivoiriens de l'Extérieur" 
+                      className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end transition-all duration-300 group-hover:from-black/90 group-hover:via-black/50">
+                      <div className="p-6 text-white transform transition-transform duration-300 group-hover:translate-y-[-8px]">
+                        <h3 className="text-2xl font-bold mb-2 transition-colors duration-300 group-hover:text-secondary">Ivoiriens de l'Extérieur</h3>
+                        <p className="text-sm text-white/90">
+                          Accompagner et coordonner les initiatives visant le regroupement et l'organisation 
+                          des Ivoiriens de l'extérieur, faciliter leur réinsertion et mobiliser leurs compétences
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              </AccordionContent>
+            </AccordionItem>
 
-        {/* Documents à télécharger */}
-        <Card className="mb-12 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3 text-2xl">
-              <FileText className="w-7 h-7 text-primary transition-transform duration-300 hover:scale-110" />
-              Documents à télécharger
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-3 gap-4">
-              <a 
-                href="#" 
-                className="group p-4 rounded-lg border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card"
-              >
+            {/* Documents à télécharger */}
+            <AccordionItem value="documents">
+              <AccordionTrigger className="px-6 text-xl font-bold hover:no-underline">
                 <div className="flex items-center gap-3">
-                  <FileText className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
-                  <div>
-                    <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Le Décret</p>
-                    <p className="text-xs text-muted-foreground">Fichier PDF</p>
-                  </div>
+                  <FileText className="w-7 h-7 text-primary transition-transform duration-300" />
+                  Documents à télécharger
                 </div>
-              </a>
-              <a 
-                href="#" 
-                className="group p-4 rounded-lg border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card"
-              >
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="grid md:grid-cols-3 gap-4">
+                  <a 
+                    href="#" 
+                    className="group p-4 rounded-lg border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card"
+                  >
+                    <div className="flex items-center gap-3">
+                      <FileText className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
+                      <div>
+                        <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Le Décret</p>
+                        <p className="text-xs text-muted-foreground">Fichier PDF</p>
+                      </div>
+                    </div>
+                  </a>
+                  <a 
+                    href="#" 
+                    className="group p-4 rounded-lg border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Network className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
+                      <div>
+                        <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Organigramme</p>
+                        <p className="text-xs text-muted-foreground">À télécharger</p>
+                      </div>
+                    </div>
+                  </a>
+                  <a 
+                    href="#" 
+                    className="group p-4 rounded-lg border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Building2 className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
+                      <div>
+                        <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Structure organisationnelle</p>
+                        <p className="text-xs text-muted-foreground">Cabinet, DGPI, DGIE, SPSE</p>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            {/* Structure Organisationnelle */}
+            <AccordionItem value="structure">
+              <AccordionTrigger className="px-6 text-xl font-bold hover:no-underline">
                 <div className="flex items-center gap-3">
-                  <Network className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
-                  <div>
-                    <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Organigramme</p>
-                    <p className="text-xs text-muted-foreground">À télécharger</p>
-                  </div>
+                  <Building2 className="w-7 h-7 text-primary transition-transform duration-300" />
+                  Structure Organisationnelle
                 </div>
-              </a>
-              <a 
-                href="#" 
-                className="group p-4 rounded-lg border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card"
-              >
-                <div className="flex items-center gap-3">
-                  <Building2 className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
-                  <div>
-                    <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Structure organisationnelle</p>
-                    <p className="text-xs text-muted-foreground">Cabinet, DGPI, DGIE, SPSE</p>
-                  </div>
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="grid gap-6">
+                  {/* DGPI */}
+                  <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 border-l-4 border-l-primary hover:border-l-primary/80 cursor-pointer group">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-3 transition-colors duration-300 group-hover:text-primary">
+                        <Network className="w-6 h-6 text-primary transition-transform duration-300 group-hover:rotate-12" />
+                        Direction Générale des Politiques d'Intégration (DGPI)
+                      </CardTitle>
+                      <CardDescription>
+                        Coordinatrice des politiques d'intégration régionale et africaine
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-semibold mb-2">Attributions principales :</h4>
+                          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                            <li>Participation et harmonisation des instruments techniques et économiques d'intégration</li>
+                            <li>Coordination des politiques sectorielles en matière d'intégration africaine</li>
+                            <li>Mise en œuvre et suivi des programmes communautaires</li>
+                            <li>Promotion de la paix et de la sécurité régionale</li>
+                          </ul>
+                        </div>
+                        <div className="grid md:grid-cols-3 gap-3">
+                          <div className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20">
+                            <p className="font-semibold text-sm">Direction des Politiques Communautaires Macroéconomiques et Financières</p>
+                          </div>
+                          <div className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20">
+                            <p className="font-semibold text-sm">Direction des Politiques Communautaires du Commerce et de la Libre Circulation</p>
+                          </div>
+                          <div className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20">
+                            <p className="font-semibold text-sm">Direction des Politiques de la Promotion Humaine et du Développement Durable</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* DGIE */}
+                  <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-secondary/10 border-l-4 border-l-secondary hover:border-l-secondary/80 cursor-pointer group">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-3 transition-colors duration-300 group-hover:text-secondary">
+                        <Users2 className="w-6 h-6 text-primary transition-transform duration-300 group-hover:scale-110" />
+                        Direction Générale des Ivoiriens de l'Extérieur (DGIE)
+                      </CardTitle>
+                      <CardDescription>
+                        Gestion et accompagnement de la diaspora ivoirienne
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-semibold mb-2">Attributions principales :</h4>
+                          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                            <li>Encourager et coordonner les initiatives de regroupement des Ivoiriens de l'extérieur</li>
+                            <li>Appuyer la réinsertion économique, sociale et culturelle lors du retour en Côte d'Ivoire</li>
+                            <li>Faciliter l'accès au logement et coordonner la participation au développement</li>
+                            <li>Mobiliser les compétences des Ivoiriens de l'extérieur</li>
+                          </ul>
+                        </div>
+                        <div className="grid md:grid-cols-3 gap-3">
+                          <div className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary/20">
+                            <p className="font-semibold text-sm">Direction de l'Accueil, de l'Orientation et du Suivi des Actions de Réinsertion</p>
+                          </div>
+                          <div className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary/20">
+                            <p className="font-semibold text-sm">Direction de la Mobilisation des Compétences et des Ressources</p>
+                          </div>
+                          <div className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary/20">
+                            <p className="font-semibold text-sm">Direction de l'Action Sociale</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* SPSE */}
+                  <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-accent/10 border-l-4 border-l-accent hover:border-l-accent/80 bg-gradient-subtle cursor-pointer group">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-3 transition-colors duration-300 group-hover:text-accent">
+                        <FileText className="w-6 h-6 text-primary transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+                        Service Planification & Suivi-Évaluation (SPSE)
+                      </CardTitle>
+                      <CardDescription>
+                        Gestionnaire de la plateforme ECOBASE
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-semibold mb-2">Rôle vis-à-vis d'ECOBASE :</h4>
+                          <p className="text-sm text-muted-foreground mb-3">
+                            Le SPSE est le service responsable de la gestion et du maintien de la plateforme ECOBASE. 
+                            Il assure la collecte, la validation et la diffusion des données et indicateurs stratégiques.
+                          </p>
+                          <h4 className="font-semibold mb-2">Attributions principales :</h4>
+                          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                            <li>Participation à l'élaboration des Plans Nationaux de Développement</li>
+                            <li>Production des statistiques et indicateurs sectoriels</li>
+                            <li>Accompagnement des structures du ministère en matière de planification et de suivi-évaluation</li>
+                            <li>Élaboration des bilans semestriels et annuels des activités du ministère</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              </a>
-            </div>
-          </CardContent>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Card>
 
         {/* Pillars Section */}
@@ -371,121 +495,6 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
-        </div>
-
-        {/* Structure organisationnelle */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-            <Building2 className="w-8 h-8 text-primary transition-transform duration-300 hover:scale-110" />
-            Structure Organisationnelle
-          </h2>
-
-          <div className="grid gap-6">
-            {/* DGPI */}
-            <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 border-l-4 border-l-primary hover:border-l-primary/80 cursor-pointer group">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3 transition-colors duration-300 group-hover:text-primary">
-                  <Network className="w-6 h-6 text-primary transition-transform duration-300 group-hover:rotate-12" />
-                  Direction Générale des Politiques d'Intégration (DGPI)
-                </CardTitle>
-                <CardDescription>
-                  Coordinatrice des politiques d'intégration régionale et africaine
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold mb-2">Attributions principales :</h4>
-                    <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                      <li>Participation et harmonisation des instruments techniques et économiques d'intégration</li>
-                      <li>Coordination des politiques sectorielles en matière d'intégration africaine</li>
-                      <li>Mise en œuvre et suivi des programmes communautaires</li>
-                      <li>Promotion de la paix et de la sécurité régionale</li>
-                    </ul>
-                  </div>
-                  <div className="grid md:grid-cols-3 gap-3">
-                    <div className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20">
-                      <p className="font-semibold text-sm">Direction des Politiques Communautaires Macroéconomiques et Financières</p>
-                    </div>
-                    <div className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20">
-                      <p className="font-semibold text-sm">Direction des Politiques Communautaires du Commerce et de la Libre Circulation</p>
-                    </div>
-                    <div className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20">
-                      <p className="font-semibold text-sm">Direction des Politiques de la Promotion Humaine et du Développement Durable</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* DGIE */}
-            <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-secondary/10 border-l-4 border-l-secondary hover:border-l-secondary/80 cursor-pointer group">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3 transition-colors duration-300 group-hover:text-secondary">
-                  <Users2 className="w-6 h-6 text-primary transition-transform duration-300 group-hover:scale-110" />
-                  Direction Générale des Ivoiriens de l'Extérieur (DGIE)
-                </CardTitle>
-                <CardDescription>
-                  Gestion et accompagnement de la diaspora ivoirienne
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold mb-2">Attributions principales :</h4>
-                    <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                      <li>Encourager et coordonner les initiatives de regroupement des Ivoiriens de l'extérieur</li>
-                      <li>Appuyer la réinsertion économique, sociale et culturelle lors du retour en Côte d'Ivoire</li>
-                      <li>Faciliter l'accès au logement et coordonner la participation au développement</li>
-                      <li>Mobiliser les compétences des Ivoiriens de l'extérieur</li>
-                    </ul>
-                  </div>
-                  <div className="grid md:grid-cols-3 gap-3">
-                    <div className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary/20">
-                      <p className="font-semibold text-sm">Direction de l'Accueil, de l'Orientation et du Suivi des Actions de Réinsertion</p>
-                    </div>
-                    <div className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary/20">
-                      <p className="font-semibold text-sm">Direction de la Mobilisation des Compétences et des Ressources</p>
-                    </div>
-                    <div className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary/20">
-                      <p className="font-semibold text-sm">Direction de l'Action Sociale</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* SPSE */}
-            <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-accent/10 border-l-4 border-l-accent hover:border-l-accent/80 bg-gradient-subtle cursor-pointer group">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3 transition-colors duration-300 group-hover:text-accent">
-                  <FileText className="w-6 h-6 text-primary transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
-                  Service Planification & Suivi-Évaluation (SPSE)
-                </CardTitle>
-                <CardDescription>
-                  Gestionnaire de la plateforme ECOBASE
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold mb-2">Rôle vis-à-vis d'ECOBASE :</h4>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      Le SPSE est le service responsable de la gestion et du maintien de la plateforme ECOBASE. 
-                      Il assure la collecte, la validation et la diffusion des données et indicateurs stratégiques.
-                    </p>
-                    <h4 className="font-semibold mb-2">Attributions principales :</h4>
-                    <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                      <li>Participation à l'élaboration des Plans Nationaux de Développement</li>
-                      <li>Production des statistiques et indicateurs sectoriels</li>
-                      <li>Accompagnement des structures du ministère en matière de planification et de suivi-évaluation</li>
-                      <li>Élaboration des bilans semestriels et annuels des activités du ministère</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
         </div>
 
       </div>
