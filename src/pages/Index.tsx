@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Database, Users, TrendingUp, FileText, BookOpen, Building2, Network, Users2, Target, BarChart3, Globe2 } from "lucide-react";
+import { Database, Users, TrendingUp, FileText, BookOpen, Building2, Network, Users2, Target, BarChart3, Globe2, Landmark, Sprout, CircleDollarSign, Plane, Coins, Flag } from "lucide-react";
 import { metadata, organizations, pillars } from "@/data/metadata";
 import { indicators } from "@/data/indicators";
 import integrationPolicyImage from "@/assets/integration-policy.jpg";
@@ -15,6 +15,23 @@ const Index = () => {
     INT: indicators.filter(i => i.pillar === "INT").length,
     DIA: indicators.filter(i => i.pillar === "DIA").length,
     MACRO: indicators.filter(i => i.pillar === "MACRO").length
+  };
+
+  // Helper function to get icon for organization
+  const getOrgIcon = (orgId: string) => {
+    const iconMap: { [key: string]: any } = {
+      'INS': BarChart3,
+      'MINEF': Landmark,
+      'MINADER': Sprout,
+      'BM': Building2,
+      'FMI': CircleDollarSign,
+      'BAD': TrendingUp,
+      'OIM': Plane,
+      'CEDEAO': Globe2,
+      'UEMOA': Coins,
+      'UA': Flag
+    };
+    return iconMap[orgId] || Building2;
   };
 
   return (
@@ -446,12 +463,20 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {organizations.filter(org => ['INS', 'MINEF', 'MINADER'].includes(org.id)).map((org) => (
-                  <div key={org.id} className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:border-primary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
-                    <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-primary">{org.id}</p>
-                    <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
-                  </div>
-                ))}
+                {organizations.filter(org => ['INS', 'MINEF', 'MINADER'].includes(org.id)).map((org) => {
+                  const IconComponent = getOrgIcon(org.id);
+                  return (
+                    <div key={org.id} className="p-4 rounded-lg bg-muted/50 hover:bg-primary/10 hover:border-primary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                          <IconComponent className="w-5 h-5 text-primary" />
+                        </div>
+                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-primary">{org.id}</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
+                    </div>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
@@ -466,12 +491,20 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {organizations.filter(org => ['BM', 'FMI', 'BAD', 'OIM'].includes(org.id)).map((org) => (
-                  <div key={org.id} className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:border-secondary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
-                    <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-secondary">{org.id}</p>
-                    <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
-                  </div>
-                ))}
+                {organizations.filter(org => ['BM', 'FMI', 'BAD', 'OIM'].includes(org.id)).map((org) => {
+                  const IconComponent = getOrgIcon(org.id);
+                  return (
+                    <div key={org.id} className="p-4 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:border-secondary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="p-2 rounded-lg bg-secondary/10 group-hover:bg-secondary/20 transition-colors">
+                          <IconComponent className="w-5 h-5 text-secondary" />
+                        </div>
+                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-secondary">{org.id}</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
+                    </div>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
@@ -486,12 +519,20 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {organizations.filter(org => ['CEDEAO', 'UEMOA', 'UA'].includes(org.id)).map((org) => (
-                  <div key={org.id} className="p-3 rounded-lg bg-muted/50 hover:bg-accent/10 hover:border-accent/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
-                    <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-accent">{org.id}</p>
-                    <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
-                  </div>
-                ))}
+                {organizations.filter(org => ['CEDEAO', 'UEMOA', 'UA'].includes(org.id)).map((org) => {
+                  const IconComponent = getOrgIcon(org.id);
+                  return (
+                    <div key={org.id} className="p-4 rounded-lg bg-muted/50 hover:bg-accent/10 hover:border-accent/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="p-2 rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
+                          <IconComponent className="w-5 h-5 text-accent" />
+                        </div>
+                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-accent">{org.id}</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
+                    </div>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
