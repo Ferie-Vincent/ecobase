@@ -16,7 +16,7 @@ interface TimelineChartProps {
 
 export const TimelineChart = ({ title, data, lines }: TimelineChartProps) => {
   return (
-    <Card className="p-6">
+    <Card className="p-6 bg-card/60 backdrop-blur-sm border-border/50 hover:shadow-xl transition-all duration-300">
       <h3 className="text-xl font-bold text-foreground mb-6">
         {title}
       </h3>
@@ -30,8 +30,9 @@ export const TimelineChart = ({ title, data, lines }: TimelineChartProps) => {
           <YAxis stroke="hsl(var(--muted-foreground))" />
           <Tooltip 
             contentStyle={{ 
-              backgroundColor: 'hsl(var(--card))',
-              border: '1px solid hsl(var(--border))',
+              backgroundColor: 'hsl(var(--card) / 0.9)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid hsl(var(--border) / 0.5)',
               borderRadius: '8px'
             }}
             formatter={(value: number) => value.toLocaleString('fr-FR')}

@@ -15,7 +15,7 @@ export const Navigation = () => {
   const location = useLocation();
   
   return (
-    <nav className="bg-card border-b border-border sticky top-0 z-50 backdrop-blur-sm bg-card/95">
+    <nav className="bg-card/80 border-b border-border/50 sticky top-0 z-50 backdrop-blur-md">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 gap-4">
           <div className="flex items-center gap-3">

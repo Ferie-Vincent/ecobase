@@ -14,9 +14,9 @@ export const StatCard = ({ title, value, unit, trend, icon, variant = "default" 
   const isPositiveTrend = trend?.startsWith("+");
   
   const variantStyles = {
-    default: "border-border hover:border-primary/30 transition-all duration-300",
-    primary: "bg-gradient-to-br from-primary/10 to-primary/5 border-primary/30 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300",
-    secondary: "bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/30 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300"
+    default: "border-border/50 hover:border-primary/30 transition-all duration-300 bg-card/60 backdrop-blur-sm",
+    primary: "bg-gradient-to-br from-primary/10 to-primary/5 border-primary/30 hover:shadow-xl transition-all duration-300 backdrop-blur-sm",
+    secondary: "bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/30 hover:shadow-xl transition-all duration-300 backdrop-blur-sm"
   };
 
   return (

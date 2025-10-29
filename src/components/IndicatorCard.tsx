@@ -21,7 +21,7 @@ export const IndicatorCard = ({ name, value, unit, trend, category, description 
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Card className="p-5 hover:shadow-lg transition-all duration-300 border-border hover:border-primary/20 cursor-pointer hover:scale-[1.02]">
+          <Card className="p-5 hover:shadow-xl transition-all duration-300 border-border/50 hover:border-primary/30 cursor-pointer hover:scale-[1.02] bg-card/60 backdrop-blur-sm">
             <div className="space-y-3">
               <div className="flex items-start justify-between">
                 <h4 className="text-sm font-semibold text-foreground leading-snug pr-2">{name}</h4>

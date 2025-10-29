@@ -30,7 +30,7 @@ const DocumentsRapports = () => {
   const renderDocumentCard = (doc: Document) => (
     <Card 
       key={doc.id} 
-      className="group hover:shadow-lg transition-all duration-300 cursor-pointer"
+      className="group hover:shadow-xl transition-all duration-300 cursor-pointer bg-card/60 backdrop-blur-sm border-border/50"
       onClick={() => handleDocumentClick(doc)}
     >
       <CardHeader>
@@ -133,7 +133,7 @@ const DocumentsRapports = () => {
         </section>
 
         {/* Info Card */}
-        <Card className="bg-gradient-to-br from-accent/5 to-accent/10 border-accent/20">
+        <Card className="bg-gradient-to-br from-accent/5 to-accent/10 border-accent/20 backdrop-blur-sm">
           <CardHeader>
             <div className="flex items-center gap-2">
               <Info className="h-5 w-5 text-accent" />

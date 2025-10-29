@@ -21,7 +21,7 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <div className="container mx-auto px-4 py-12">
         {/* Hero Section - Présentation du Ministère */}
-        <div className="text-center mb-16 space-y-4 bg-gradient-to-br from-orange-500/10 to-orange-600/5 p-8 rounded-xl border border-orange-500/20">
+        <div className="text-center mb-16 space-y-4 bg-gradient-to-br from-orange-500/10 to-orange-600/5 p-8 rounded-xl border border-orange-500/20 backdrop-blur-sm">
           <h1 className="text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
             ECOBASE
           </h1>
@@ -51,7 +51,7 @@ const Index = () => {
         </div>
 
         {/* Accordion: Missions + Documents + Structure */}
-        <Card className="mb-12 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
+        <Card className="mb-12 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 bg-card/60 backdrop-blur-sm border-border/50">
           <Accordion type="single" collapsible className="w-full">
             {/* Nos Missions */}
             <AccordionItem value="missions">
@@ -117,7 +117,7 @@ const Index = () => {
                 <div className="grid md:grid-cols-3 gap-4">
                   <a 
                     href="#" 
-                    className="group p-4 rounded-lg border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card"
+                    className="group p-4 rounded-lg border border-border/50 hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card/60 backdrop-blur-sm"
                   >
                     <div className="flex items-center gap-3">
                       <FileText className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
@@ -129,7 +129,7 @@ const Index = () => {
                   </a>
                   <a 
                     href="#" 
-                    className="group p-4 rounded-lg border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card"
+                    className="group p-4 rounded-lg border border-border/50 hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card/60 backdrop-blur-sm"
                   >
                     <div className="flex items-center gap-3">
                       <Network className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
@@ -141,7 +141,7 @@ const Index = () => {
                   </a>
                   <a 
                     href="#" 
-                    className="group p-4 rounded-lg border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card"
+                    className="group p-4 rounded-lg border border-border/50 hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card/60 backdrop-blur-sm"
                   >
                     <div className="flex items-center gap-3">
                       <Building2 className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
@@ -166,7 +166,7 @@ const Index = () => {
               <AccordionContent className="px-6 pb-6">
                 <div className="grid gap-6">
                   {/* DGPI */}
-                  <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 border-l-4 border-l-primary hover:border-l-primary/80 cursor-pointer group">
+                  <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 border-l-4 border-l-primary hover:border-l-primary/80 cursor-pointer group bg-card/60 backdrop-blur-sm border-border/50">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-3 transition-colors duration-300 group-hover:text-primary">
                         <Network className="w-6 h-6 text-primary transition-transform duration-300 group-hover:rotate-12" />
@@ -203,7 +203,7 @@ const Index = () => {
                   </Card>
 
                   {/* DGIE */}
-                  <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-secondary/10 border-l-4 border-l-secondary hover:border-l-secondary/80 cursor-pointer group">
+                  <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-secondary/10 border-l-4 border-l-secondary hover:border-l-secondary/80 cursor-pointer group bg-card/60 backdrop-blur-sm border-border/50">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-3 transition-colors duration-300 group-hover:text-secondary">
                         <Users2 className="w-6 h-6 text-primary transition-transform duration-300 group-hover:scale-110" />
@@ -240,7 +240,7 @@ const Index = () => {
                   </Card>
 
                   {/* SPSE */}
-                  <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-accent/10 border-l-4 border-l-accent hover:border-l-accent/80 bg-gradient-subtle cursor-pointer group">
+                  <Card className="transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-accent/10 border-l-4 border-l-accent hover:border-l-accent/80 bg-gradient-subtle cursor-pointer group bg-card/60 backdrop-blur-sm border-border/50">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-3 transition-colors duration-300 group-hover:text-accent">
                         <FileText className="w-6 h-6 text-primary transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
@@ -283,7 +283,7 @@ const Index = () => {
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {pillars.map((pillar) => (
-              <Card key={pillar.id} className="transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/50 cursor-pointer group">
+              <Card key={pillar.id} className="transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/50 cursor-pointer group bg-card/60 backdrop-blur-sm border-border/50">
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between transition-colors duration-300 group-hover:text-primary">
                     {pillar.label}
@@ -346,7 +346,7 @@ const Index = () => {
             Poids de la Côte d'Ivoire dans les Régions
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/40 group cursor-pointer">
+            <Card className="p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/40 group cursor-pointer bg-card/60 backdrop-blur-sm border-border/50">
               <h4 className="text-sm font-semibold text-muted-foreground mb-4 transition-colors duration-300 group-hover:text-primary">PIB Régional</h4>
               <div className="space-y-3">
                 <div>
@@ -379,7 +379,7 @@ const Index = () => {
               </div>
             </Card>
 
-            <Card className="p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-secondary/10 hover:border-secondary/40 group cursor-pointer">
+            <Card className="p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-secondary/10 hover:border-secondary/40 group cursor-pointer bg-card/60 backdrop-blur-sm border-border/50">
               <h4 className="text-sm font-semibold text-muted-foreground mb-4 transition-colors duration-300 group-hover:text-secondary">Exportations</h4>
               <div className="space-y-3">
                 <div>
@@ -403,7 +403,7 @@ const Index = () => {
               </div>
             </Card>
 
-            <Card className="p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-accent/10 hover:border-accent/40 group cursor-pointer">
+            <Card className="p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-accent/10 hover:border-accent/40 group cursor-pointer bg-card/60 backdrop-blur-sm border-border/50">
               <h4 className="text-sm font-semibold text-muted-foreground mb-4 transition-colors duration-300 group-hover:text-accent">Importations</h4>
               <div className="space-y-3">
                 <div>
@@ -437,7 +437,7 @@ const Index = () => {
           </h2>
           
           {/* National */}
-          <Card className="mb-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
+          <Card className="mb-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 bg-card/60 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-3 text-xl">
                 <Building2 className="w-6 h-6 text-primary transition-transform duration-300 hover:scale-110" />
@@ -457,7 +457,7 @@ const Index = () => {
           </Card>
 
           {/* Internationales */}
-          <Card className="mb-6 transition-all duration-300 hover:shadow-xl hover:shadow-secondary/10">
+          <Card className="mb-6 transition-all duration-300 hover:shadow-xl hover:shadow-secondary/10 bg-card/60 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-3 text-xl">
                 <Globe2 className="w-6 h-6 text-secondary transition-transform duration-300 hover:rotate-180" />
@@ -477,7 +477,7 @@ const Index = () => {
           </Card>
 
           {/* Organisations communautaires */}
-          <Card className="transition-all duration-300 hover:shadow-xl hover:shadow-accent/10">
+          <Card className="transition-all duration-300 hover:shadow-xl hover:shadow-accent/10 bg-card/60 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-3 text-xl">
                 <Network className="w-6 h-6 text-accent transition-transform duration-300 hover:scale-110" />
