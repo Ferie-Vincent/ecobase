@@ -1,5 +1,6 @@
 import { IndicatorCard } from "@/components/IndicatorCard";
 import { integrationIndicatorsByYear } from "@/data/mockData";
+import { integrationIndicatorDescriptions } from "@/data/indicatorDescriptions";
 import { Card } from "@/components/ui/card";
 import { YearSelector } from "@/components/YearSelector";
 import { TimelineChart } from "@/components/TimelineChart";
@@ -93,7 +94,11 @@ const Integration = () => {
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredIndicators.map((indicator, index) => (
-              <IndicatorCard key={index} {...indicator} />
+              <IndicatorCard 
+                key={index} 
+                {...indicator} 
+                description={integrationIndicatorDescriptions[indicator.name]}
+              />
             ))}
           </div>
         </section>
