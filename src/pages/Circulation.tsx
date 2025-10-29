@@ -1,18 +1,30 @@
 import { IndicatorCard } from "@/components/IndicatorCard";
 import { circulationIndicatorsByYear, studentsData } from "@/data/mockData";
+import { circulationIndicatorDescriptions } from "@/data/indicatorDescriptions";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { YearSelector } from "@/components/YearSelector";
 import { TimelineChart } from "@/components/TimelineChart";
 import { Footer } from "@/components/Footer";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useState, useMemo } from "react";
 
 const Circulation = () => {
   const categories = ["Population", "Transport"];
   const availableYears = Object.keys(circulationIndicatorsByYear).sort().reverse();
   const [selectedYear, setSelectedYear] = useState(availableYears[0]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("tous");
+  
   const circulationIndicators = circulationIndicatorsByYear[selectedYear];
+  
+  const filteredIndicators = useMemo(() => {
+    if (selectedCategory === "tous") {
+      return circulationIndicators;
+    }
+    return circulationIndicators.filter(indicator => 
+      indicator.category.toLowerCase() === selectedCategory.toLowerCase()
+    );
+  }, [circulationIndicators, selectedCategory]);
   
   const timelineData = useMemo(() => {
     return Object.keys(circulationIndicatorsByYear).sort().map(year => {
@@ -46,16 +58,25 @@ const Circulation = () => {
         />
 
         {/* Filter by Category */}
-        <div className="flex flex-wrap gap-3">
-          <Badge variant="outline" className="text-sm cursor-pointer hover:bg-muted">
+        <ToggleGroup 
+          type="single" 
+          value={selectedCategory} 
+          onValueChange={(value) => value && setSelectedCategory(value)}
+          className="justify-start flex-wrap"
+        >
+          <ToggleGroupItem value="tous" className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
             Tous les indicateurs
-          </Badge>
+          </ToggleGroupItem>
           {categories.map((cat) => (
-            <Badge key={cat} variant="outline" className="text-sm cursor-pointer hover:bg-muted">
+            <ToggleGroupItem 
+              key={cat} 
+              value={cat.toLowerCase()}
+              className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+            >
               {cat}
-            </Badge>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroup>
 
         {/* Timeline Chart */}
         <section>
@@ -73,8 +94,12 @@ const Circulation = () => {
         {/* Indicators Grid */}
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {circulationIndicators.map((indicator, index) => (
-              <IndicatorCard key={index} {...indicator} />
+            {filteredIndicators.map((indicator, index) => (
+              <IndicatorCard 
+                key={index} 
+                {...indicator}
+                description={circulationIndicatorDescriptions[indicator.name]}
+              />
             ))}
           </div>
         </section>

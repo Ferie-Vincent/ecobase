@@ -1,18 +1,30 @@
 import { IndicatorCard } from "@/components/IndicatorCard";
 import { diasporaIndicatorsByYear } from "@/data/mockData";
+import { diasporaIndicatorDescriptions } from "@/data/indicatorDescriptions";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { YearSelector } from "@/components/YearSelector";
 import { TimelineChart } from "@/components/TimelineChart";
 import { Footer } from "@/components/Footer";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useState, useMemo } from "react";
 
 const Diaspora = () => {
   const categories = ["Sensibilisation", "Réinsertion", "Emploi", "Économie", "Social", "Assistance"];
   const availableYears = Object.keys(diasporaIndicatorsByYear).sort().reverse();
   const [selectedYear, setSelectedYear] = useState(availableYears[0]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("tous");
+  
   const diasporaIndicators = diasporaIndicatorsByYear[selectedYear];
+  
+  const filteredIndicators = useMemo(() => {
+    if (selectedCategory === "tous") {
+      return diasporaIndicators;
+    }
+    return diasporaIndicators.filter(indicator => 
+      indicator.category.toLowerCase() === selectedCategory.toLowerCase()
+    );
+  }, [diasporaIndicators, selectedCategory]);
   
   const categoryData = useMemo(() => {
     const sensibilisation = diasporaIndicators.filter(i => i.category === "Sensibilisation").reduce((sum, i) => sum + i.value, 0);
@@ -62,16 +74,25 @@ const Diaspora = () => {
         />
 
         {/* Filter by Category */}
-        <div className="flex flex-wrap gap-3">
-          <Badge variant="outline" className="text-sm cursor-pointer hover:bg-muted">
+        <ToggleGroup 
+          type="single" 
+          value={selectedCategory} 
+          onValueChange={(value) => value && setSelectedCategory(value)}
+          className="justify-start flex-wrap"
+        >
+          <ToggleGroupItem value="tous" className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
             Tous les indicateurs
-          </Badge>
+          </ToggleGroupItem>
           {categories.map((cat) => (
-            <Badge key={cat} variant="outline" className="text-sm cursor-pointer hover:bg-muted">
+            <ToggleGroupItem 
+              key={cat} 
+              value={cat.toLowerCase()}
+              className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+            >
               {cat}
-            </Badge>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroup>
 
         {/* Timeline Chart */}
         <section>
@@ -89,8 +110,12 @@ const Diaspora = () => {
         {/* Indicators Grid */}
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {diasporaIndicators.map((indicator, index) => (
-              <IndicatorCard key={index} {...indicator} />
+            {filteredIndicators.map((indicator, index) => (
+              <IndicatorCard 
+                key={index} 
+                {...indicator}
+                description={diasporaIndicatorDescriptions[indicator.name]}
+              />
             ))}
           </div>
         </section>
