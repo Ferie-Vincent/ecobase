@@ -10,6 +10,7 @@ import Integration from "./pages/Integration";
 import Diaspora from "./pages/Diaspora";
 import Circulation from "./pages/Circulation";
 import Performance from "./pages/Performance";
+import DocumentsRapports from "./pages/DocumentsRapports";
 import Login from "./pages/Login";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -45,6 +46,7 @@ const App = () => {
                             <Route path="/diaspora" element={<><Navigation /><Diaspora /></>} />
                             <Route path="/circulation" element={<><Navigation /><Circulation /></>} />
                             <Route path="/performance" element={<><Navigation /><Performance /></>} />
+                            <Route path="/documents-rapports" element={<><Navigation /><DocumentsRapports /></>} />
                             <Route path="/login" element={<Login />} />
                             
                             {/* Admin routes */}

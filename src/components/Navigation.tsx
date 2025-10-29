@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { BarChart3, Users, Globe, Home, TrendingUp, LogIn, LogOut } from "lucide-react";
+import { BarChart3, Users, Globe, Home, TrendingUp, LogIn, LogOut, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -9,7 +9,8 @@ const navItems = [
   { path: "/integration", label: "Intégration Africaine", icon: Globe },
   { path: "/diaspora", label: "Ivoiriens de l'Extérieur", icon: Users },
   { path: "/circulation", label: "Libre Circulation", icon: BarChart3 },
-  { path: "/performance", label: "Performance", icon: TrendingUp }
+  { path: "/performance", label: "Performance", icon: TrendingUp },
+  { path: "/documents-rapports", label: "Documents & Rapports", icon: FileText }
 ];
 
 export const Navigation = () => {
