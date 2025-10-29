@@ -14,6 +14,12 @@ import DocumentsRapports from "./pages/DocumentsRapports";
 import Login from "./pages/Login";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import PageAccueil from "./pages/admin/PageAccueil";
+import PageIntegration from "./pages/admin/PageIntegration";
+import PageDiaspora from "./pages/admin/PageDiaspora";
+import PageCirculation from "./pages/admin/PageCirculation";
+import PagePerformance from "./pages/admin/PagePerformance";
+import PageDocuments from "./pages/admin/PageDocuments";
 import Indicateurs from "./pages/admin/Indicateurs";
 import Donnees from "./pages/admin/Donnees";
 import Organisations from "./pages/admin/Organisations";
@@ -52,6 +58,12 @@ const App = () => {
                             {/* Admin routes */}
                             <Route path="/admin" element={<AdminLayout />}>
                                 <Route index element={<AdminDashboard />} />
+                                <Route path="page-accueil" element={<PageAccueil />} />
+                                <Route path="page-integration" element={<PageIntegration />} />
+                                <Route path="page-diaspora" element={<PageDiaspora />} />
+                                <Route path="page-circulation" element={<PageCirculation />} />
+                                <Route path="page-performance" element={<PagePerformance />} />
+                                <Route path="page-documents" element={<PageDocuments />} />
                                 <Route path="organisations" element={<Organisations />} />
                                 <Route path="structures-nationales" element={<StructuresNationales />} />
                                 <Route path="structures-internes" element={<StructuresInternes />} />

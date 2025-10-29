@@ -11,7 +11,12 @@ import {
   FileSpreadsheet,
   Plug,
   UserCog,
-  Map
+  Map,
+  Home,
+  Network,
+  Users2,
+  TrendingUp,
+  BookOpen
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import {
@@ -31,6 +36,17 @@ const menuItems = [
     title: "Tableau de bord",
     items: [
       { title: "Vue d'ensemble", url: "/admin", icon: LayoutDashboard }
+    ]
+  },
+  {
+    title: "Gestion des Pages",
+    items: [
+      { title: "Page d'accueil", url: "/admin/page-accueil", icon: Home },
+      { title: "Intégration Africaine", url: "/admin/page-integration", icon: Network },
+      { title: "Ivoiriens de l'Extérieur", url: "/admin/page-diaspora", icon: Users2 },
+      { title: "Libre Circulation", url: "/admin/page-circulation", icon: Map },
+      { title: "Performance", url: "/admin/page-performance", icon: TrendingUp },
+      { title: "Documents & Rapports", url: "/admin/page-documents", icon: BookOpen }
     ]
   },
   {
