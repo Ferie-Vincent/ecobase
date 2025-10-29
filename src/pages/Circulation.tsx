@@ -40,7 +40,7 @@ const Circulation = () => {
   
   return (
     <div className="min-h-screen bg-background">
-      <div className="bg-gradient-to-br from-accent via-accent/90 to-accent/80 text-white py-12">
+      <div className="bg-gradient-to-br from-[hsl(155,75%,35%)] via-[hsl(155,75%,32%)] to-[hsl(155,75%,28%)] text-white py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-bold mb-3">Libre Circulation des Personnes</h1>
           <p className="text-lg text-white/90">
@@ -64,14 +64,14 @@ const Circulation = () => {
           onValueChange={(value) => value && setSelectedCategory(value)}
           className="justify-start flex-wrap"
         >
-          <ToggleGroupItem value="tous" className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
+          <ToggleGroupItem value="tous" className="data-[state=on]:bg-[hsl(155,75%,35%)] data-[state=on]:text-white">
             Tous les indicateurs
           </ToggleGroupItem>
           {categories.map((cat) => (
             <ToggleGroupItem 
               key={cat} 
               value={cat.toLowerCase()}
-              className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+              className="data-[state=on]:bg-[hsl(155,75%,35%)] data-[state=on]:text-white"
             >
               {cat}
             </ToggleGroupItem>
@@ -84,9 +84,9 @@ const Circulation = () => {
             title="Évolution de la Circulation et Mobilité"
             data={timelineData}
             lines={[
-              { dataKey: "africains", name: "Ressortissants africains (%)", color: "hsl(var(--primary))" },
-              { dataKey: "aerienCEDEAO", name: "Aérien CEDEAO (milliers)", color: "hsl(var(--secondary))" },
-              { dataKey: "routierCEDEAO", name: "Routier CEDEAO (milliers)", color: "hsl(var(--accent))" }
+              { dataKey: "africains", name: "Ressortissants africains (%)", color: "hsl(155, 75%, 35%)" },
+              { dataKey: "aerienCEDEAO", name: "Aérien CEDEAO (milliers)", color: "hsl(27, 80%, 50%)" },
+              { dataKey: "routierCEDEAO", name: "Routier CEDEAO (milliers)", color: "hsl(45, 95%, 55%)" }
             ]}
           />
         </section>
@@ -131,7 +131,7 @@ const Circulation = () => {
                   }}
                   formatter={(value: number) => value.toLocaleString('fr-FR')}
                 />
-                <Bar dataKey="voyageurs" fill="hsl(var(--primary))" name="Voyageurs" />
+                <Bar dataKey="voyageurs" fill="hsl(155, 75%, 35%)" name="Voyageurs" />
               </BarChart>
             </ResponsiveContainer>
           </Card>
@@ -157,10 +157,10 @@ const Circulation = () => {
                   formatter={(value: number) => value.toLocaleString('fr-FR')}
                 />
                 <Legend />
-                <Bar dataKey="economie" stackId="a" fill="hsl(var(--primary))" name="Économie" />
-                <Bar dataKey="droit" stackId="a" fill="hsl(var(--secondary))" name="Droit" />
-                <Bar dataKey="culture" stackId="a" fill="hsl(var(--accent))" name="Culture" />
-                <Bar dataKey="autres" stackId="a" fill="hsl(27 80% 60%)" name="Autres" />
+                <Bar dataKey="economie" stackId="a" fill="hsl(155, 75%, 35%)" name="Économie" />
+                <Bar dataKey="droit" stackId="a" fill="hsl(27, 80%, 50%)" name="Droit" />
+                <Bar dataKey="culture" stackId="a" fill="hsl(45, 95%, 55%)" name="Culture" />
+                <Bar dataKey="autres" stackId="a" fill="hsl(27, 70%, 45%)" name="Autres" />
               </BarChart>
             </ResponsiveContainer>
           </Card>
@@ -175,7 +175,7 @@ const Circulation = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Total</span>
-                    <span className="text-xl font-bold text-primary">{region.total.toLocaleString('fr-FR')}</span>
+                    <span className="text-xl font-bold text-[hsl(155,75%,35%)]">{region.total.toLocaleString('fr-FR')}</span>
                   </div>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
