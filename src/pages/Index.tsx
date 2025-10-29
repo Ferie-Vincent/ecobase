@@ -6,8 +6,7 @@ import { indicators } from "@/data/indicators";
 import integrationPolicyImage from "@/assets/integration-policy.jpg";
 import diasporaPolicyImage from "@/assets/diaspora-policy.jpg";
 import { StatCard } from "@/components/StatCard";
-import { dashboardStats, tradeEvolution, regionalWeights } from "@/data/mockData";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { dashboardStats, regionalWeights } from "@/data/mockData";
 import { Footer } from "@/components/Footer";
 
 const Index = () => {
@@ -102,11 +101,61 @@ const Index = () => {
           </CardContent>
         </Card>
 
+        {/* Documents à télécharger */}
+        <Card className="mb-12 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3 text-2xl">
+              <FileText className="w-7 h-7 text-primary transition-transform duration-300 hover:scale-110" />
+              Documents à télécharger
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-4">
+              <a 
+                href="#" 
+                className="group p-4 rounded-lg border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card"
+              >
+                <div className="flex items-center gap-3">
+                  <FileText className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
+                  <div>
+                    <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Le Décret</p>
+                    <p className="text-xs text-muted-foreground">Fichier PDF</p>
+                  </div>
+                </div>
+              </a>
+              <a 
+                href="#" 
+                className="group p-4 rounded-lg border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card"
+              >
+                <div className="flex items-center gap-3">
+                  <Network className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
+                  <div>
+                    <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Organigramme</p>
+                    <p className="text-xs text-muted-foreground">À télécharger</p>
+                  </div>
+                </div>
+              </a>
+              <a 
+                href="#" 
+                className="group p-4 rounded-lg border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card"
+              >
+                <div className="flex items-center gap-3">
+                  <Building2 className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
+                  <div>
+                    <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Structure organisationnelle</p>
+                    <p className="text-xs text-muted-foreground">Cabinet, DGPI, DGIE, SPSE</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Pillars Section */}
         <div className="mb-12">
           <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
             <BookOpen className="w-8 h-8 text-primary transition-transform duration-300 hover:rotate-12" />
-            Piliers Stratégiques
+            Les Piliers Stratégiques
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {pillars.map((pillar) => (
@@ -164,34 +213,6 @@ const Index = () => {
               icon={<Globe2 className="h-6 w-6 text-secondary" />}
             />
           </div>
-        </section>
-
-        {/* Commerce Evolution */}
-        <section className="mb-12">
-          <Card className="p-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30">
-            <h3 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-              <TrendingUp className="w-6 h-6 text-primary transition-transform duration-300 hover:scale-110" />
-              Évolution du Commerce (Milliards FCFA)
-            </h3>
-            <ResponsiveContainer width="100%" height={350}>
-              <LineChart data={tradeEvolution}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="year" stroke="hsl(var(--muted-foreground))" />
-                <YAxis stroke="hsl(var(--muted-foreground))" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
-                  }}
-                />
-                <Legend />
-                <Line type="monotone" dataKey="exports" stroke="hsl(var(--primary))" strokeWidth={3} name="Exportations" />
-                <Line type="monotone" dataKey="imports" stroke="hsl(var(--secondary))" strokeWidth={3} name="Importations" />
-                <Line type="monotone" dataKey="intraAfrica" stroke="hsl(var(--accent))" strokeWidth={3} name="Intra-Afrique" />
-              </LineChart>
-            </ResponsiveContainer>
-          </Card>
         </section>
 
         {/* Regional Weights */}
@@ -284,18 +305,66 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Organizations Section */}
-        <div>
+        {/* Partenaires Techniques Section */}
+        <div className="mb-12">
           <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
             <Users className="w-8 h-8 text-primary transition-transform duration-300 hover:scale-110" />
-            Organisations Contributeurs
+            Partenaires Techniques
           </h2>
-          <Card className="transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
-            <CardContent className="pt-6">
+          
+          {/* National */}
+          <Card className="mb-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <Building2 className="w-6 h-6 text-primary transition-transform duration-300 hover:scale-110" />
+                National
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {organizations.map((org) => (
+                {organizations.filter(org => ['INS', 'MINEF', 'MINADER'].includes(org.id)).map((org) => (
                   <div key={org.id} className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:border-primary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
                     <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-primary">{org.id}</p>
+                    <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Internationales */}
+          <Card className="mb-6 transition-all duration-300 hover:shadow-xl hover:shadow-secondary/10">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <Globe2 className="w-6 h-6 text-secondary transition-transform duration-300 hover:rotate-180" />
+                Internationales
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {organizations.filter(org => ['BM', 'FMI', 'BAD', 'OIM'].includes(org.id)).map((org) => (
+                  <div key={org.id} className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:border-secondary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
+                    <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-secondary">{org.id}</p>
+                    <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Organisations communautaires */}
+          <Card className="transition-all duration-300 hover:shadow-xl hover:shadow-accent/10">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <Network className="w-6 h-6 text-accent transition-transform duration-300 hover:scale-110" />
+                Organisations Communautaires
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {organizations.filter(org => ['CEDEAO', 'UEMOA', 'UA'].includes(org.id)).map((org) => (
+                  <div key={org.id} className="p-3 rounded-lg bg-muted/50 hover:bg-accent/10 hover:border-accent/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
+                    <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-accent">{org.id}</p>
                     <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.name}</p>
                   </div>
                 ))}
