@@ -355,6 +355,60 @@ export const performanceIndicators = {
         }
       ]
     }
+  ],
+  ivoiriensExterieur: [
+    {
+      objectif: "Mobiliser et valoriser les compétences de la diaspora",
+      indicateurs: [
+        {
+          nom: "Nombre d'ivoiriens sensibilisés à l'immigration clandestine",
+          reference: "8920",
+          cible2022: "11340",
+          cible2023: "12450",
+          cible2024: "13780"
+        },
+        {
+          nom: "Nombre d'ivoiriens réinsérés",
+          reference: "2780",
+          cible2022: "3520",
+          cible2023: "3890",
+          cible2024: "4320"
+        },
+        {
+          nom: "Intégrés dans la fonction publique",
+          reference: "389",
+          cible2022: "512",
+          cible2023: "567",
+          cible2024: "634"
+        }
+      ]
+    },
+    {
+      objectif: "Renforcer la protection sociale des ivoiriens de l'extérieur",
+      indicateurs: [
+        {
+          nom: "Taux des transferts d'argent par rapport au PIB",
+          reference: "6.8%",
+          cible2022: "7.9%",
+          cible2023: "8.4%",
+          cible2024: "9.1%"
+        },
+        {
+          nom: "Nombre d'ivoiriens enregistrés à la CNPS",
+          reference: "6340",
+          cible2022: "8120",
+          cible2023: "8920",
+          cible2024: "9870"
+        },
+        {
+          nom: "Nombre d'ivoiriens assistés à l'étranger",
+          reference: "3120",
+          cible2022: "4050",
+          cible2023: "4560",
+          cible2024: "5120"
+        }
+      ]
+    }
   ]
 };
 

@@ -125,9 +125,10 @@ const Performance = () => {
           </h2>
 
           <Tabs defaultValue="administration" className="w-full">
-            <TabsList className="grid w-full md:w-auto grid-cols-2 mb-6">
+            <TabsList className="grid w-full md:w-auto grid-cols-3 mb-6">
               <TabsTrigger value="administration">Administration Générale</TabsTrigger>
               <TabsTrigger value="integration">Intégration Africaine</TabsTrigger>
+              <TabsTrigger value="diaspora">Ivoiriens de l'Extérieur</TabsTrigger>
             </TabsList>
 
             <TabsContent value="administration" className="space-y-6">
@@ -164,6 +165,38 @@ const Performance = () => {
 
             <TabsContent value="integration" className="space-y-6">
               {performanceIndicators.integrationAfricaine.map((section, idx) => (
+                <Card key={idx} className="p-6">
+                  <h3 className="text-lg font-bold text-foreground mb-4">{section.objectif}</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-border">
+                          <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Indicateur</th>
+                          <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Référence</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2022" ? "text-primary" : "text-muted-foreground"}`}>2022</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2023" ? "text-primary" : "text-muted-foreground"}`}>2023</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2024" ? "text-primary" : "text-muted-foreground"}`}>2024</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.indicateurs.map((ind, i) => (
+                          <tr key={i} className="border-b border-border hover:bg-muted/50 transition-colors">
+                            <td className="py-3 px-4 text-sm text-foreground">{ind.nom}</td>
+                            <td className="text-center py-3 px-4 text-sm font-medium">{ind.reference}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2022" ? "text-primary font-bold" : ""}`}>{ind.cible2022}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2023" ? "text-primary font-bold" : ""}`}>{ind.cible2023}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2024" ? "text-secondary font-bold" : ""}`}>{ind.cible2024}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </Card>
+              ))}
+            </TabsContent>
+
+            <TabsContent value="diaspora" className="space-y-6">
+              {performanceIndicators.ivoiriensExterieur.map((section, idx) => (
                 <Card key={idx} className="p-6">
                   <h3 className="text-lg font-bold text-foreground mb-4">{section.objectif}</h3>
                   <div className="overflow-x-auto">
