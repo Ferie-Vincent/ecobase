@@ -34,8 +34,10 @@ export function CreateOrganisationModal({ open, onOpenChange }: CreateOrganisati
     site_web: "",
     convention: false,
     representant_national: "",
+    date_adhesion: "",
     responsable: "",
-    contact: ""
+    contact: "",
+    statut: "Actif" as "Actif" | "Inactif"
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -53,8 +55,10 @@ export function CreateOrganisationModal({ open, onOpenChange }: CreateOrganisati
       site_web: "",
       convention: false,
       representant_national: "",
+      date_adhesion: "",
       responsable: "",
-      contact: ""
+      contact: "",
+      statut: "Actif"
     });
   };
 
@@ -142,6 +146,16 @@ export function CreateOrganisationModal({ open, onOpenChange }: CreateOrganisati
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="date_adhesion">Date d'adhésion</Label>
+                  <Input
+                    id="date_adhesion"
+                    type="date"
+                    value={formData.date_adhesion}
+                    onChange={(e) => setFormData({ ...formData, date_adhesion: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="convention">Convention signée</Label>
                     <Switch
@@ -178,6 +192,19 @@ export function CreateOrganisationModal({ open, onOpenChange }: CreateOrganisati
                 </div>
               </>
             )}
+
+            <div className="space-y-2">
+              <Label htmlFor="statut">Statut *</Label>
+              <Select value={formData.statut} onValueChange={(value) => setFormData({ ...formData, statut: value as "Actif" | "Inactif" })}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Actif">Actif</SelectItem>
+                  <SelectItem value="Inactif">Inactif</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="flex justify-end gap-2 pt-4 border-t">

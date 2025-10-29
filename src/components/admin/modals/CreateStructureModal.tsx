@@ -20,6 +20,8 @@ export function CreateStructureModal({ open, onOpenChange, type }: CreateStructu
     type: "",
     responsable: "",
     contact: "",
+    point_focal: "",
+    domaine: "",
     statut: "Actif"
   });
 
@@ -38,6 +40,8 @@ export function CreateStructureModal({ open, onOpenChange, type }: CreateStructu
       type: "",
       responsable: "",
       contact: "",
+      point_focal: "",
+      domaine: "",
       statut: "Actif"
     });
   };
@@ -116,6 +120,32 @@ export function CreateStructureModal({ open, onOpenChange, type }: CreateStructu
               />
             </div>
           </div>
+
+          {type === "interne" && (
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="point_focal">Point focal *</Label>
+                <Input
+                  id="point_focal"
+                  value={formData.point_focal}
+                  onChange={(e) => setFormData({ ...formData, point_focal: e.target.value })}
+                  placeholder="Ex: Admin SPSE"
+                  required={type === "interne"}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="domaine">Domaine *</Label>
+                <Input
+                  id="domaine"
+                  value={formData.domaine}
+                  onChange={(e) => setFormData({ ...formData, domaine: e.target.value })}
+                  placeholder="Ex: Planification"
+                  required={type === "interne"}
+                />
+              </div>
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="statut">Statut</Label>

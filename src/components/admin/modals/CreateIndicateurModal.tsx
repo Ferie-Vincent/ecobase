@@ -35,7 +35,9 @@ export function CreateIndicateurModal({ open, onOpenChange }: CreateIndicateurMo
     source: "",
     methode: "",
     formule: "",
-    description: ""
+    responsable_spse: "",
+    description: "",
+    methodologie: ""
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -54,7 +56,9 @@ export function CreateIndicateurModal({ open, onOpenChange }: CreateIndicateurMo
       source: "",
       methode: "",
       formule: "",
-      description: ""
+      responsable_spse: "",
+      description: "",
+      methodologie: ""
     });
   };
 
@@ -184,13 +188,38 @@ export function CreateIndicateurModal({ open, onOpenChange }: CreateIndicateurMo
             )}
 
             <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="responsable_spse">Responsable SPSE *</Label>
+              <Select value={formData.responsable_spse} onValueChange={(value) => setFormData({ ...formData, responsable_spse: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionner" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="INT-SPSE">Service Planification & Suivi-Évaluation</SelectItem>
+                  <SelectItem value="INT-DGPI">Direction Générale des Politiques d'Intégration</SelectItem>
+                  <SelectItem value="INT-DGIE">Direction Générale des Ivoiriens de l'Extérieur</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
               <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
-                placeholder="Description et méthodologie de l'indicateur..."
+                placeholder="Description de l'indicateur..."
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                rows={4}
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="methodologie">Méthodologie</Label>
+              <Textarea
+                id="methodologie"
+                placeholder="Méthodologie de collecte et de calcul..."
+                value={formData.methodologie}
+                onChange={(e) => setFormData({ ...formData, methodologie: e.target.value })}
+                rows={3}
               />
             </div>
           </div>

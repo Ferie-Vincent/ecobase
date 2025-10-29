@@ -21,6 +21,8 @@ export function CreateProgrammeModal({ open, onOpenChange }: CreateProgrammeModa
     debut: "",
     fin: "",
     budget: "",
+    acteurs_ids: [] as string[],
+    indicateurs_ids: [] as string[],
     statut: "Planifié"
   });
 
@@ -40,6 +42,8 @@ export function CreateProgrammeModal({ open, onOpenChange }: CreateProgrammeModa
       debut: "",
       fin: "",
       budget: "",
+      acteurs_ids: [],
+      indicateurs_ids: [],
       statut: "Planifié"
     });
   };
