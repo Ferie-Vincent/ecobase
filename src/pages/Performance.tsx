@@ -1,37 +1,116 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { performanceIndicators, projectsData } from "@/data/mockData";
-import { TrendingUp, Calendar, User, BarChart3 } from "lucide-react";
+import { TrendingUp, Calendar, User, BarChart3, Download } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { YearSelector } from "@/components/YearSelector";
+import { MultiYearSelector } from "@/components/MultiYearSelector";
+import { IndicatorSelector } from "@/components/IndicatorSelector";
 import { TimelineChart } from "@/components/TimelineChart";
 import { Footer } from "@/components/Footer";
 import { useState, useMemo } from "react";
+import * as XLSX from 'xlsx';
+import { useToast } from "@/hooks/use-toast";
 
 const Performance = () => {
-  const [selectedYear, setSelectedYear] = useState("2024");
-  const availableYears = ["2020", "2021", "2022", "2023", "2024"];
+  const { toast } = useToast();
+  const [selectedYears, setSelectedYears] = useState<string[]>(["2024"]);
+  const [selectedAdminIndicators, setSelectedAdminIndicators] = useState<string[]>(["realisation", "digitalisation", "partenaires"]);
+  const [selectedIntegrationIndicators, setSelectedIntegrationIndicators] = useState<string[]>(["iira", "penetration", "agrements"]);
+  const availableYears = ["Référence", "2022", "2023", "2024"];
+
+  const adminIndicatorsOptions = [
+    { value: "realisation", label: "Taux réalisation (%)" },
+    { value: "digitalisation", label: "Digitalisation (%)" },
+    { value: "partenaires", label: "Partenaires mobilisés" }
+  ];
+
+  const integrationIndicatorsOptions = [
+    { value: "iira", label: "IIRA (indice)" },
+    { value: "penetration", label: "Pénétration marchés (%)" },
+    { value: "agrements", label: "Agréments SLE" }
+  ];
+
+  const allTimelineData = useMemo(() => [
+    { year: "Référence", realisation: 68, digitalisation: 20, partenaires: 5, iira: 0.55, penetration: 3.0, agrements: 20 },
+    { year: "2022", realisation: 69, digitalisation: 25, partenaires: 5, iira: 0.60, penetration: 3.5, agrements: 25 },
+    { year: "2023", realisation: 70, digitalisation: 28, partenaires: 6, iira: 0.64, penetration: 4.2, agrements: 30 },
+    { year: "2024", realisation: 72, digitalisation: 32, partenaires: 7, iira: 0.67, penetration: 5.0, agrements: 35 },
+  ], []);
 
   const timelineData = useMemo(() => {
-    // Évolution du taux de réalisation des activités et digitalisation
-    const firstSection = performanceIndicators.administration[0];
-    return [
-      { year: "Référence", realisation: 68, digitalisation: 20, partenaires: 5 },
-      { year: "2022", realisation: 69, digitalisation: 25, partenaires: 5 },
-      { year: "2023", realisation: 70, digitalisation: 28, partenaires: 6 },
-      { year: "2024", realisation: 72, digitalisation: 32, partenaires: 7 },
-    ];
-  }, []);
+    return allTimelineData.filter(item => selectedYears.includes(item.year));
+  }, [selectedYears, allTimelineData]);
 
   const integrationTimelineData = useMemo(() => {
-    return [
-      { year: "Référence", iira: 0.55, penetration: 3.0, agrements: 20 },
-      { year: "2022", iira: 0.60, penetration: 3.5, agrements: 25 },
-      { year: "2023", iira: 0.64, penetration: 4.2, agrements: 30 },
-      { year: "2024", iira: 0.67, penetration: 5.0, agrements: 35 },
-    ];
-  }, []);
+    return allTimelineData.filter(item => selectedYears.includes(item.year));
+  }, [selectedYears, allTimelineData]);
+
+  const adminLines = useMemo(() => {
+    return adminIndicatorsOptions
+      .filter(opt => selectedAdminIndicators.includes(opt.value))
+      .map((opt, idx) => ({
+        dataKey: opt.value,
+        name: opt.label,
+        color: idx === 0 ? "hsl(var(--primary))" : idx === 1 ? "hsl(var(--secondary))" : "hsl(var(--accent))"
+      }));
+  }, [selectedAdminIndicators]);
+
+  const integrationLines = useMemo(() => {
+    return integrationIndicatorsOptions
+      .filter(opt => selectedIntegrationIndicators.includes(opt.value))
+      .map((opt, idx) => ({
+        dataKey: opt.value,
+        name: opt.label,
+        color: idx === 0 ? "hsl(var(--primary))" : idx === 1 ? "hsl(var(--secondary))" : "hsl(var(--accent))"
+      }));
+  }, [selectedIntegrationIndicators]);
+
+  const exportToExcel = () => {
+    const wb = XLSX.utils.book_new();
+    
+    // Export Administration data
+    const adminData = allTimelineData.map(item => ({
+      'Année': item.year,
+      'Taux réalisation (%)': item.realisation,
+      'Digitalisation (%)': item.digitalisation,
+      'Partenaires mobilisés': item.partenaires
+    }));
+    const adminSheet = XLSX.utils.json_to_sheet(adminData);
+    XLSX.utils.book_append_sheet(wb, adminSheet, 'Administration');
+    
+    // Export Integration data
+    const integrationData = allTimelineData.map(item => ({
+      'Année': item.year,
+      'IIRA (indice)': item.iira,
+      'Pénétration marchés (%)': item.penetration,
+      'Agréments SLE': item.agrements
+    }));
+    const integrationSheet = XLSX.utils.json_to_sheet(integrationData);
+    XLSX.utils.book_append_sheet(wb, integrationSheet, 'Intégration');
+    
+    // Export Performance Indicators
+    performanceIndicators.administration.forEach((section, idx) => {
+      const sectionData = section.indicateurs.map(ind => ({
+        'Objectif': section.objectif,
+        'Indicateur': ind.nom,
+        'Référence': ind.reference,
+        '2022': ind.cible2022,
+        '2023': ind.cible2023,
+        '2024': ind.cible2024
+      }));
+      const sectionSheet = XLSX.utils.json_to_sheet(sectionData);
+      XLSX.utils.book_append_sheet(wb, sectionSheet, `Admin ${idx + 1}`);
+    });
+    
+    XLSX.writeFile(wb, 'indicateurs_performance.xlsx');
+    
+    toast({
+      title: "Export réussi",
+      description: "Les données ont été exportées en Excel.",
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -45,36 +124,46 @@ const Performance = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 space-y-8">
-        {/* Year Selector */}
-        <YearSelector 
-          selectedYear={selectedYear} 
-          onYearChange={setSelectedYear} 
-          availableYears={availableYears}
-        />
+        {/* Controls */}
+        <div className="flex flex-wrap gap-4 items-center justify-between">
+          <div className="flex flex-wrap gap-4">
+            <MultiYearSelector 
+              selectedYears={selectedYears} 
+              onYearsChange={setSelectedYears} 
+              availableYears={availableYears}
+            />
+          </div>
+          <Button onClick={exportToExcel} variant="outline">
+            <Download className="h-4 w-4 mr-2" />
+            Exporter en Excel
+          </Button>
+        </div>
 
         {/* Timeline Chart - Administration */}
-        <section>
+        <section className="space-y-4">
+          <IndicatorSelector
+            selectedIndicators={selectedAdminIndicators}
+            onIndicatorsChange={setSelectedAdminIndicators}
+            availableIndicators={adminIndicatorsOptions}
+          />
           <TimelineChart
             title="Évolution des Indicateurs d'Administration"
             data={timelineData}
-            lines={[
-              { dataKey: "realisation", name: "Taux réalisation (%)", color: "hsl(var(--primary))" },
-              { dataKey: "digitalisation", name: "Digitalisation (%)", color: "hsl(var(--secondary))" },
-              { dataKey: "partenaires", name: "Partenaires mobilisés", color: "hsl(var(--accent))" }
-            ]}
+            lines={adminLines}
           />
         </section>
 
         {/* Timeline Chart - Integration */}
-        <section>
+        <section className="space-y-4">
+          <IndicatorSelector
+            selectedIndicators={selectedIntegrationIndicators}
+            onIndicatorsChange={setSelectedIntegrationIndicators}
+            availableIndicators={integrationIndicatorsOptions}
+          />
           <TimelineChart
             title="Évolution des Indicateurs d'Intégration Africaine"
             data={integrationTimelineData}
-            lines={[
-              { dataKey: "iira", name: "IIRA (indice)", color: "hsl(var(--primary))" },
-              { dataKey: "penetration", name: "Pénétration marchés (%)", color: "hsl(var(--secondary))" },
-              { dataKey: "agrements", name: "Agréments SLE", color: "hsl(var(--accent))" }
-            ]}
+            lines={integrationLines}
           />
         </section>
 
@@ -141,9 +230,9 @@ const Performance = () => {
                         <tr className="border-b border-border">
                           <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Indicateur</th>
                           <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Référence</th>
-                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2022" ? "text-primary" : "text-muted-foreground"}`}>2022</th>
-                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2023" ? "text-primary" : "text-muted-foreground"}`}>2023</th>
-                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2024" ? "text-primary" : "text-muted-foreground"}`}>2024</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2022") ? "text-primary" : "text-muted-foreground"}`}>2022</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2023") ? "text-primary" : "text-muted-foreground"}`}>2023</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2024") ? "text-primary" : "text-muted-foreground"}`}>2024</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -151,9 +240,9 @@ const Performance = () => {
                           <tr key={i} className="border-b border-border hover:bg-muted/50 transition-colors">
                             <td className="py-3 px-4 text-sm text-foreground">{ind.nom}</td>
                             <td className="text-center py-3 px-4 text-sm font-medium">{ind.reference}</td>
-                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2022" ? "text-primary font-bold" : ""}`}>{ind.cible2022}</td>
-                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2023" ? "text-primary font-bold" : ""}`}>{ind.cible2023}</td>
-                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2024" ? "text-secondary font-bold" : ""}`}>{ind.cible2024}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2022") ? "text-primary font-bold" : ""}`}>{ind.cible2022}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2023") ? "text-primary font-bold" : ""}`}>{ind.cible2023}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2024") ? "text-secondary font-bold" : ""}`}>{ind.cible2024}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -173,9 +262,9 @@ const Performance = () => {
                         <tr className="border-b border-border">
                           <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Indicateur</th>
                           <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Référence</th>
-                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2022" ? "text-primary" : "text-muted-foreground"}`}>2022</th>
-                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2023" ? "text-primary" : "text-muted-foreground"}`}>2023</th>
-                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2024" ? "text-primary" : "text-muted-foreground"}`}>2024</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2022") ? "text-primary" : "text-muted-foreground"}`}>2022</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2023") ? "text-primary" : "text-muted-foreground"}`}>2023</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2024") ? "text-primary" : "text-muted-foreground"}`}>2024</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -183,9 +272,9 @@ const Performance = () => {
                           <tr key={i} className="border-b border-border hover:bg-muted/50 transition-colors">
                             <td className="py-3 px-4 text-sm text-foreground">{ind.nom}</td>
                             <td className="text-center py-3 px-4 text-sm font-medium">{ind.reference}</td>
-                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2022" ? "text-primary font-bold" : ""}`}>{ind.cible2022}</td>
-                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2023" ? "text-primary font-bold" : ""}`}>{ind.cible2023}</td>
-                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2024" ? "text-secondary font-bold" : ""}`}>{ind.cible2024}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2022") ? "text-primary font-bold" : ""}`}>{ind.cible2022}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2023") ? "text-primary font-bold" : ""}`}>{ind.cible2023}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2024") ? "text-secondary font-bold" : ""}`}>{ind.cible2024}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -205,9 +294,9 @@ const Performance = () => {
                         <tr className="border-b border-border">
                           <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Indicateur</th>
                           <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Référence</th>
-                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2022" ? "text-primary" : "text-muted-foreground"}`}>2022</th>
-                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2023" ? "text-primary" : "text-muted-foreground"}`}>2023</th>
-                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYear === "2024" ? "text-primary" : "text-muted-foreground"}`}>2024</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2022") ? "text-primary" : "text-muted-foreground"}`}>2022</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2023") ? "text-primary" : "text-muted-foreground"}`}>2023</th>
+                          <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2024") ? "text-primary" : "text-muted-foreground"}`}>2024</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -215,9 +304,9 @@ const Performance = () => {
                           <tr key={i} className="border-b border-border hover:bg-muted/50 transition-colors">
                             <td className="py-3 px-4 text-sm text-foreground">{ind.nom}</td>
                             <td className="text-center py-3 px-4 text-sm font-medium">{ind.reference}</td>
-                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2022" ? "text-primary font-bold" : ""}`}>{ind.cible2022}</td>
-                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2023" ? "text-primary font-bold" : ""}`}>{ind.cible2023}</td>
-                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYear === "2024" ? "text-secondary font-bold" : ""}`}>{ind.cible2024}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2022") ? "text-primary font-bold" : ""}`}>{ind.cible2022}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2023") ? "text-primary font-bold" : ""}`}>{ind.cible2023}</td>
+                            <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2024") ? "text-secondary font-bold" : ""}`}>{ind.cible2024}</td>
                           </tr>
                         ))}
                       </tbody>

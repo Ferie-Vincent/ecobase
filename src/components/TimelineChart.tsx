@@ -36,6 +36,10 @@ export const TimelineChart = ({ title, data, lines }: TimelineChartProps) => {
               borderRadius: '8px'
             }}
             formatter={(value: number) => value.toLocaleString('fr-FR')}
+            cursor={{ stroke: 'hsl(var(--primary))', strokeWidth: 1 }}
+            separator=": "
+            itemStyle={{ color: 'hsl(var(--foreground))' }}
+            labelStyle={{ color: 'hsl(var(--muted-foreground))' }}
           />
           <Legend />
           {lines.map((line) => (
