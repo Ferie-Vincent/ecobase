@@ -7,6 +7,7 @@ import { TrendingUp, Calendar, User, BarChart3, Download } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { MultiYearSelector } from "@/components/MultiYearSelector";
 import { IndicatorSelector } from "@/components/IndicatorSelector";
+import { AdvancedFilters } from "@/components/AdvancedFilters";
 import { TimelineChart } from "@/components/TimelineChart";
 import { Footer } from "@/components/Footer";
 import { useState, useMemo } from "react";
@@ -19,6 +20,14 @@ const Performance = () => {
   const [selectedAdminIndicators, setSelectedAdminIndicators] = useState<string[]>(["realisation", "digitalisation", "partenaires"]);
   const [selectedIntegrationIndicators, setSelectedIntegrationIndicators] = useState<string[]>(["iira", "penetration", "agrements"]);
   const availableYears = ["Référence", "2022", "2023", "2024"];
+  
+  // Advanced filters state
+  const [selectedObjectifAdmin, setSelectedObjectifAdmin] = useState<string>("tous");
+  const [selectedStatutAdmin, setSelectedStatutAdmin] = useState<string>("tous");
+  const [selectedObjectifIntegration, setSelectedObjectifIntegration] = useState<string>("tous");
+  const [selectedStatutIntegration, setSelectedStatutIntegration] = useState<string>("tous");
+  const [selectedObjectifDiaspora, setSelectedObjectifDiaspora] = useState<string>("tous");
+  const [selectedStatutDiaspora, setSelectedStatutDiaspora] = useState<string>("tous");
 
   const adminIndicatorsOptions = [
     { value: "realisation", label: "Taux réalisation (%)" },
@@ -66,6 +75,96 @@ const Performance = () => {
         color: idx === 0 ? "hsl(var(--primary))" : idx === 1 ? "hsl(var(--secondary))" : "hsl(var(--accent))"
       }));
   }, [selectedIntegrationIndicators]);
+
+  // Calculate status based on target achievement
+  const calculateStatut = (reference: string, cible: string, year: string): string => {
+    const refNum = parseFloat(reference.replace(/[^\d.-]/g, ''));
+    const cibleNum = parseFloat(cible.replace(/[^\d.-]/g, ''));
+    
+    if (isNaN(refNum) || isNaN(cibleNum)) return "en_cours";
+    
+    const progress = ((cibleNum - refNum) / Math.abs(refNum)) * 100;
+    
+    if (progress >= 100) return "atteint";
+    if (progress >= 70) return "en_cours";
+    if (progress >= 40) return "risque";
+    return "non_atteint";
+  };
+
+  // Get status badge
+  const getStatutBadge = (reference: string, cible: string, year: string) => {
+    const statut = calculateStatut(reference, cible, year);
+    
+    switch (statut) {
+      case "atteint":
+        return <Badge className="bg-green-500 hover:bg-green-600">Atteint</Badge>;
+      case "en_cours":
+        return <Badge variant="secondary">En cours</Badge>;
+      case "risque":
+        return <Badge className="bg-orange-500 hover:bg-orange-600">À risque</Badge>;
+      case "non_atteint":
+        return <Badge variant="destructive">Non atteint</Badge>;
+      default:
+        return <Badge variant="secondary">En cours</Badge>;
+    }
+  };
+
+  // Filter functions
+  const filteredAdminSections = useMemo(() => {
+    return performanceIndicators.administration
+      .filter(section => selectedObjectifAdmin === "tous" || section.objectif === selectedObjectifAdmin)
+      .map(section => ({
+        ...section,
+        indicateurs: section.indicateurs.filter(ind => {
+          if (selectedStatutAdmin === "tous") return true;
+          const statut = calculateStatut(ind.reference, ind.cible2024, "2024");
+          return statut === selectedStatutAdmin;
+        })
+      }))
+      .filter(section => section.indicateurs.length > 0);
+  }, [selectedObjectifAdmin, selectedStatutAdmin]);
+
+  const filteredIntegrationSections = useMemo(() => {
+    return performanceIndicators.integrationAfricaine
+      .filter(section => selectedObjectifIntegration === "tous" || section.objectif === selectedObjectifIntegration)
+      .map(section => ({
+        ...section,
+        indicateurs: section.indicateurs.filter(ind => {
+          if (selectedStatutIntegration === "tous") return true;
+          const statut = calculateStatut(ind.reference, ind.cible2024, "2024");
+          return statut === selectedStatutIntegration;
+        })
+      }))
+      .filter(section => section.indicateurs.length > 0);
+  }, [selectedObjectifIntegration, selectedStatutIntegration]);
+
+  const filteredDiasporaSections = useMemo(() => {
+    return performanceIndicators.ivoiriensExterieur
+      .filter(section => selectedObjectifDiaspora === "tous" || section.objectif === selectedObjectifDiaspora)
+      .map(section => ({
+        ...section,
+        indicateurs: section.indicateurs.filter(ind => {
+          if (selectedStatutDiaspora === "tous") return true;
+          const statut = calculateStatut(ind.reference, ind.cible2024, "2024");
+          return statut === selectedStatutDiaspora;
+        })
+      }))
+      .filter(section => section.indicateurs.length > 0);
+  }, [selectedObjectifDiaspora, selectedStatutDiaspora]);
+
+  // Get unique objectifs
+  const adminObjectifs = useMemo(() => 
+    performanceIndicators.administration.map(s => s.objectif), 
+    []
+  );
+  const integrationObjectifs = useMemo(() => 
+    performanceIndicators.integrationAfricaine.map(s => s.objectif), 
+    []
+  );
+  const diasporaObjectifs = useMemo(() => 
+    performanceIndicators.ivoiriensExterieur.map(s => s.objectif), 
+    []
+  );
 
   const exportToExcel = () => {
     const wb = XLSX.utils.book_new();
@@ -221,7 +320,19 @@ const Performance = () => {
             </TabsList>
 
             <TabsContent value="administration" className="space-y-6">
-              {performanceIndicators.administration.map((section, idx) => (
+              <AdvancedFilters
+                selectedObjectif={selectedObjectifAdmin}
+                selectedStatut={selectedStatutAdmin}
+                onObjectifChange={setSelectedObjectifAdmin}
+                onStatutChange={setSelectedStatutAdmin}
+                onReset={() => {
+                  setSelectedObjectifAdmin("tous");
+                  setSelectedStatutAdmin("tous");
+                }}
+                objectifsOptions={adminObjectifs}
+              />
+              
+              {filteredAdminSections.map((section, idx) => (
                 <Card key={idx} className="p-6">
                   <h3 className="text-lg font-bold text-foreground mb-4">{section.objectif}</h3>
                   <div className="overflow-x-auto">
@@ -233,6 +344,7 @@ const Performance = () => {
                           <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2022") ? "text-primary" : "text-muted-foreground"}`}>2022</th>
                           <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2023") ? "text-primary" : "text-muted-foreground"}`}>2023</th>
                           <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2024") ? "text-primary" : "text-muted-foreground"}`}>2024</th>
+                          <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Statut</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -243,6 +355,7 @@ const Performance = () => {
                             <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2022") ? "text-primary font-bold" : ""}`}>{ind.cible2022}</td>
                             <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2023") ? "text-primary font-bold" : ""}`}>{ind.cible2023}</td>
                             <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2024") ? "text-secondary font-bold" : ""}`}>{ind.cible2024}</td>
+                            <td className="text-center py-3 px-4">{getStatutBadge(ind.reference, ind.cible2024, "2024")}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -253,7 +366,19 @@ const Performance = () => {
             </TabsContent>
 
             <TabsContent value="integration" className="space-y-6">
-              {performanceIndicators.integrationAfricaine.map((section, idx) => (
+              <AdvancedFilters
+                selectedObjectif={selectedObjectifIntegration}
+                selectedStatut={selectedStatutIntegration}
+                onObjectifChange={setSelectedObjectifIntegration}
+                onStatutChange={setSelectedStatutIntegration}
+                onReset={() => {
+                  setSelectedObjectifIntegration("tous");
+                  setSelectedStatutIntegration("tous");
+                }}
+                objectifsOptions={integrationObjectifs}
+              />
+              
+              {filteredIntegrationSections.map((section, idx) => (
                 <Card key={idx} className="p-6">
                   <h3 className="text-lg font-bold text-foreground mb-4">{section.objectif}</h3>
                   <div className="overflow-x-auto">
@@ -265,6 +390,7 @@ const Performance = () => {
                           <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2022") ? "text-primary" : "text-muted-foreground"}`}>2022</th>
                           <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2023") ? "text-primary" : "text-muted-foreground"}`}>2023</th>
                           <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2024") ? "text-primary" : "text-muted-foreground"}`}>2024</th>
+                          <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Statut</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -275,6 +401,7 @@ const Performance = () => {
                             <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2022") ? "text-primary font-bold" : ""}`}>{ind.cible2022}</td>
                             <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2023") ? "text-primary font-bold" : ""}`}>{ind.cible2023}</td>
                             <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2024") ? "text-secondary font-bold" : ""}`}>{ind.cible2024}</td>
+                            <td className="text-center py-3 px-4">{getStatutBadge(ind.reference, ind.cible2024, "2024")}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -285,7 +412,19 @@ const Performance = () => {
             </TabsContent>
 
             <TabsContent value="diaspora" className="space-y-6">
-              {performanceIndicators.ivoiriensExterieur.map((section, idx) => (
+              <AdvancedFilters
+                selectedObjectif={selectedObjectifDiaspora}
+                selectedStatut={selectedStatutDiaspora}
+                onObjectifChange={setSelectedObjectifDiaspora}
+                onStatutChange={setSelectedStatutDiaspora}
+                onReset={() => {
+                  setSelectedObjectifDiaspora("tous");
+                  setSelectedStatutDiaspora("tous");
+                }}
+                objectifsOptions={diasporaObjectifs}
+              />
+              
+              {filteredDiasporaSections.map((section, idx) => (
                 <Card key={idx} className="p-6">
                   <h3 className="text-lg font-bold text-foreground mb-4">{section.objectif}</h3>
                   <div className="overflow-x-auto">
@@ -297,6 +436,7 @@ const Performance = () => {
                           <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2022") ? "text-primary" : "text-muted-foreground"}`}>2022</th>
                           <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2023") ? "text-primary" : "text-muted-foreground"}`}>2023</th>
                           <th className={`text-center py-3 px-4 text-sm font-semibold ${selectedYears.includes("2024") ? "text-primary" : "text-muted-foreground"}`}>2024</th>
+                          <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Statut</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -307,6 +447,7 @@ const Performance = () => {
                             <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2022") ? "text-primary font-bold" : ""}`}>{ind.cible2022}</td>
                             <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2023") ? "text-primary font-bold" : ""}`}>{ind.cible2023}</td>
                             <td className={`text-center py-3 px-4 text-sm font-medium ${selectedYears.includes("2024") ? "text-secondary font-bold" : ""}`}>{ind.cible2024}</td>
+                            <td className="text-center py-3 px-4">{getStatutBadge(ind.reference, ind.cible2024, "2024")}</td>
                           </tr>
                         ))}
                       </tbody>
