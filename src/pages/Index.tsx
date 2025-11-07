@@ -1,7 +1,27 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Database, Users, TrendingUp, FileText, BookOpen, Building2, Network, Users2, Target, BarChart3, Globe2, Landmark, Sprout, CircleDollarSign, Plane, Coins, Flag, BanknoteIcon, Ship } from "lucide-react";
+import {
+  Database,
+  Users,
+  TrendingUp,
+  FileText,
+  BookOpen,
+  Building2,
+  Network,
+  Users2,
+  Target,
+  BarChart3,
+  Globe2,
+  Landmark,
+  Sprout,
+  CircleDollarSign,
+  Plane,
+  Coins,
+  Flag,
+  BanknoteIcon,
+  Ship,
+} from "lucide-react";
 import { metadata, pillars } from "@/data/metadata";
 import { indicators } from "@/data/indicators";
 import { organisations } from "@/data/seedData";
@@ -13,22 +33,22 @@ import { Footer } from "@/components/Footer";
 
 const Index = () => {
   const indicatorsByPillar = {
-    INT: indicators.filter(i => i.pillar === "INT").length,
-    DIA: indicators.filter(i => i.pillar === "DIA").length,
-    MACRO: indicators.filter(i => i.pillar === "MACRO").length
+    INT: indicators.filter((i) => i.pillar === "INT").length,
+    DIA: indicators.filter((i) => i.pillar === "DIA").length,
+    MACRO: indicators.filter((i) => i.pillar === "MACRO").length,
   };
 
   // Helper function to get icon for organization based on sigle
   const getOrgIcon = (sigle: string) => {
     const iconMap: { [key: string]: any } = {
-      'CEDEAO': Globe2,
-      'UEMOA': Coins,
-      'BAD': TrendingUp,
-      'OIM': Plane,
-      'DBDES': Landmark,
-      'DGCE': Ship,
-      'DGD': Building2,
-      'CNPS': BanknoteIcon
+      CEDEAO: Globe2,
+      UEMOA: Coins,
+      BAD: TrendingUp,
+      OIM: Plane,
+      DBDES: Landmark,
+      DGCE: Ship,
+      DGD: Building2,
+      CNPS: BanknoteIcon,
     };
     return iconMap[sigle] || Building2;
   };
@@ -38,31 +58,18 @@ const Index = () => {
       <div className="container mx-auto px-4 py-12">
         {/* Hero Section - Présentation du Ministère */}
         <div className="text-center mb-16 space-y-4 bg-gradient-to-br from-orange-500/10 to-orange-600/5 p-8 rounded-xl border border-orange-500/20 backdrop-blur-sm">
-          <h1 className="text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            ECOBASE
-          </h1>
+          <h1 className="text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">ECOBASE</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Plateforme de données pour le suivi et l'évaluation des politiques publiques
           </p>
           <div className="max-w-4xl mx-auto mb-6">
             <p className="text-base text-foreground/90 leading-relaxed">
               ECOBASE est la base de données officielle du{" "}
-              <strong>Ministère Délégué chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur</strong>.
-              Elle centralise les indicateurs socio-économiques et techniques permettant le suivi et l'évaluation 
-              de deux politiques majeures : <strong>l'Intégration Africaine</strong> et la{" "}
+              <strong>Ministère Délégué chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur</strong>. Elle
+              centralise les indicateurs socio-économiques et techniques permettant le suivi et l'évaluation de deux
+              politiques majeures : <strong>l'Intégration Africaine</strong> et la{" "}
               <strong>Gestion des Ivoiriens de l'Extérieur</strong>.
             </p>
-          </div>
-          <div className="flex gap-2 justify-center flex-wrap">
-            <Badge variant="outline" className="text-sm">
-              Version {metadata.version}
-            </Badge>
-            <Badge variant="outline" className="text-sm">
-              {metadata.license}
-            </Badge>
-            <Badge variant="outline" className="text-sm">
-              Mis à jour: {metadata.updated_at}
-            </Badge>
           </div>
         </div>
 
@@ -84,17 +91,19 @@ const Index = () => {
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Mission 1 - Intégration */}
                   <div className="group relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
-                    <img 
-                      src={integrationPolicyImage} 
-                      alt="Politique d'Intégration Africaine" 
+                    <img
+                      src={integrationPolicyImage}
+                      alt="Politique d'Intégration Africaine"
                       className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end transition-all duration-300 group-hover:from-black/90 group-hover:via-black/50">
                       <div className="p-6 text-white transform transition-transform duration-300 group-hover:translate-y-[-8px]">
-                        <h3 className="text-2xl font-bold mb-2 transition-colors duration-300 group-hover:text-primary">Intégration Africaine</h3>
+                        <h3 className="text-2xl font-bold mb-2 transition-colors duration-300 group-hover:text-primary">
+                          Intégration Africaine
+                        </h3>
                         <p className="text-sm text-white/90">
-                          Promouvoir l'intégration régionale, harmoniser les politiques sectorielles, 
-                          et renforcer la coopération économique et commerciale au sein de la CEDEAO et de l'UEMOA
+                          Promouvoir l'intégration régionale, harmoniser les politiques sectorielles, et renforcer la
+                          coopération économique et commerciale au sein de la CEDEAO et de l'UEMOA
                         </p>
                       </div>
                     </div>
@@ -102,17 +111,19 @@ const Index = () => {
 
                   {/* Mission 2 - Diaspora */}
                   <div className="group relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer">
-                    <img 
-                      src={diasporaPolicyImage} 
-                      alt="Gestion des Ivoiriens de l'Extérieur" 
+                    <img
+                      src={diasporaPolicyImage}
+                      alt="Gestion des Ivoiriens de l'Extérieur"
                       className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end transition-all duration-300 group-hover:from-black/90 group-hover:via-black/50">
                       <div className="p-6 text-white transform transition-transform duration-300 group-hover:translate-y-[-8px]">
-                        <h3 className="text-2xl font-bold mb-2 transition-colors duration-300 group-hover:text-secondary">Ivoiriens de l'Extérieur</h3>
+                        <h3 className="text-2xl font-bold mb-2 transition-colors duration-300 group-hover:text-secondary">
+                          Ivoiriens de l'Extérieur
+                        </h3>
                         <p className="text-sm text-white/90">
-                          Accompagner et coordonner les initiatives visant le regroupement et l'organisation 
-                          des Ivoiriens de l'extérieur, faciliter leur réinsertion et mobiliser leurs compétences
+                          Accompagner et coordonner les initiatives visant le regroupement et l'organisation des
+                          Ivoiriens de l'extérieur, faciliter leur réinsertion et mobiliser leurs compétences
                         </p>
                       </div>
                     </div>
@@ -131,38 +142,44 @@ const Index = () => {
               </AccordionTrigger>
               <AccordionContent className="px-6 pb-6">
                 <div className="grid md:grid-cols-3 gap-4">
-                  <a 
-                    href="#" 
+                  <a
+                    href="#"
                     className="group p-4 rounded-lg border border-border/50 hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card/60 backdrop-blur-sm"
                   >
                     <div className="flex items-center gap-3">
                       <FileText className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
                       <div>
-                        <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Le Décret</p>
+                        <p className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                          Le Décret
+                        </p>
                         <p className="text-xs text-muted-foreground">Fichier PDF</p>
                       </div>
                     </div>
                   </a>
-                  <a 
-                    href="#" 
+                  <a
+                    href="#"
                     className="group p-4 rounded-lg border border-border/50 hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card/60 backdrop-blur-sm"
                   >
                     <div className="flex items-center gap-3">
                       <Network className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
                       <div>
-                        <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Organigramme</p>
+                        <p className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                          Organigramme
+                        </p>
                         <p className="text-xs text-muted-foreground">À télécharger</p>
                       </div>
                     </div>
                   </a>
-                  <a 
-                    href="#" 
+                  <a
+                    href="#"
                     className="group p-4 rounded-lg border border-border/50 hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer bg-card/60 backdrop-blur-sm"
                   >
                     <div className="flex items-center gap-3">
                       <Building2 className="w-8 h-8 text-primary transition-transform duration-300 group-hover:scale-110" />
                       <div>
-                        <p className="font-semibold text-foreground group-hover:text-primary transition-colors">Structure organisationnelle</p>
+                        <p className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                          Structure organisationnelle
+                        </p>
                         <p className="text-xs text-muted-foreground">Cabinet, DGPI, DGIE, SPSE</p>
                       </div>
                     </div>
@@ -197,7 +214,9 @@ const Index = () => {
                         <div>
                           <h4 className="font-semibold mb-2">Attributions principales :</h4>
                           <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                            <li>Participation et harmonisation des instruments techniques et économiques d'intégration</li>
+                            <li>
+                              Participation et harmonisation des instruments techniques et économiques d'intégration
+                            </li>
                             <li>Coordination des politiques sectorielles en matière d'intégration africaine</li>
                             <li>Mise en œuvre et suivi des programmes communautaires</li>
                             <li>Promotion de la paix et de la sécurité régionale</li>
@@ -205,13 +224,19 @@ const Index = () => {
                         </div>
                         <div className="grid md:grid-cols-3 gap-3">
                           <div className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20">
-                            <p className="font-semibold text-sm">Direction des Politiques Communautaires Macroéconomiques et Financières</p>
+                            <p className="font-semibold text-sm">
+                              Direction des Politiques Communautaires Macroéconomiques et Financières
+                            </p>
                           </div>
                           <div className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20">
-                            <p className="font-semibold text-sm">Direction des Politiques Communautaires du Commerce et de la Libre Circulation</p>
+                            <p className="font-semibold text-sm">
+                              Direction des Politiques Communautaires du Commerce et de la Libre Circulation
+                            </p>
                           </div>
                           <div className="p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary/20">
-                            <p className="font-semibold text-sm">Direction des Politiques de la Promotion Humaine et du Développement Durable</p>
+                            <p className="font-semibold text-sm">
+                              Direction des Politiques de la Promotion Humaine et du Développement Durable
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -225,27 +250,33 @@ const Index = () => {
                         <Users2 className="w-6 h-6 text-primary transition-transform duration-300 group-hover:scale-110" />
                         Direction Générale des Ivoiriens de l'Extérieur (DGIE)
                       </CardTitle>
-                      <CardDescription>
-                        Gestion et accompagnement de la diaspora ivoirienne
-                      </CardDescription>
+                      <CardDescription>Gestion et accompagnement de la diaspora ivoirienne</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
                         <div>
                           <h4 className="font-semibold mb-2">Attributions principales :</h4>
                           <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                            <li>Encourager et coordonner les initiatives de regroupement des Ivoiriens de l'extérieur</li>
-                            <li>Appuyer la réinsertion économique, sociale et culturelle lors du retour en Côte d'Ivoire</li>
+                            <li>
+                              Encourager et coordonner les initiatives de regroupement des Ivoiriens de l'extérieur
+                            </li>
+                            <li>
+                              Appuyer la réinsertion économique, sociale et culturelle lors du retour en Côte d'Ivoire
+                            </li>
                             <li>Faciliter l'accès au logement et coordonner la participation au développement</li>
                             <li>Mobiliser les compétences des Ivoiriens de l'extérieur</li>
                           </ul>
                         </div>
                         <div className="grid md:grid-cols-3 gap-3">
                           <div className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary/20">
-                            <p className="font-semibold text-sm">Direction de l'Accueil, de l'Orientation et du Suivi des Actions de Réinsertion</p>
+                            <p className="font-semibold text-sm">
+                              Direction de l'Accueil, de l'Orientation et du Suivi des Actions de Réinsertion
+                            </p>
                           </div>
                           <div className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary/20">
-                            <p className="font-semibold text-sm">Direction de la Mobilisation des Compétences et des Ressources</p>
+                            <p className="font-semibold text-sm">
+                              Direction de la Mobilisation des Compétences et des Ressources
+                            </p>
                           </div>
                           <div className="p-3 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary/20">
                             <p className="font-semibold text-sm">Direction de l'Action Sociale</p>
@@ -262,23 +293,24 @@ const Index = () => {
                         <FileText className="w-6 h-6 text-primary transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
                         Service Planification & Suivi-Évaluation (SPSE)
                       </CardTitle>
-                      <CardDescription>
-                        Gestionnaire de la plateforme ECOBASE
-                      </CardDescription>
+                      <CardDescription>Gestionnaire de la plateforme ECOBASE</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
                         <div>
                           <h4 className="font-semibold mb-2">Rôle vis-à-vis d'ECOBASE :</h4>
                           <p className="text-sm text-muted-foreground mb-3">
-                            Le SPSE est le service responsable de la gestion et du maintien de la plateforme ECOBASE. 
-                            Il assure la collecte, la validation et la diffusion des données et indicateurs stratégiques.
+                            Le SPSE est le service responsable de la gestion et du maintien de la plateforme ECOBASE. Il
+                            assure la collecte, la validation et la diffusion des données et indicateurs stratégiques.
                           </p>
                           <h4 className="font-semibold mb-2">Attributions principales :</h4>
                           <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
                             <li>Participation à l'élaboration des Plans Nationaux de Développement</li>
                             <li>Production des statistiques et indicateurs sectoriels</li>
-                            <li>Accompagnement des structures du ministère en matière de planification et de suivi-évaluation</li>
+                            <li>
+                              Accompagnement des structures du ministère en matière de planification et de
+                              suivi-évaluation
+                            </li>
                             <li>Élaboration des bilans semestriels et annuels des activités du ministère</li>
                           </ul>
                         </div>
@@ -299,11 +331,17 @@ const Index = () => {
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {pillars.map((pillar) => (
-              <Card key={pillar.id} className="transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/50 cursor-pointer group bg-card/60 backdrop-blur-sm border-border/50">
+              <Card
+                key={pillar.id}
+                className="transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/50 cursor-pointer group bg-card/60 backdrop-blur-sm border-border/50"
+              >
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between transition-colors duration-300 group-hover:text-primary">
                     {pillar.label}
-                    <Badge variant="secondary" className="transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
+                    <Badge
+                      variant="secondary"
+                      className="transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground"
+                    >
                       {indicatorsByPillar[pillar.id as keyof typeof indicatorsByPillar]} indicateurs
                     </Badge>
                   </CardTitle>
@@ -363,7 +401,9 @@ const Index = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/40 group cursor-pointer bg-card/60 backdrop-blur-sm border-border/50">
-              <h4 className="text-sm font-semibold text-muted-foreground mb-4 transition-colors duration-300 group-hover:text-primary">PIB Régional</h4>
+              <h4 className="text-sm font-semibold text-muted-foreground mb-4 transition-colors duration-300 group-hover:text-primary">
+                PIB Régional
+              </h4>
               <div className="space-y-3">
                 <div>
                   <div className="flex justify-between mb-1">
@@ -371,7 +411,10 @@ const Index = () => {
                     <span className="text-sm font-bold text-primary">{regionalWeights.pibUEMOA}%</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-primary to-primary/80" style={{ width: `${regionalWeights.pibUEMOA}%` }} />
+                    <div
+                      className="h-full bg-gradient-to-r from-primary to-primary/80"
+                      style={{ width: `${regionalWeights.pibUEMOA}%` }}
+                    />
                   </div>
                 </div>
                 <div>
@@ -380,7 +423,10 @@ const Index = () => {
                     <span className="text-sm font-bold text-primary">{regionalWeights.pibCEDEAO}%</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-primary to-primary/80" style={{ width: `${regionalWeights.pibCEDEAO}%` }} />
+                    <div
+                      className="h-full bg-gradient-to-r from-primary to-primary/80"
+                      style={{ width: `${regionalWeights.pibCEDEAO}%` }}
+                    />
                   </div>
                 </div>
                 <div>
@@ -389,14 +435,19 @@ const Index = () => {
                     <span className="text-sm font-bold text-primary">{regionalWeights.pibAfrica}%</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-primary to-primary/80" style={{ width: `${regionalWeights.pibAfrica * 10}%` }} />
+                    <div
+                      className="h-full bg-gradient-to-r from-primary to-primary/80"
+                      style={{ width: `${regionalWeights.pibAfrica * 10}%` }}
+                    />
                   </div>
                 </div>
               </div>
             </Card>
 
             <Card className="p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-secondary/10 hover:border-secondary/40 group cursor-pointer bg-card/60 backdrop-blur-sm border-border/50">
-              <h4 className="text-sm font-semibold text-muted-foreground mb-4 transition-colors duration-300 group-hover:text-secondary">Exportations</h4>
+              <h4 className="text-sm font-semibold text-muted-foreground mb-4 transition-colors duration-300 group-hover:text-secondary">
+                Exportations
+              </h4>
               <div className="space-y-3">
                 <div>
                   <div className="flex justify-between mb-1">
@@ -404,7 +455,10 @@ const Index = () => {
                     <span className="text-sm font-bold text-secondary">{regionalWeights.exportsCEDEAO}%</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-secondary to-secondary/80" style={{ width: `${regionalWeights.exportsCEDEAO}%` }} />
+                    <div
+                      className="h-full bg-gradient-to-r from-secondary to-secondary/80"
+                      style={{ width: `${regionalWeights.exportsCEDEAO}%` }}
+                    />
                   </div>
                 </div>
                 <div>
@@ -413,14 +467,19 @@ const Index = () => {
                     <span className="text-sm font-bold text-secondary">{regionalWeights.exportsAfrica}%</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-secondary to-secondary/80" style={{ width: `${regionalWeights.exportsAfrica * 10}%` }} />
+                    <div
+                      className="h-full bg-gradient-to-r from-secondary to-secondary/80"
+                      style={{ width: `${regionalWeights.exportsAfrica * 10}%` }}
+                    />
                   </div>
                 </div>
               </div>
             </Card>
 
             <Card className="p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-accent/10 hover:border-accent/40 group cursor-pointer bg-card/60 backdrop-blur-sm border-border/50">
-              <h4 className="text-sm font-semibold text-muted-foreground mb-4 transition-colors duration-300 group-hover:text-accent">Importations</h4>
+              <h4 className="text-sm font-semibold text-muted-foreground mb-4 transition-colors duration-300 group-hover:text-accent">
+                Importations
+              </h4>
               <div className="space-y-3">
                 <div>
                   <div className="flex justify-between mb-1">
@@ -428,7 +487,10 @@ const Index = () => {
                     <span className="text-sm font-bold text-accent">{regionalWeights.importsCEDEAO}%</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-accent to-accent/80" style={{ width: `${regionalWeights.importsCEDEAO}%` }} />
+                    <div
+                      className="h-full bg-gradient-to-r from-accent to-accent/80"
+                      style={{ width: `${regionalWeights.importsCEDEAO}%` }}
+                    />
                   </div>
                 </div>
                 <div>
@@ -437,7 +499,10 @@ const Index = () => {
                     <span className="text-sm font-bold text-accent">{regionalWeights.importsAfrica}%</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-accent to-accent/80" style={{ width: `${regionalWeights.importsAfrica * 10}%` }} />
+                    <div
+                      className="h-full bg-gradient-to-r from-accent to-accent/80"
+                      style={{ width: `${regionalWeights.importsAfrica * 10}%` }}
+                    />
                   </div>
                 </div>
               </div>
@@ -451,7 +516,7 @@ const Index = () => {
             <Users className="w-8 h-8 text-primary transition-transform duration-300 hover:scale-110" />
             Partenaires Techniques
           </h2>
-          
+
           {/* Nationales */}
           <Card className="mb-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 bg-card/60 backdrop-blur-sm border-border/50">
             <CardHeader>
@@ -462,20 +527,29 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {organisations.filter(org => org.type === "Nationale").map((org) => {
-                  const IconComponent = getOrgIcon(org.sigle);
-                  return (
-                    <div key={org.id} className="p-4 rounded-lg bg-muted/50 hover:bg-primary/10 hover:border-primary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                          <IconComponent className="w-5 h-5 text-primary" />
+                {organisations
+                  .filter((org) => org.type === "Nationale")
+                  .map((org) => {
+                    const IconComponent = getOrgIcon(org.sigle);
+                    return (
+                      <div
+                        key={org.id}
+                        className="p-4 rounded-lg bg-muted/50 hover:bg-primary/10 hover:border-primary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group"
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                            <IconComponent className="w-5 h-5 text-primary" />
+                          </div>
+                          <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-primary">
+                            {org.sigle}
+                          </p>
                         </div>
-                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-primary">{org.sigle}</p>
+                        <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
+                          {org.nom}
+                        </p>
                       </div>
-                      <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.nom}</p>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             </CardContent>
           </Card>
@@ -490,20 +564,29 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4">
-                {organisations.filter(org => org.type === "Régionale").map((org) => {
-                  const IconComponent = getOrgIcon(org.sigle);
-                  return (
-                    <div key={org.id} className="p-4 rounded-lg bg-muted/50 hover:bg-accent/10 hover:border-accent/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2 rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
-                          <IconComponent className="w-5 h-5 text-accent" />
+                {organisations
+                  .filter((org) => org.type === "Régionale")
+                  .map((org) => {
+                    const IconComponent = getOrgIcon(org.sigle);
+                    return (
+                      <div
+                        key={org.id}
+                        className="p-4 rounded-lg bg-muted/50 hover:bg-accent/10 hover:border-accent/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group"
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="p-2 rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
+                            <IconComponent className="w-5 h-5 text-accent" />
+                          </div>
+                          <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-accent">
+                            {org.sigle}
+                          </p>
                         </div>
-                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-accent">{org.sigle}</p>
+                        <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
+                          {org.nom}
+                        </p>
                       </div>
-                      <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.nom}</p>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             </CardContent>
           </Card>
@@ -518,27 +601,35 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4">
-                {organisations.filter(org => org.type === "Internationale").map((org) => {
-                  const IconComponent = getOrgIcon(org.sigle);
-                  return (
-                    <div key={org.id} className="p-4 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:border-secondary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2 rounded-lg bg-secondary/10 group-hover:bg-secondary/20 transition-colors">
-                          <IconComponent className="w-5 h-5 text-secondary" />
+                {organisations
+                  .filter((org) => org.type === "Internationale")
+                  .map((org) => {
+                    const IconComponent = getOrgIcon(org.sigle);
+                    return (
+                      <div
+                        key={org.id}
+                        className="p-4 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:border-secondary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group"
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="p-2 rounded-lg bg-secondary/10 group-hover:bg-secondary/20 transition-colors">
+                            <IconComponent className="w-5 h-5 text-secondary" />
+                          </div>
+                          <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-secondary">
+                            {org.sigle}
+                          </p>
                         </div>
-                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-secondary">{org.sigle}</p>
+                        <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
+                          {org.nom}
+                        </p>
                       </div>
-                      <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">{org.nom}</p>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             </CardContent>
           </Card>
         </div>
-
       </div>
-      
+
       <Footer />
     </div>
   );
