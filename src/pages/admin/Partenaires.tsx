@@ -4,31 +4,55 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CreatePartenaireModal } from "@/components/admin/modals/CreatePartenaireModal";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Search, Plus, Eye, FileEdit, CheckCircle } from "lucide-react";
-import { organisations } from "@/data/seedData";
+import { EditOrganisationModal } from "@/components/admin/modals/EditOrganisationModal";
+import { ViewOrganisationModal } from "@/components/admin/modals/ViewOrganisationModal";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Search, Plus, Eye, FileEdit, Trash2, CheckCircle } from "lucide-react";
+import { organisations as initialOrgs, Organisation } from "@/data/seedData";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Partenaires() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedOrg, setSelectedOrg] = useState<Organisation | null>(null);
+  const [organisations, setOrganisations] = useState<Organisation[]>(initialOrgs);
   const { hasRole } = useAuth();
+  const { toast } = useToast();
 
   const partenaires = organisations.filter(org => 
-    org.type === "Internationale" || org.type === "PTF"
+    org.type === "Internationale" || org.type === "PTF" || org.type === "Régionale"
   );
   
   const filteredPartenaires = partenaires.filter(org =>
     org.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
     org.sigle.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleView = (org: Organisation) => {
+    setSelectedOrg(org);
+    setIsViewModalOpen(true);
+  };
+
+  const handleEdit = (org: Organisation) => {
+    setSelectedOrg(org);
+    setIsEditModalOpen(true);
+    setIsViewModalOpen(false);
+  };
+
+  const handleSave = (updatedOrg: Organisation) => {
+    setOrganisations(organisations.map(o => o.id === updatedOrg.id ? updatedOrg : o));
+  };
+
+  const handleDelete = (id: string) => {
+    setOrganisations(organisations.filter(o => o.id !== id));
+    toast({
+      title: "Partenaire supprimé",
+      description: "Le partenaire a été supprimé avec succès.",
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -101,13 +125,18 @@ export default function Partenaires() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" onClick={() => handleView(partenaire)}>
                         <Eye className="h-4 w-4" />
                       </Button>
                       {hasRole(["SPSE_ADMIN", "DIRECTION"]) && (
-                        <Button variant="ghost" size="icon">
-                          <FileEdit className="h-4 w-4" />
-                        </Button>
+                        <>
+                          <Button variant="ghost" size="icon" onClick={() => handleEdit(partenaire)}>
+                            <FileEdit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon" onClick={() => handleDelete(partenaire.id)}>
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </>
                       )}
                     </div>
                   </TableCell>
@@ -119,6 +148,18 @@ export default function Partenaires() {
       </Card>
 
       <CreatePartenaireModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
+      <EditOrganisationModal 
+        open={isEditModalOpen} 
+        onOpenChange={setIsEditModalOpen} 
+        organisation={selectedOrg} 
+        onSave={handleSave} 
+      />
+      <ViewOrganisationModal 
+        open={isViewModalOpen} 
+        onOpenChange={setIsViewModalOpen} 
+        organisation={selectedOrg} 
+        onEdit={() => handleEdit(selectedOrg!)}
+      />
     </div>
   );
 }
