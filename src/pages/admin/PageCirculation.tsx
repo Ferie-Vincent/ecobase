@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
@@ -18,51 +17,97 @@ interface CirculationIndicator {
   annee2024: string;
 }
 
-interface StudentData {
-  pays: string;
-  etudiants2022: string;
-  etudiants2023: string;
-  etudiants2024: string;
+interface StudentRegionData {
+  id: string;
+  region: string;
+  total: string;
+  economie: string;
+  droit: string;
+  culture: string;
+  autres: string;
+}
+
+interface TransportMode {
+  id: string;
+  mode: string;
+  voyageurs: string;
 }
 
 export default function PageCirculation() {
   const { toast } = useToast();
   
+  // Indicateurs de circulation (alignés avec mockData)
   const [indicators, setIndicators] = useState<CirculationIndicator[]>([
     {
       id: "1",
       nom: "Ressortissants africains en CI",
       categorie: "Population",
-      unite: "%",
-      annee2022: "24.2",
-      annee2023: "24.8",
-      annee2024: "25.4"
+      unite: "% population",
+      annee2022: "27.2",
+      annee2023: "28.5",
+      annee2024: "29.7"
     },
     {
       id: "2",
-      nom: "Voyageurs aériens CEDEAO",
+      nom: "Trafic ferroviaire UEMOA",
       categorie: "Transport",
       unite: "voyageurs",
-      annee2022: "1250000",
-      annee2023: "1345000",
-      annee2024: "1420000"
+      annee2022: "135000",
+      annee2023: "145000",
+      annee2024: "156000"
     },
     {
       id: "3",
+      nom: "Voyageurs aériens UEMOA",
+      categorie: "Transport",
+      unite: "voyageurs",
+      annee2022: "318000",
+      annee2023: "342000",
+      annee2024: "368000"
+    },
+    {
+      id: "4",
+      nom: "Voyageurs aériens CEDEAO",
+      categorie: "Transport",
+      unite: "voyageurs",
+      annee2022: "548000",
+      annee2023: "589000",
+      annee2024: "634000"
+    },
+    {
+      id: "5",
+      nom: "Trafic routier UEMOA",
+      categorie: "Transport",
+      unite: "voyageurs",
+      annee2022: "2190000",
+      annee2023: "2340000",
+      annee2024: "2520000"
+    },
+    {
+      id: "6",
       nom: "Trafic routier CEDEAO",
       categorie: "Transport",
       unite: "voyageurs",
-      annee2022: "3200000",
-      annee2023: "3580000",
-      annee2024: "3920000"
+      annee2022: "3210000",
+      annee2023: "3450000",
+      annee2024: "3720000"
     }
   ]);
 
-  const [studentData, setStudentData] = useState<StudentData[]>([
-    { pays: "Mali", etudiants2022: "1200", etudiants2023: "1350", etudiants2024: "1480" },
-    { pays: "Burkina Faso", etudiants2022: "980", etudiants2023: "1120", etudiants2024: "1250" },
-    { pays: "Niger", etudiants2022: "450", etudiants2023: "520", etudiants2024: "580" },
-    { pays: "Sénégal", etudiants2022: "320", etudiants2023: "380", etudiants2024: "420" }
+  // Étudiants par région (aligné avec studentsData dans mockData)
+  const [studentRegionData, setStudentRegionData] = useState<StudentRegionData[]>([
+    { id: "1", region: "UEMOA", total: "45600", economie: "12300", droit: "15400", culture: "8900", autres: "9000" },
+    { id: "2", region: "CEDEAO", total: "67800", economie: "18900", droit: "22400", culture: "12300", autres: "14200" },
+    { id: "3", region: "UFM", total: "8900", economie: "2300", droit: "3400", culture: "1800", autres: "1400" }
+  ]);
+
+  // Comparaison des modes de transport (aligné avec le graphique du front)
+  const [transportModes, setTransportModes] = useState<TransportMode[]>([
+    { id: "1", mode: "Routier UEMOA", voyageurs: "2340000" },
+    { id: "2", mode: "Routier CEDEAO", voyageurs: "3450000" },
+    { id: "3", mode: "Aérien UEMOA", voyageurs: "342000" },
+    { id: "4", mode: "Aérien CEDEAO", voyageurs: "589000" },
+    { id: "5", mode: "Ferroviaire", voyageurs: "145000" }
   ]);
 
   const handleSave = () => {
@@ -72,6 +117,7 @@ export default function PageCirculation() {
     });
   };
 
+  // Fonctions pour les indicateurs
   const addIndicator = () => {
     const newIndicator: CirculationIndicator = {
       id: Date.now().toString(),
@@ -95,24 +141,48 @@ export default function PageCirculation() {
     ));
   };
 
-  const addStudentData = () => {
-    const newData: StudentData = {
-      pays: "Nouveau pays",
-      etudiants2022: "",
-      etudiants2023: "",
-      etudiants2024: ""
+  // Fonctions pour les étudiants par région
+  const addStudentRegion = () => {
+    const newData: StudentRegionData = {
+      id: Date.now().toString(),
+      region: "Nouvelle région",
+      total: "0",
+      economie: "0",
+      droit: "0",
+      culture: "0",
+      autres: "0"
     };
-    setStudentData([...studentData, newData]);
+    setStudentRegionData([...studentRegionData, newData]);
   };
 
-  const removeStudentData = (index: number) => {
-    setStudentData(studentData.filter((_, i) => i !== index));
+  const removeStudentRegion = (id: string) => {
+    setStudentRegionData(studentRegionData.filter(d => d.id !== id));
   };
 
-  const updateStudentData = (index: number, field: keyof StudentData, value: string) => {
-    const newData = [...studentData];
-    (newData[index] as any)[field] = value;
-    setStudentData(newData);
+  const updateStudentRegion = (id: string, field: keyof StudentRegionData, value: string) => {
+    setStudentRegionData(studentRegionData.map(d => 
+      d.id === id ? { ...d, [field]: value } : d
+    ));
+  };
+
+  // Fonctions pour les modes de transport
+  const addTransportMode = () => {
+    const newData: TransportMode = {
+      id: Date.now().toString(),
+      mode: "Nouveau mode",
+      voyageurs: "0"
+    };
+    setTransportModes([...transportModes, newData]);
+  };
+
+  const removeTransportMode = (id: string) => {
+    setTransportModes(transportModes.filter(d => d.id !== id));
+  };
+
+  const updateTransportMode = (id: string, field: keyof TransportMode, value: string) => {
+    setTransportModes(transportModes.map(d => 
+      d.id === id ? { ...d, [field]: value } : d
+    ));
   };
 
   return (
@@ -127,9 +197,11 @@ export default function PageCirculation() {
       <Tabs defaultValue="indicateurs" className="space-y-6">
         <TabsList>
           <TabsTrigger value="indicateurs">Indicateurs de Circulation</TabsTrigger>
-          <TabsTrigger value="etudiants">Étudiants par Pays</TabsTrigger>
+          <TabsTrigger value="etudiants">Étudiants par Région</TabsTrigger>
+          <TabsTrigger value="transport">Modes de Transport</TabsTrigger>
         </TabsList>
 
+        {/* Onglet Indicateurs */}
         <TabsContent value="indicateurs" className="space-y-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -149,7 +221,7 @@ export default function PageCirculation() {
                     <TableHead>2022</TableHead>
                     <TableHead>2023</TableHead>
                     <TableHead>2024</TableHead>
-                    <TableHead className="w-[100px]">Actions</TableHead>
+                    <TableHead className="w-[80px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -165,7 +237,7 @@ export default function PageCirculation() {
                         <select
                           value={indicator.categorie}
                           onChange={(e) => updateIndicator(indicator.id, "categorie", e.target.value as "Population" | "Transport")}
-                          className="w-full px-3 py-2 border rounded-md"
+                          className="w-full px-3 py-2 border rounded-md bg-background"
                         >
                           <option value="Population">Population</option>
                           <option value="Transport">Transport</option>
@@ -175,25 +247,29 @@ export default function PageCirculation() {
                         <Input
                           value={indicator.unite}
                           onChange={(e) => updateIndicator(indicator.id, "unite", e.target.value)}
-                          placeholder="%, nombre..."
+                          placeholder="%, voyageurs..."
+                          className="w-28"
                         />
                       </TableCell>
                       <TableCell>
                         <Input
                           value={indicator.annee2022}
                           onChange={(e) => updateIndicator(indicator.id, "annee2022", e.target.value)}
+                          className="w-24"
                         />
                       </TableCell>
                       <TableCell>
                         <Input
                           value={indicator.annee2023}
                           onChange={(e) => updateIndicator(indicator.id, "annee2023", e.target.value)}
+                          className="w-24"
                         />
                       </TableCell>
                       <TableCell>
                         <Input
                           value={indicator.annee2024}
                           onChange={(e) => updateIndicator(indicator.id, "annee2024", e.target.value)}
+                          className="w-24"
                         />
                       </TableCell>
                       <TableCell>
@@ -213,11 +289,17 @@ export default function PageCirculation() {
           </Card>
         </TabsContent>
 
+        {/* Onglet Étudiants par Région */}
         <TabsContent value="etudiants" className="space-y-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Étudiants CEDEAO en Côte d'Ivoire</CardTitle>
-              <Button onClick={addStudentData} variant="outline" size="sm">
+              <div>
+                <CardTitle>Étudiants Étrangers par Région</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Données affichées dans le graphique du front office
+                </p>
+              </div>
+              <Button onClick={addStudentRegion} variant="outline" size="sm">
                 <Plus className="h-4 w-4 mr-2" />
                 Ajouter
               </Button>
@@ -226,46 +308,124 @@ export default function PageCirculation() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Pays d'origine</TableHead>
-                    <TableHead>Étudiants 2022</TableHead>
-                    <TableHead>Étudiants 2023</TableHead>
-                    <TableHead>Étudiants 2024</TableHead>
-                    <TableHead className="w-[100px]">Actions</TableHead>
+                    <TableHead>Région</TableHead>
+                    <TableHead>Total</TableHead>
+                    <TableHead>Économie</TableHead>
+                    <TableHead>Droit</TableHead>
+                    <TableHead>Culture</TableHead>
+                    <TableHead>Autres</TableHead>
+                    <TableHead className="w-[80px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {studentData.map((data, index) => (
-                    <TableRow key={index}>
+                  {studentRegionData.map((data) => (
+                    <TableRow key={data.id}>
                       <TableCell>
                         <Input
-                          value={data.pays}
-                          onChange={(e) => updateStudentData(index, "pays", e.target.value)}
+                          value={data.region}
+                          onChange={(e) => updateStudentRegion(data.id, "region", e.target.value)}
                         />
                       </TableCell>
                       <TableCell>
                         <Input
-                          value={data.etudiants2022}
-                          onChange={(e) => updateStudentData(index, "etudiants2022", e.target.value)}
+                          value={data.total}
+                          onChange={(e) => updateStudentRegion(data.id, "total", e.target.value)}
                           type="number"
+                          className="w-24"
                         />
                       </TableCell>
                       <TableCell>
                         <Input
-                          value={data.etudiants2023}
-                          onChange={(e) => updateStudentData(index, "etudiants2023", e.target.value)}
+                          value={data.economie}
+                          onChange={(e) => updateStudentRegion(data.id, "economie", e.target.value)}
                           type="number"
+                          className="w-20"
                         />
                       </TableCell>
                       <TableCell>
                         <Input
-                          value={data.etudiants2024}
-                          onChange={(e) => updateStudentData(index, "etudiants2024", e.target.value)}
+                          value={data.droit}
+                          onChange={(e) => updateStudentRegion(data.id, "droit", e.target.value)}
+                          type="number"
+                          className="w-20"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          value={data.culture}
+                          onChange={(e) => updateStudentRegion(data.id, "culture", e.target.value)}
+                          type="number"
+                          className="w-20"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          value={data.autres}
+                          onChange={(e) => updateStudentRegion(data.id, "autres", e.target.value)}
+                          type="number"
+                          className="w-20"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          onClick={() => removeStudentRegion(data.id)}
+                          variant="ghost"
+                          size="sm"
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Onglet Modes de Transport */}
+        <TabsContent value="transport" className="space-y-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Comparaison des Modes de Transport</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Données affichées dans le graphique comparatif du front office
+                </p>
+              </div>
+              <Button onClick={addTransportMode} variant="outline" size="sm">
+                <Plus className="h-4 w-4 mr-2" />
+                Ajouter
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Mode de Transport</TableHead>
+                    <TableHead>Nombre de Voyageurs</TableHead>
+                    <TableHead className="w-[80px]">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {transportModes.map((data) => (
+                    <TableRow key={data.id}>
+                      <TableCell>
+                        <Input
+                          value={data.mode}
+                          onChange={(e) => updateTransportMode(data.id, "mode", e.target.value)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          value={data.voyageurs}
+                          onChange={(e) => updateTransportMode(data.id, "voyageurs", e.target.value)}
                           type="number"
                         />
                       </TableCell>
                       <TableCell>
                         <Button
-                          onClick={() => removeStudentData(index)}
+                          onClick={() => removeTransportMode(data.id)}
                           variant="ghost"
                           size="sm"
                         >

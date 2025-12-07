@@ -22,6 +22,14 @@ interface DonneeCommerce {
   annee: string;
   exportations: string;
   importations: string;
+  intraAfrique: string;
+}
+
+interface DocumentTelecharge {
+  id: string;
+  nom: string;
+  description: string;
+  lien: string;
 }
 
 export default function PageAccueil() {
@@ -70,11 +78,18 @@ export default function PageAccueil() {
   ]);
 
   const [commerceData, setCommerceData] = useState<DonneeCommerce[]>([
-    { annee: "2020", exportations: "6890", importations: "8234" },
-    { annee: "2021", exportations: "7350", importations: "8920" },
-    { annee: "2022", exportations: "8120", importations: "9450" },
-    { annee: "2023", exportations: "8890", importations: "10120" },
-    { annee: "2024", exportations: "9560", importations: "10890" }
+    { annee: "2020", exportations: "28.4", importations: "31.2", intraAfrique: "15.2" },
+    { annee: "2021", exportations: "32.1", importations: "34.8", intraAfrique: "17.8" },
+    { annee: "2022", exportations: "38.5", importations: "39.2", intraAfrique: "21.4" },
+    { annee: "2023", exportations: "42.3", importations: "41.6", intraAfrique: "24.7" },
+    { annee: "2024", exportations: "48.9", importations: "45.3", intraAfrique: "28.3" }
+  ]);
+
+  // Documents à télécharger (alignés avec la section du front Index.tsx)
+  const [documentsTelecharge, setDocumentsTelecharge] = useState<DocumentTelecharge[]>([
+    { id: "1", nom: "Le Décret", description: "Fichier PDF", lien: "#" },
+    { id: "2", nom: "Organigramme", description: "À télécharger", lien: "#" },
+    { id: "3", nom: "Structure organisationnelle", description: "Cabinet, DGPI, DGIE, SPSE", lien: "#" }
   ]);
 
   const handleSave = () => {
@@ -110,7 +125,8 @@ export default function PageAccueil() {
     const newYear: DonneeCommerce = {
       annee: new Date().getFullYear().toString(),
       exportations: "",
-      importations: ""
+      importations: "",
+      intraAfrique: ""
     };
     setCommerceData([...commerceData, newYear]);
   };
@@ -125,6 +141,26 @@ export default function PageAccueil() {
     setCommerceData(newData);
   };
 
+  const addDocument = () => {
+    const newDoc: DocumentTelecharge = {
+      id: Date.now().toString(),
+      nom: "Nouveau document",
+      description: "Description",
+      lien: "#"
+    };
+    setDocumentsTelecharge([...documentsTelecharge, newDoc]);
+  };
+
+  const removeDocument = (id: string) => {
+    setDocumentsTelecharge(documentsTelecharge.filter(doc => doc.id !== id));
+  };
+
+  const updateDocument = (id: string, field: keyof DocumentTelecharge, value: string) => {
+    setDocumentsTelecharge(documentsTelecharge.map(doc => 
+      doc.id === id ? { ...doc, [field]: value } : doc
+    ));
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -133,9 +169,10 @@ export default function PageAccueil() {
       </div>
 
       <Tabs defaultValue="hero" className="space-y-6">
-        <TabsList>
+        <TabsList className="flex-wrap">
           <TabsTrigger value="hero">Contenu Hero</TabsTrigger>
           <TabsTrigger value="missions">Missions</TabsTrigger>
+          <TabsTrigger value="documents">Documents à télécharger</TabsTrigger>
           <TabsTrigger value="stats">Statistiques Clés</TabsTrigger>
           <TabsTrigger value="commerce">Données Commerce</TabsTrigger>
         </TabsList>
@@ -203,6 +240,69 @@ export default function PageAccueil() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="documents" className="space-y-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Documents à télécharger</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Liens affichés dans l'accordéon "Documents à télécharger" de la page d'accueil
+                </p>
+              </div>
+              <Button onClick={addDocument} variant="outline" size="sm">
+                <Plus className="h-4 w-4 mr-2" />
+                Ajouter
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nom du document</TableHead>
+                    <TableHead>Description</TableHead>
+                    <TableHead>Lien</TableHead>
+                    <TableHead className="w-[80px]">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {documentsTelecharge.map((doc) => (
+                    <TableRow key={doc.id}>
+                      <TableCell>
+                        <Input
+                          value={doc.nom}
+                          onChange={(e) => updateDocument(doc.id, "nom", e.target.value)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          value={doc.description}
+                          onChange={(e) => updateDocument(doc.id, "description", e.target.value)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          value={doc.lien}
+                          onChange={(e) => updateDocument(doc.id, "lien", e.target.value)}
+                          placeholder="/documents/fichier.pdf"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          onClick={() => removeDocument(doc.id)}
+                          variant="ghost"
+                          size="sm"
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="stats" className="space-y-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -221,7 +321,7 @@ export default function PageAccueil() {
                     <TableHead>Unité</TableHead>
                     <TableHead>Tendance</TableHead>
                     <TableHead>Catégorie</TableHead>
-                    <TableHead className="w-[100px]">Actions</TableHead>
+                    <TableHead className="w-[80px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -237,6 +337,7 @@ export default function PageAccueil() {
                         <Input
                           value={stat.valeur}
                           onChange={(e) => updateStat(stat.id, "valeur", e.target.value)}
+                          className="w-24"
                         />
                       </TableCell>
                       <TableCell>
@@ -244,6 +345,7 @@ export default function PageAccueil() {
                           value={stat.unite}
                           onChange={(e) => updateStat(stat.id, "unite", e.target.value)}
                           placeholder="%, personnes..."
+                          className="w-28"
                         />
                       </TableCell>
                       <TableCell>
@@ -251,13 +353,14 @@ export default function PageAccueil() {
                           value={stat.tendance}
                           onChange={(e) => updateStat(stat.id, "tendance", e.target.value)}
                           placeholder="+18, -5..."
+                          className="w-24"
                         />
                       </TableCell>
                       <TableCell>
                         <select
                           value={stat.categorie}
                           onChange={(e) => updateStat(stat.id, "categorie", e.target.value)}
-                          className="w-full px-3 py-2 border rounded-md"
+                          className="w-full px-3 py-2 border rounded-md bg-background"
                         >
                           <option value="Intégration">Intégration</option>
                           <option value="Diaspora">Diaspora</option>
@@ -284,7 +387,12 @@ export default function PageAccueil() {
         <TabsContent value="commerce" className="space-y-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Évolution du Commerce (Milliards FCFA)</CardTitle>
+              <div>
+                <CardTitle>Évolution du Commerce (Milliards FCFA)</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Données utilisées dans les graphiques de commerce
+                </p>
+              </div>
               <Button onClick={addCommerceYear} variant="outline" size="sm">
                 <Plus className="h-4 w-4 mr-2" />
                 Ajouter Année
@@ -295,9 +403,10 @@ export default function PageAccueil() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Année</TableHead>
-                    <TableHead>Exportations (Mds FCFA)</TableHead>
-                    <TableHead>Importations (Mds FCFA)</TableHead>
-                    <TableHead className="w-[100px]">Actions</TableHead>
+                    <TableHead>Exportations</TableHead>
+                    <TableHead>Importations</TableHead>
+                    <TableHead>Intra-Afrique</TableHead>
+                    <TableHead className="w-[80px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -308,20 +417,28 @@ export default function PageAccueil() {
                           value={data.annee}
                           onChange={(e) => updateCommerceData(index, "annee", e.target.value)}
                           type="number"
+                          className="w-24"
                         />
                       </TableCell>
                       <TableCell>
                         <Input
                           value={data.exportations}
                           onChange={(e) => updateCommerceData(index, "exportations", e.target.value)}
-                          type="number"
+                          className="w-24"
                         />
                       </TableCell>
                       <TableCell>
                         <Input
                           value={data.importations}
                           onChange={(e) => updateCommerceData(index, "importations", e.target.value)}
-                          type="number"
+                          className="w-24"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          value={data.intraAfrique}
+                          onChange={(e) => updateCommerceData(index, "intraAfrique", e.target.value)}
+                          className="w-24"
                         />
                       </TableCell>
                       <TableCell>
