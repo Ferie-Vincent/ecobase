@@ -30,6 +30,7 @@ interface TransportMode {
 
 export default function PageCirculation() {
   const { toast } = useToast();
+  const [availableYears, setAvailableYears] = useState(["2024", "2023", "2022"]);
   const [selectedYear, setSelectedYear] = useState("2024");
   
   const [indicators, setIndicators] = useState<CirculationIndicator[]>([
@@ -122,7 +123,7 @@ export default function PageCirculation() {
           <h1 className="text-3xl font-bold text-foreground">Gestion - Libre Circulation</h1>
           <p className="text-muted-foreground">Gérez les indicateurs de circulation et mobilité régionale</p>
         </div>
-        <YearSelectorAdmin selectedYear={selectedYear} onYearChange={setSelectedYear} />
+        <YearSelectorAdmin selectedYear={selectedYear} onYearChange={setSelectedYear} years={availableYears} onYearsChange={setAvailableYears} />
       </div>
 
       <Tabs defaultValue="indicateurs" className="space-y-6">

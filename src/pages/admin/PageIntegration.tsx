@@ -35,6 +35,7 @@ interface ContentSection {
 
 export default function PageIntegration() {
   const { toast } = useToast();
+  const [availableYears, setAvailableYears] = useState(["2024", "2023", "2022"]);
   const [selectedYear, setSelectedYear] = useState("2024");
   
   // Indicateurs d'intégration avec valeurs par année
@@ -118,7 +119,7 @@ export default function PageIntegration() {
           <h1 className="text-3xl font-bold text-foreground">Gestion - Intégration Africaine</h1>
           <p className="text-muted-foreground">Gérez les indicateurs d'intégration et les données SLEC</p>
         </div>
-        <YearSelectorAdmin selectedYear={selectedYear} onYearChange={setSelectedYear} />
+        <YearSelectorAdmin selectedYear={selectedYear} onYearChange={setSelectedYear} years={availableYears} onYearsChange={setAvailableYears} />
       </div>
 
       <Tabs defaultValue="indicateurs" className="space-y-6">

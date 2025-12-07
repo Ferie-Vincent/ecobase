@@ -31,6 +31,7 @@ interface ProgrammeData {
 
 export default function PageDiaspora() {
   const { toast } = useToast();
+  const [availableYears, setAvailableYears] = useState(["2024", "2023", "2022"]);
   const [selectedYear, setSelectedYear] = useState("2024");
   
   const [actions, setActions] = useState<ActionData[]>([
@@ -130,7 +131,7 @@ export default function PageDiaspora() {
           <h1 className="text-3xl font-bold text-foreground">Gestion - Ivoiriens de l'Extérieur</h1>
           <p className="text-muted-foreground">Gérez les données de la diaspora ivoirienne</p>
         </div>
-        <YearSelectorAdmin selectedYear={selectedYear} onYearChange={setSelectedYear} />
+        <YearSelectorAdmin selectedYear={selectedYear} onYearChange={setSelectedYear} years={availableYears} onYearsChange={setAvailableYears} />
       </div>
 
       <Tabs defaultValue="actions" className="w-full">

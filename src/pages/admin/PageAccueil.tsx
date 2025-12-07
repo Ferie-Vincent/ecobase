@@ -35,6 +35,7 @@ interface DocumentTelecharge {
 
 export default function PageAccueil() {
   const { toast } = useToast();
+  const [availableYears, setAvailableYears] = useState(["2024", "2023", "2022"]);
   const [selectedYear, setSelectedYear] = useState("2024");
   
   const [formData, setFormData] = useState({
@@ -123,7 +124,7 @@ export default function PageAccueil() {
           <h1 className="text-3xl font-bold text-foreground">Gestion Page d'Accueil & Dashboard</h1>
           <p className="text-muted-foreground">Gérez le contenu de la page d'accueil et les données du tableau de bord</p>
         </div>
-        <YearSelectorAdmin selectedYear={selectedYear} onYearChange={setSelectedYear} />
+        <YearSelectorAdmin selectedYear={selectedYear} onYearChange={setSelectedYear} years={availableYears} onYearsChange={setAvailableYears} />
       </div>
 
       <Tabs defaultValue="hero" className="space-y-6">
