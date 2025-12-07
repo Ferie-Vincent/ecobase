@@ -2,14 +2,30 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { CreateProgrammeModal } from "@/components/admin/modals/CreateProgrammeModal";
-import { programmes } from "@/data/seedData";
-import { Plus, Calendar, DollarSign } from "lucide-react";
+import { EditProgrammeModal } from "@/components/admin/modals/EditProgrammeModal";
+import { ViewProgrammeModal } from "@/components/admin/modals/ViewProgrammeModal";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { programmes as initialProgrammes, Programme } from "@/data/seedData";
+import { Plus, Calendar, DollarSign, Search, Eye, FileEdit, Trash2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Programmes() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedProgramme, setSelectedProgramme] = useState<Programme | null>(null);
+  const [programmes, setProgrammes] = useState<Programme[]>(initialProgrammes);
+  const [searchTerm, setSearchTerm] = useState("");
   const { hasRole } = useAuth();
+  const { toast } = useToast();
+
+  const filteredProgrammes = programmes.filter(p =>
+    p.titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    p.domaine.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const getStatutBadge = (statut: string) => {
     const variants: Record<string, "default" | "secondary" | "outline"> = {
@@ -18,6 +34,29 @@ export default function Programmes() {
       "Clôturé": "outline"
     };
     return <Badge variant={variants[statut] || "outline"}>{statut}</Badge>;
+  };
+
+  const handleView = (programme: Programme) => {
+    setSelectedProgramme(programme);
+    setIsViewModalOpen(true);
+  };
+
+  const handleEdit = (programme: Programme) => {
+    setSelectedProgramme(programme);
+    setIsEditModalOpen(true);
+    setIsViewModalOpen(false);
+  };
+
+  const handleSave = (updatedProgramme: Programme) => {
+    setProgrammes(programmes.map(p => p.id === updatedProgramme.id ? updatedProgramme : p));
+  };
+
+  const handleDelete = (id: string) => {
+    setProgrammes(programmes.filter(p => p.id !== id));
+    toast({
+      title: "Programme supprimé",
+      description: "Le programme a été supprimé avec succès.",
+    });
   };
 
   return (
@@ -35,59 +74,84 @@ export default function Programmes() {
         )}
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {programmes.map((programme) => (
-          <Card key={programme.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <h3 className="text-lg font-semibold">{programme.titre}</h3>
-                  <div className="flex items-center gap-2">
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-4">
+            <div className="relative flex-1 max-w-sm">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Rechercher un programme..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            <Badge variant="outline">{filteredProgrammes.length} résultats</Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Titre</TableHead>
+                <TableHead>Domaine</TableHead>
+                <TableHead>Période</TableHead>
+                <TableHead>Budget</TableHead>
+                <TableHead>Statut</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredProgrammes.map((programme) => (
+                <TableRow key={programme.id}>
+                  <TableCell className="font-medium max-w-xs truncate">{programme.titre}</TableCell>
+                  <TableCell>
                     <Badge>{programme.domaine}</Badge>
-                    {getStatutBadge(programme.statut)}
-                  </div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">{programme.description}</p>
-              
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">Période:</span>
-                  <span className="font-medium">
-                    {new Date(programme.debut).toLocaleDateString('fr-FR')} - {new Date(programme.fin).toLocaleDateString('fr-FR')}
-                  </span>
-                </div>
-                
-                {programme.budget && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <DollarSign className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">Budget:</span>
-                    <span className="font-medium font-mono">
-                      {(programme.budget / 1000000000).toFixed(1)}Mds FCFA
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex gap-2 pt-4 border-t">
-                <Button variant="outline" size="sm" className="flex-1">
-                  Voir détails
-                </Button>
-                {hasRole(["SPSE_ADMIN", "DIRECTION"]) && (
-                  <Button variant="outline" size="sm" className="flex-1">
-                    Modifier
-                  </Button>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                  </TableCell>
+                  <TableCell className="text-sm">
+                    {new Date(programme.debut).toLocaleDateString('fr-FR', { year: 'numeric' })} - {new Date(programme.fin).toLocaleDateString('fr-FR', { year: 'numeric' })}
+                  </TableCell>
+                  <TableCell className="font-mono">
+                    {programme.budget ? `${(programme.budget / 1000000000).toFixed(1)} Mds` : "-"}
+                  </TableCell>
+                  <TableCell>{getStatutBadge(programme.statut)}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
+                      <Button variant="ghost" size="icon" onClick={() => handleView(programme)}>
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      {hasRole(["SPSE_ADMIN", "DIRECTION"]) && (
+                        <>
+                          <Button variant="ghost" size="icon" onClick={() => handleEdit(programme)}>
+                            <FileEdit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon" onClick={() => handleDelete(programme.id)}>
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
       <CreateProgrammeModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
+      <EditProgrammeModal 
+        open={isEditModalOpen} 
+        onOpenChange={setIsEditModalOpen} 
+        programme={selectedProgramme} 
+        onSave={handleSave} 
+      />
+      <ViewProgrammeModal 
+        open={isViewModalOpen} 
+        onOpenChange={setIsViewModalOpen} 
+        programme={selectedProgramme} 
+        onEdit={() => handleEdit(selectedProgramme!)}
+      />
     </div>
   );
 }

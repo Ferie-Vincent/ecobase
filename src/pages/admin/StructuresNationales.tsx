@@ -4,22 +4,23 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CreateStructureModal } from "@/components/admin/modals/CreateStructureModal";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Search, Plus, Eye, FileEdit } from "lucide-react";
-import { organisations } from "@/data/seedData";
+import { EditOrganisationModal } from "@/components/admin/modals/EditOrganisationModal";
+import { ViewOrganisationModal } from "@/components/admin/modals/ViewOrganisationModal";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Search, Plus, Eye, FileEdit, Trash2 } from "lucide-react";
+import { organisations as initialOrgs, Organisation } from "@/data/seedData";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 export default function StructuresNationales() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedOrg, setSelectedOrg] = useState<Organisation | null>(null);
+  const [organisations, setOrganisations] = useState<Organisation[]>(initialOrgs);
   const { hasRole } = useAuth();
+  const { toast } = useToast();
 
   const structuresNationales = organisations.filter(org => org.type === "Nationale");
   
@@ -27,6 +28,29 @@ export default function StructuresNationales() {
     org.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
     org.sigle.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleView = (org: Organisation) => {
+    setSelectedOrg(org);
+    setIsViewModalOpen(true);
+  };
+
+  const handleEdit = (org: Organisation) => {
+    setSelectedOrg(org);
+    setIsEditModalOpen(true);
+    setIsViewModalOpen(false);
+  };
+
+  const handleSave = (updatedOrg: Organisation) => {
+    setOrganisations(organisations.map(o => o.id === updatedOrg.id ? updatedOrg : o));
+  };
+
+  const handleDelete = (id: string) => {
+    setOrganisations(organisations.filter(o => o.id !== id));
+    toast({
+      title: "Structure supprimée",
+      description: "La structure a été supprimée avec succès.",
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -86,13 +110,18 @@ export default function StructuresNationales() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" onClick={() => handleView(structure)}>
                         <Eye className="h-4 w-4" />
                       </Button>
                       {hasRole(["SPSE_ADMIN", "DIRECTION"]) && (
-                        <Button variant="ghost" size="icon">
-                          <FileEdit className="h-4 w-4" />
-                        </Button>
+                        <>
+                          <Button variant="ghost" size="icon" onClick={() => handleEdit(structure)}>
+                            <FileEdit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon" onClick={() => handleDelete(structure.id)}>
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </>
                       )}
                     </div>
                   </TableCell>
@@ -104,6 +133,18 @@ export default function StructuresNationales() {
       </Card>
 
       <CreateStructureModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} type="nationale" />
+      <EditOrganisationModal 
+        open={isEditModalOpen} 
+        onOpenChange={setIsEditModalOpen} 
+        organisation={selectedOrg} 
+        onSave={handleSave} 
+      />
+      <ViewOrganisationModal 
+        open={isViewModalOpen} 
+        onOpenChange={setIsViewModalOpen} 
+        organisation={selectedOrg} 
+        onEdit={() => handleEdit(selectedOrg!)}
+      />
     </div>
   );
 }
