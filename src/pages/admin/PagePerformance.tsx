@@ -23,6 +23,7 @@ interface Section {
 
 export default function PagePerformance() {
   const { toast } = useToast();
+  const [availableYears, setAvailableYears] = useState(["2024", "2023", "2022"]);
   const [selectedYear, setSelectedYear] = useState("2024");
   
   const [adminSections, setAdminSections] = useState<Section[]>([
@@ -190,7 +191,7 @@ export default function PagePerformance() {
           <h1 className="text-3xl font-bold text-foreground">Gestion - Indicateurs de Performance</h1>
           <p className="text-muted-foreground">Gérez les indicateurs de performance par catégorie</p>
         </div>
-        <YearSelectorAdmin selectedYear={selectedYear} onYearChange={setSelectedYear} />
+        <YearSelectorAdmin selectedYear={selectedYear} onYearChange={setSelectedYear} years={availableYears} onYearsChange={setAvailableYears} />
       </div>
 
       <Tabs defaultValue="admin" className="w-full">
