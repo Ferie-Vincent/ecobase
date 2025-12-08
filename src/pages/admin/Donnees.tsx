@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CreateDonneeModal } from "@/components/admin/modals/CreateDonneeModal";
+import { ExportMenu } from "@/components/ExportMenu";
 import {
   Table,
   TableBody,
@@ -108,6 +109,23 @@ export default function Donnees() {
                 className="pl-9"
               />
             </div>
+            <ExportMenu
+              data={filteredDonnees.map(d => ({
+                ...d,
+                indicateur_nom: indicateurs.find(i => i.id === d.indicateur_id)?.nom || d.indicateur_id
+              }))}
+              columns={[
+                { header: "Indicateur", accessor: "indicateur_nom" },
+                { header: "Année", accessor: "year" },
+                { header: "Région", accessor: (row) => row.geo_region || "-" },
+                { header: "Valeur", accessor: "value" },
+                { header: "Unité", accessor: "unit" },
+                { header: "Statut", accessor: "statut" },
+                { header: "Source", accessor: "source_note" }
+              ]}
+              filename="donnees-ecobase"
+              title="Données ECOBASE"
+            />
           </div>
         </CardHeader>
         <CardContent>
