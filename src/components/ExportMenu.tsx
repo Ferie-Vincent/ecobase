@@ -1,13 +1,16 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Download, FileSpreadsheet, FileText, FileType } from "lucide-react";
+import { Download, FileSpreadsheet, FileText, FileType, Eye } from "lucide-react";
 import { exportData, ExportColumn, ExportFormat } from "@/utils/exportUtils";
 import { useToast } from "@/hooks/use-toast";
+import { ExportPreviewDialog } from "./ExportPreviewDialog";
 
 interface ExportMenuProps {
   data: any[];
@@ -29,6 +32,7 @@ export function ExportMenu({
   disabled = false
 }: ExportMenuProps) {
   const { toast } = useToast();
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const handleExport = (format: ExportFormat) => {
     try {
@@ -59,27 +63,43 @@ export function ExportMenu({
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant={variant} size={size} disabled={disabled || data.length === 0}>
-          <Download className="h-4 w-4 mr-2" />
-          Exporter
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => handleExport("csv")} className="gap-2">
-          <FileText className="h-4 w-4" />
-          Export CSV
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleExport("excel")} className="gap-2">
-          <FileSpreadsheet className="h-4 w-4" />
-          Export Excel
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleExport("pdf")} className="gap-2">
-          <FileType className="h-4 w-4" />
-          Export PDF
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={variant} size={size} disabled={disabled || data.length === 0}>
+            <Download className="h-4 w-4 mr-2" />
+            Exporter
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="bg-popover">
+          <DropdownMenuItem onClick={() => setPreviewOpen(true)} className="gap-2">
+            <Eye className="h-4 w-4" />
+            Aperçu et personnalisation
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => handleExport("csv")} className="gap-2">
+            <FileText className="h-4 w-4" />
+            Export CSV rapide
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleExport("excel")} className="gap-2">
+            <FileSpreadsheet className="h-4 w-4" />
+            Export Excel rapide
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleExport("pdf")} className="gap-2">
+            <FileType className="h-4 w-4" />
+            Export PDF rapide
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <ExportPreviewDialog
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        data={data}
+        columns={columns}
+        filename={filename}
+        title={title}
+      />
+    </>
   );
 }
