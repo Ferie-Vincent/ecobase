@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CreateIndicateurModal } from "@/components/admin/modals/CreateIndicateurModal";
+import { ExportMenu } from "@/components/ExportMenu";
 import {
   Table,
   TableBody,
@@ -62,9 +63,21 @@ export default function Indicateurs() {
                 className="pl-9"
               />
             </div>
-            <div className="flex gap-2">
-              <Badge variant="outline">{filteredIndicateurs.length} résultats</Badge>
-            </div>
+            <Badge variant="outline">{filteredIndicateurs.length} résultats</Badge>
+            <ExportMenu
+              data={filteredIndicateurs}
+              columns={[
+                { header: "ID", accessor: "id" },
+                { header: "Nom", accessor: "nom" },
+                { header: "Type", accessor: "type" },
+                { header: "Unité", accessor: "unite" },
+                { header: "Fréquence", accessor: "frequence" },
+                { header: "Source", accessor: "source" },
+                { header: "Méthode", accessor: "methode" }
+              ]}
+              filename="indicateurs-ecobase"
+              title="Indicateurs ECOBASE"
+            />
           </div>
         </CardHeader>
         <CardContent>

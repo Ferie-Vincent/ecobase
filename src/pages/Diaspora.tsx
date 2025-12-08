@@ -7,6 +7,7 @@ import { YearSelector } from "@/components/YearSelector";
 import { TimelineChart } from "@/components/TimelineChart";
 import { Footer } from "@/components/Footer";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { ExportMenu } from "@/components/ExportMenu";
 import { useState, useMemo } from "react";
 
 const Diaspora = () => {
@@ -66,12 +67,26 @@ const Diaspora = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8 space-y-8">
-        {/* Year Selector */}
-        <YearSelector 
-          selectedYear={selectedYear} 
-          onYearChange={setSelectedYear} 
-          availableYears={availableYears}
-        />
+        {/* Year Selector & Export */}
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <YearSelector 
+            selectedYear={selectedYear} 
+            onYearChange={setSelectedYear} 
+            availableYears={availableYears}
+          />
+          <ExportMenu
+            data={filteredIndicators}
+            columns={[
+              { header: "Indicateur", accessor: "name" },
+              { header: "Valeur", accessor: "value" },
+              { header: "Unité", accessor: "unit" },
+              { header: "Tendance", accessor: "trend" },
+              { header: "Catégorie", accessor: "category" }
+            ]}
+            filename={`diaspora-${selectedYear}`}
+            title={`Indicateurs Diaspora - ${selectedYear}`}
+          />
+        </div>
 
         {/* Filter by Category */}
         <ToggleGroup 

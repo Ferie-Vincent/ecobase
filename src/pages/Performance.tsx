@@ -1,21 +1,18 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { performanceIndicators, projectsData } from "@/data/mockData";
-import { TrendingUp, Calendar, User, BarChart3, Download } from "lucide-react";
+import { TrendingUp, Calendar, User, BarChart3 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { MultiYearSelector } from "@/components/MultiYearSelector";
 import { IndicatorSelector } from "@/components/IndicatorSelector";
 import { AdvancedFilters } from "@/components/AdvancedFilters";
 import { TimelineChart } from "@/components/TimelineChart";
 import { Footer } from "@/components/Footer";
+import { ExportMenu } from "@/components/ExportMenu";
 import { useState, useMemo } from "react";
-import * as XLSX from 'xlsx';
-import { useToast } from "@/hooks/use-toast";
 
 const Performance = () => {
-  const { toast } = useToast();
   const [selectedYears, setSelectedYears] = useState<string[]>(["2024"]);
   const [selectedAdminIndicators, setSelectedAdminIndicators] = useState<string[]>(["realisation", "digitalisation", "partenaires"]);
   const [selectedIntegrationIndicators, setSelectedIntegrationIndicators] = useState<string[]>(["iira", "penetration", "agrements"]);
@@ -166,50 +163,57 @@ const Performance = () => {
     []
   );
 
-  const exportToExcel = () => {
-    const wb = XLSX.utils.book_new();
+  // Prepare export data
+  const exportData = useMemo(() => {
+    const allIndicators: any[] = [];
     
-    // Export Administration data
-    const adminData = allTimelineData.map(item => ({
-      'Année': item.year,
-      'Taux réalisation (%)': item.realisation,
-      'Digitalisation (%)': item.digitalisation,
-      'Partenaires mobilisés': item.partenaires
-    }));
-    const adminSheet = XLSX.utils.json_to_sheet(adminData);
-    XLSX.utils.book_append_sheet(wb, adminSheet, 'Administration');
-    
-    // Export Integration data
-    const integrationData = allTimelineData.map(item => ({
-      'Année': item.year,
-      'IIRA (indice)': item.iira,
-      'Pénétration marchés (%)': item.penetration,
-      'Agréments SLE': item.agrements
-    }));
-    const integrationSheet = XLSX.utils.json_to_sheet(integrationData);
-    XLSX.utils.book_append_sheet(wb, integrationSheet, 'Intégration');
-    
-    // Export Performance Indicators
-    performanceIndicators.administration.forEach((section, idx) => {
-      const sectionData = section.indicateurs.map(ind => ({
-        'Objectif': section.objectif,
-        'Indicateur': ind.nom,
-        'Référence': ind.reference,
-        '2022': ind.cible2022,
-        '2023': ind.cible2023,
-        '2024': ind.cible2024
-      }));
-      const sectionSheet = XLSX.utils.json_to_sheet(sectionData);
-      XLSX.utils.book_append_sheet(wb, sectionSheet, `Admin ${idx + 1}`);
+    performanceIndicators.administration.forEach(section => {
+      section.indicateurs.forEach(ind => {
+        allIndicators.push({
+          section: "Administration",
+          objectif: section.objectif,
+          nom: ind.nom,
+          reference: ind.reference,
+          cible2022: ind.cible2022,
+          cible2023: ind.cible2023,
+          cible2024: ind.cible2024,
+          statut: calculateStatut(ind.reference, ind.cible2024, "2024")
+        });
+      });
     });
     
-    XLSX.writeFile(wb, 'indicateurs_performance.xlsx');
-    
-    toast({
-      title: "Export réussi",
-      description: "Les données ont été exportées en Excel.",
+    performanceIndicators.integrationAfricaine.forEach(section => {
+      section.indicateurs.forEach(ind => {
+        allIndicators.push({
+          section: "Intégration Africaine",
+          objectif: section.objectif,
+          nom: ind.nom,
+          reference: ind.reference,
+          cible2022: ind.cible2022,
+          cible2023: ind.cible2023,
+          cible2024: ind.cible2024,
+          statut: calculateStatut(ind.reference, ind.cible2024, "2024")
+        });
+      });
     });
-  };
+    
+    performanceIndicators.ivoiriensExterieur.forEach(section => {
+      section.indicateurs.forEach(ind => {
+        allIndicators.push({
+          section: "Ivoiriens Extérieur",
+          objectif: section.objectif,
+          nom: ind.nom,
+          reference: ind.reference,
+          cible2022: ind.cible2022,
+          cible2023: ind.cible2023,
+          cible2024: ind.cible2024,
+          statut: calculateStatut(ind.reference, ind.cible2024, "2024")
+        });
+      });
+    });
+    
+    return allIndicators;
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -232,10 +236,21 @@ const Performance = () => {
               availableYears={availableYears}
             />
           </div>
-          <Button onClick={exportToExcel} variant="outline">
-            <Download className="h-4 w-4 mr-2" />
-            Exporter en Excel
-          </Button>
+          <ExportMenu
+            data={exportData}
+            columns={[
+              { header: "Section", accessor: "section" },
+              { header: "Objectif", accessor: "objectif" },
+              { header: "Indicateur", accessor: "nom" },
+              { header: "Référence", accessor: "reference" },
+              { header: "Cible 2022", accessor: "cible2022" },
+              { header: "Cible 2023", accessor: "cible2023" },
+              { header: "Cible 2024", accessor: "cible2024" },
+              { header: "Statut", accessor: "statut" }
+            ]}
+            filename="indicateurs-performance"
+            title="Indicateurs de Performance"
+          />
         </div>
 
         {/* Timeline Chart - Administration */}
