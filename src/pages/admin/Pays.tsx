@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CreatePaysModal } from "@/components/admin/modals/CreatePaysModal";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { pays as initialPays, organisations, Pays as PaysType } from "@/data/seedData";
-import { Plus, Globe, Search, FileEdit, Trash2 } from "lucide-react";
+import { Plus, Globe, Search, FileEdit, Trash2, Building } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -71,76 +70,67 @@ export default function Pays() {
         )}
       </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-4">
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Rechercher un pays..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-            <Badge variant="outline">{filteredPays.length} résultats</Badge>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Pays</TableHead>
-                <TableHead>Code</TableHead>
-                <TableHead>Organisations</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredPays.map((p) => {
-                const orgs = getPaysOrganisations(p.code);
-                return (
-                  <TableRow key={p.code}>
-                    <TableCell className="font-medium">
-                      <div className="flex items-center gap-2">
-                        <Globe className="h-4 w-4 text-primary" />
-                        {p.nom}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{p.code}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-wrap gap-1">
-                        {orgs.map(org => (
-                          <Badge key={org.id} variant="secondary" className="text-xs">
-                            {org.sigle}
-                          </Badge>
-                        ))}
-                        {orgs.length === 0 && <span className="text-muted-foreground text-sm">Aucune</span>}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        {hasRole("SPSE_ADMIN") && (
-                          <>
-                            <Button variant="ghost" size="icon" onClick={() => handleEdit(p)}>
-                              <FileEdit className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon" onClick={() => handleDelete(p.code)}>
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <div className="flex items-center gap-4">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Rechercher un pays..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+        <Badge variant="outline">{filteredPays.length} résultats</Badge>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {filteredPays.map((p) => {
+          const orgs = getPaysOrganisations(p.code);
+          return (
+            <Card key={p.code} className="hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/30">
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between">
+                  <div className="p-3 rounded-lg bg-primary/10">
+                    <Globe className="h-6 w-6 text-primary" />
+                  </div>
+                  <Badge variant="outline">{p.code}</Badge>
+                </div>
+                <CardTitle className="text-lg mt-3">{p.nom}</CardTitle>
+              </CardHeader>
+              <CardContent className="pb-3">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Building className="h-4 w-4" />
+                    <span>{orgs.length} organisation(s)</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {orgs.map(org => (
+                      <Badge key={org.id} variant="secondary" className="text-xs">
+                        {org.sigle}
+                      </Badge>
+                    ))}
+                    {orgs.length === 0 && <span className="text-muted-foreground text-xs">Aucune organisation</span>}
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter className="pt-3 border-t border-border/50">
+                <div className="flex justify-end w-full gap-2">
+                  {hasRole("SPSE_ADMIN") && (
+                    <>
+                      <Button variant="ghost" size="icon" onClick={() => handleEdit(p)}>
+                        <FileEdit className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(p.code)}>
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </CardFooter>
+            </Card>
+          );
+        })}
+      </div>
 
       <CreatePaysModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
 
