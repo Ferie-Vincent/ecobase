@@ -33,6 +33,7 @@ import Connecteurs from "./pages/admin/Connecteurs";
 import Utilisateurs from "./pages/admin/Utilisateurs";
 import Rapports from "./pages/admin/Rapports";
 import Parametres from "./pages/admin/Parametres";
+import NotificationsHistory from "./pages/admin/NotificationsHistory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -77,6 +78,7 @@ const App = () => {
                                 <Route path="connecteurs" element={<Connecteurs />} />
                                 <Route path="utilisateurs" element={<Utilisateurs />} />
                                 <Route path="parametres" element={<Parametres />} />
+                                <Route path="notifications" element={<NotificationsHistory />} />
                             </Route>
                             
                             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

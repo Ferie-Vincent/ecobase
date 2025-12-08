@@ -164,8 +164,8 @@ export function NotificationsDropdown() {
         </ScrollArea>
         
         <div className="border-t border-border p-2">
-          <Button variant="ghost" size="sm" className="w-full text-xs" onClick={() => navigate("/admin")}>
-            Voir toutes les activités
+          <Button variant="ghost" size="sm" className="w-full text-xs" onClick={() => navigate("/admin/notifications")}>
+            Voir tout l'historique
           </Button>
         </div>
       </DropdownMenuContent>
