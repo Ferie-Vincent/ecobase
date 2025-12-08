@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CreateStructureModal } from "@/components/admin/modals/CreateStructureModal";
 import { EditOrganisationModal } from "@/components/admin/modals/EditOrganisationModal";
 import { ViewOrganisationModal } from "@/components/admin/modals/ViewOrganisationModal";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Plus, Eye, FileEdit, Trash2 } from "lucide-react";
+import { Search, Plus, Eye, FileEdit, Trash2, Landmark, User } from "lucide-react";
 import { organisations as initialOrgs, Organisation } from "@/data/seedData";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -67,70 +66,68 @@ export default function StructuresNationales() {
         )}
       </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-4">
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Rechercher une structure..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-            <Badge variant="outline">{filteredStructures.length} résultats</Badge>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nom</TableHead>
-                <TableHead>Sigle</TableHead>
-                <TableHead>Responsable</TableHead>
-                <TableHead>Contact</TableHead>
-                <TableHead>Statut</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredStructures.map((structure) => (
-                <TableRow key={structure.id}>
-                  <TableCell className="font-medium">{structure.nom}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{structure.sigle}</Badge>
-                  </TableCell>
-                  <TableCell className="text-sm">{structure.responsable || "-"}</TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{structure.contact || "-"}</TableCell>
-                  <TableCell>
-                    <Badge variant={structure.statut === "Actif" ? "default" : "outline"}>
-                      {structure.statut}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon" onClick={() => handleView(structure)}>
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      {hasRole(["SPSE_ADMIN", "DIRECTION"]) && (
-                        <>
-                          <Button variant="ghost" size="icon" onClick={() => handleEdit(structure)}>
-                            <FileEdit className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleDelete(structure.id)}>
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <div className="flex items-center gap-4">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Rechercher une structure..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+        <Badge variant="outline">{filteredStructures.length} résultats</Badge>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredStructures.map((structure) => (
+          <Card key={structure.id} className="hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/30">
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between">
+                <div className="p-3 rounded-lg bg-secondary/10">
+                  <Landmark className="h-6 w-6 text-secondary" />
+                </div>
+                <Badge variant={structure.statut === "Actif" ? "default" : "outline"}>
+                  {structure.statut}
+                </Badge>
+              </div>
+              <CardTitle className="text-lg mt-3">{structure.nom}</CardTitle>
+              <CardDescription>
+                <Badge variant="outline" className="mt-1">{structure.sigle}</Badge>
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pb-3 space-y-2">
+              {structure.responsable && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <User className="h-4 w-4" />
+                  <span>{structure.responsable}</span>
+                </div>
+              )}
+              {structure.contact && (
+                <p className="text-sm text-muted-foreground">{structure.contact}</p>
+              )}
+            </CardContent>
+            <CardFooter className="pt-3 border-t border-border/50">
+              <div className="flex justify-between w-full">
+                <Button variant="outline" size="sm" onClick={() => handleView(structure)}>
+                  <Eye className="h-4 w-4 mr-2" />
+                  Voir détails
+                </Button>
+                {hasRole(["SPSE_ADMIN", "DIRECTION"]) && (
+                  <div className="flex gap-2">
+                    <Button variant="ghost" size="icon" onClick={() => handleEdit(structure)}>
+                      <FileEdit className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => handleDelete(structure.id)}>
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
 
       <CreateStructureModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} type="nationale" />
       <EditOrganisationModal 

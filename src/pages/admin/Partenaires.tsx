@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CreatePartenaireModal } from "@/components/admin/modals/CreatePartenaireModal";
 import { EditOrganisationModal } from "@/components/admin/modals/EditOrganisationModal";
 import { ViewOrganisationModal } from "@/components/admin/modals/ViewOrganisationModal";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Plus, Eye, FileEdit, Trash2, CheckCircle } from "lucide-react";
+import { Search, Plus, Eye, FileEdit, Trash2, CheckCircle, Globe, MapPin } from "lucide-react";
 import { organisations as initialOrgs, Organisation } from "@/data/seedData";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -54,6 +53,15 @@ export default function Partenaires() {
     });
   };
 
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case "Internationale": return "bg-blue-500/10 text-blue-600";
+      case "Régionale": return "bg-primary/10 text-primary";
+      case "PTF": return "bg-accent/10 text-accent-foreground";
+      default: return "bg-muted";
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -69,83 +77,74 @@ export default function Partenaires() {
         )}
       </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-4">
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Rechercher un partenaire..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-            <Badge variant="outline">{filteredPartenaires.length} résultats</Badge>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nom</TableHead>
-                <TableHead>Sigle</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Siège</TableHead>
-                <TableHead>Convention</TableHead>
-                <TableHead>Statut</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredPartenaires.map((partenaire) => (
-                <TableRow key={partenaire.id}>
-                  <TableCell className="font-medium">{partenaire.nom}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{partenaire.sigle}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="secondary">{partenaire.type}</Badge>
-                  </TableCell>
-                  <TableCell>{partenaire.siege || "-"}</TableCell>
-                  <TableCell>
-                    {partenaire.convention ? (
-                      <Badge variant="default" className="gap-1">
-                        <CheckCircle className="h-3 w-3" />
-                        Oui
-                      </Badge>
-                    ) : (
-                      <Badge variant="outline">Non</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={partenaire.statut === "Actif" ? "default" : "outline"}>
-                      {partenaire.statut}
+      <div className="flex items-center gap-4">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Rechercher un partenaire..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+        <Badge variant="outline">{filteredPartenaires.length} résultats</Badge>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredPartenaires.map((partenaire) => (
+          <Card key={partenaire.id} className="hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/30">
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between">
+                <div className="p-3 rounded-lg bg-primary/10">
+                  <Globe className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex gap-2">
+                  <Badge variant="secondary">{partenaire.type}</Badge>
+                  {partenaire.convention && (
+                    <Badge variant="default" className="gap-1">
+                      <CheckCircle className="h-3 w-3" />
+                      Conv.
                     </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon" onClick={() => handleView(partenaire)}>
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      {hasRole(["SPSE_ADMIN", "DIRECTION"]) && (
-                        <>
-                          <Button variant="ghost" size="icon" onClick={() => handleEdit(partenaire)}>
-                            <FileEdit className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleDelete(partenaire.id)}>
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+                  )}
+                </div>
+              </div>
+              <CardTitle className="text-lg mt-3">{partenaire.nom}</CardTitle>
+              <CardDescription>
+                <Badge variant="outline" className="mt-1">{partenaire.sigle}</Badge>
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pb-3 space-y-2">
+              {partenaire.siege && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <MapPin className="h-4 w-4" />
+                  <span>{partenaire.siege}</span>
+                </div>
+              )}
+              <Badge variant={partenaire.statut === "Actif" ? "default" : "outline"}>
+                {partenaire.statut}
+              </Badge>
+            </CardContent>
+            <CardFooter className="pt-3 border-t border-border/50">
+              <div className="flex justify-between w-full">
+                <Button variant="outline" size="sm" onClick={() => handleView(partenaire)}>
+                  <Eye className="h-4 w-4 mr-2" />
+                  Voir détails
+                </Button>
+                {hasRole(["SPSE_ADMIN", "DIRECTION"]) && (
+                  <div className="flex gap-2">
+                    <Button variant="ghost" size="icon" onClick={() => handleEdit(partenaire)}>
+                      <FileEdit className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => handleDelete(partenaire.id)}>
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
 
       <CreatePartenaireModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
       <EditOrganisationModal 
