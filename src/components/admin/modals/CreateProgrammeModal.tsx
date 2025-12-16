@@ -87,7 +87,7 @@ export function CreateProgrammeModal({ open, onOpenChange }: CreateProgrammeModa
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Intégration">Intégration</SelectItem>
-                  <SelectItem value="Diaspora">Diaspora</SelectItem>
+                  <SelectItem value="Ivoiriens Extérieur">Ivoiriens Extérieur</SelectItem>
                   <SelectItem value="Économie">Économie</SelectItem>
                   <SelectItem value="Social">Social</SelectItem>
                 </SelectContent>

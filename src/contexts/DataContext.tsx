@@ -299,7 +299,7 @@ const initialPartners: Partner[] = [
 
 const initialPiliers: PilierStrategique[] = [
   { id: "1", code: "INT", titre: "Intégration régionale", description: "Mesure de l'intégration régionale et du commerce intra-africain", icone: "Globe2" },
-  { id: "2", code: "DIA", titre: "Diaspora & Ivoiriens de l'extérieur", description: "Suivi des Ivoiriens de l'extérieur et de la diaspora", icone: "Users" },
+  { id: "2", code: "DIA", titre: "Ivoiriens de l'Extérieur", description: "Suivi des Ivoiriens de l'extérieur et accompagnement de leur contribution au développement national", icone: "Users" },
   { id: "3", code: "MACRO", titre: "Macroéconomie & Transversal", description: "Indicateurs macroéconomiques et transversaux", icone: "TrendingUp" }
 ];
 

@@ -78,7 +78,7 @@ export default function PageDiaspora() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Gestion - Ivoiriens de l'Extérieur</h1>
-          <p className="text-muted-foreground">Gérez les données de la diaspora ivoirienne</p>
+          <p className="text-muted-foreground">Gérez les données des Ivoiriens de l'Extérieur</p>
         </div>
         <YearSelectorAdmin 
           selectedYear={selectedYear} 

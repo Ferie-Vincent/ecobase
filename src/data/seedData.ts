@@ -40,7 +40,7 @@ export interface Programme {
   id: string;
   titre: string;
   description?: string;
-  domaine: "Intégration" | "Diaspora" | "Économie" | "Social";
+  domaine: "Intégration" | "Ivoiriens Extérieur" | "Économie" | "Social";
   debut: string;
   fin: string;
   budget?: number;
@@ -52,7 +52,7 @@ export interface Programme {
 export interface Indicateur {
   id: string;
   nom: string;
-  type: "Intégration" | "Diaspora" | "Économie" | "Social";
+  type: "Intégration" | "Ivoiriens Extérieur" | "Économie" | "Social";
   unite: string;
   frequence: "Mensuelle" | "Trimestrielle" | "Annuelle";
   source: string;
@@ -285,8 +285,8 @@ export const programmes: Programme[] = [
   {
     id: "PRG-DIAS-2526",
     titre: "Gestion des Ivoiriens de l'Extérieur 2025–2026",
-    description: "Programme d'appui à la diaspora et réinsertion des Ivoiriens de retour",
-    domaine: "Diaspora",
+    description: "Programme d'appui aux Ivoiriens de l'extérieur et réinsertion des Ivoiriens de retour",
+    domaine: "Ivoiriens Extérieur",
     debut: "2025-01-01",
     fin: "2026-12-31",
     budget: 8000000000,
@@ -340,7 +340,7 @@ export const indicateurs: Indicateur[] = [
   {
     id: "retours_reinseres_nb",
     nom: "Ivoiriens de retour réinsérés",
-    type: "Diaspora",
+    type: "Ivoiriens Extérieur",
     unite: "Nombre",
     frequence: "Trimestrielle",
     source: "DGIE/OIM",

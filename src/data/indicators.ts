@@ -141,7 +141,7 @@ export const indicators: Indicator[] = [
     related_to: ["slec_exportations_valeur"]
   },
 
-  // Diaspora & Ivoiriens de l'extérieur
+  // Ivoiriens de l'Extérieur
   {
     id: "sensibilises_immigration_clandestine_nb",
     name: "Personnes sensibilisées aux dangers de l'immigration clandestine",
