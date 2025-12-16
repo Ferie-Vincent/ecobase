@@ -21,6 +21,7 @@ import {
   Flag,
   BanknoteIcon,
   Ship,
+  ArrowUpRight,
 } from "lucide-react";
 import { metadata } from "@/data/metadata";
 import { indicators } from "@/data/indicators";
@@ -30,6 +31,7 @@ import { StatCard } from "@/components/StatCard";
 import { regionalWeights } from "@/data/mockData";
 import { Footer } from "@/components/Footer";
 import { useData } from "@/contexts/DataContext";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 
 // Logos partenaires
 import logoBad from "@/assets/logos/BAD.png";
@@ -166,33 +168,128 @@ const Index = () => {
             </a>
           </div>
 
-          {/* Statistiques clés */}
+          {/* Statistiques clés avec tooltips explicatifs */}
           <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-12">
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-primary">{indicators.length}+</div>
+            <div className="text-center group cursor-help" title="Total des indicateurs définis dans le référentiel ECOBASE">
+              <div className="text-3xl md:text-4xl font-bold text-primary">{indicators.length}</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Indicateurs
                 <br />
-                Suivis
+                <span className="text-xs opacity-70">au référentiel</span>
               </div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-secondary">{partners.length}+</div>
+            <div className="text-center group cursor-help" title="Organisations partenaires techniques et financiers">
+              <div className="text-3xl md:text-4xl font-bold text-secondary">{partners.length}</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Partenaires
                 <br />
-                Techniques
+                <span className="text-xs opacity-70">techniques</span>
               </div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-foreground">3</div>
+            <div className="text-center group cursor-help" title="Piliers stratégiques : Intégration, Diaspora, Macroéconomie">
+              <div className="text-3xl md:text-4xl font-bold text-foreground">{piliers.length}</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Piliers
                 <br />
-                Stratégiques
+                <span className="text-xs opacity-70">stratégiques</span>
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Aperçu Rapide - Mini Charts */}
+      <section className="container mx-auto px-4 py-8">
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Chart 1 - Commerce SLEC */}
+          <Card className="bg-card/60 backdrop-blur-sm border-border/50 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Exportations SLEC</CardTitle>
+                <Badge variant="secondary" className="text-xs">+73%</Badge>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold mb-2">52.4 Mds FCFA</div>
+              <div className="h-[80px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={[
+                    { year: "2020", value: 30 },
+                    { year: "2021", value: 35 },
+                    { year: "2022", value: 42 },
+                    { year: "2023", value: 47 },
+                    { year: "2024", value: 52 },
+                  ]}>
+                    <Area type="monotone" dataKey="value" stroke="hsl(var(--primary))" fill="hsl(var(--primary)/0.2)" strokeWidth={2} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }}
+                      formatter={(value: number) => [`${value} Mds FCFA`, 'Exports']}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Chart 2 - Transferts Diaspora */}
+          <Card className="bg-card/60 backdrop-blur-sm border-border/50 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Transferts Diaspora / PIB</CardTitle>
+                <Badge variant="outline" className="text-xs">Stable</Badge>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold mb-2">9.1%</div>
+              <div className="h-[80px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={[
+                    { year: "2020", value: 8.2 },
+                    { year: "2021", value: 8.5 },
+                    { year: "2022", value: 8.8 },
+                    { year: "2023", value: 9.0 },
+                    { year: "2024", value: 9.1 },
+                  ]}>
+                    <Bar dataKey="value" fill="hsl(var(--secondary))" radius={[4, 4, 0, 0]} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }}
+                      formatter={(value: number) => [`${value}%`, 'Part PIB']}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Chart 3 - Voyageurs CEDEAO */}
+          <Card className="bg-card/60 backdrop-blur-sm border-border/50 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Voyageurs CEDEAO</CardTitle>
+                <Badge className="text-xs bg-primary/20 text-primary border-0">+12%</Badge>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold mb-2">1.2M</div>
+              <div className="h-[80px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={[
+                    { year: "2020", value: 650 },
+                    { year: "2021", value: 780 },
+                    { year: "2022", value: 920 },
+                    { year: "2023", value: 1050 },
+                    { year: "2024", value: 1200 },
+                  ]}>
+                    <Area type="monotone" dataKey="value" stroke="hsl(var(--secondary))" fill="hsl(var(--secondary)/0.2)" strokeWidth={2} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }}
+                      formatter={(value: number) => [`${value}K`, 'Voyageurs']}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
