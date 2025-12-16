@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Save, Plus, Trash2 } from "lucide-react";
 import YearSelectorAdmin from "@/components/admin/YearSelectorAdmin";
+import { useData, PilierStrategique } from "@/contexts/DataContext";
+import { indicators } from "@/data/indicators";
 
 interface StatistiqueDashboard {
   id: string;
@@ -24,14 +26,6 @@ interface DonneeCommerce {
   exportations: string;
   importations: string;
   intraAfrique: string;
-}
-
-interface PilierStrategique {
-  id: string;
-  code: string;
-  label: string;
-  description: string;
-  icon: string;
 }
 
 interface PoidsRegional {
@@ -53,8 +47,15 @@ interface DocumentTelecharge {
 
 export default function PageAccueil() {
   const { toast } = useToast();
+  const { piliers: contextPiliers, updatePiliers } = useData();
   const [availableYears, setAvailableYears] = useState(["2024", "2023", "2022"]);
   const [selectedYear, setSelectedYear] = useState("2024");
+  const [localPiliers, setLocalPiliers] = useState<PilierStrategique[]>(contextPiliers);
+  
+  // Sync with context
+  useEffect(() => {
+    setLocalPiliers(contextPiliers);
+  }, [contextPiliers]);
   
   const [formData, setFormData] = useState({
     titre: "ECOBASE",
@@ -85,12 +86,6 @@ export default function PageAccueil() {
     { id: "3", nom: "Structure organisationnelle", description: "Cabinet, DGPI, DGIE, SPSE", lien: "#" }
   ]);
 
-  const [piliers, setPiliers] = useState<PilierStrategique[]>([
-    { id: "1", code: "INT", label: "Intégration Africaine", description: "Politiques d'intégration régionale et continentale", icon: "Globe2" },
-    { id: "2", code: "DIA", label: "Ivoiriens de l'Extérieur", description: "Gestion et accompagnement de la diaspora", icon: "Users2" },
-    { id: "3", code: "MACRO", label: "Indicateurs Macro-économiques", description: "Suivi des performances économiques globales", icon: "TrendingUp" }
-  ]);
-
   const [poidsRegionaux, setPoidsRegionaux] = useState<PoidsRegional>({
     id: "1",
     nom: "Poids de la Côte d'Ivoire",
@@ -102,6 +97,7 @@ export default function PageAccueil() {
   });
 
   const handleSave = () => {
+    updatePiliers(localPiliers);
     toast({ title: "Modifications enregistrées", description: `Les données pour ${selectedYear} ont été mises à jour.` });
   };
 
@@ -326,7 +322,7 @@ export default function PageAccueil() {
           <Card>
             <CardHeader>
               <CardTitle>Piliers Stratégiques</CardTitle>
-              <p className="text-sm text-muted-foreground mt-1">Les trois piliers affichés sur la page d'accueil</p>
+              <p className="text-sm text-muted-foreground mt-1">Les trois piliers affichés sur la page d'accueil. Le nombre d'indicateurs est calculé automatiquement.</p>
             </CardHeader>
             <CardContent>
               <Table>
@@ -335,16 +331,25 @@ export default function PageAccueil() {
                     <TableHead>Code</TableHead>
                     <TableHead>Label</TableHead>
                     <TableHead>Description</TableHead>
+                    <TableHead>Indicateurs</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {piliers.map((pilier) => (
-                    <TableRow key={pilier.id}>
-                      <TableCell><Input value={pilier.code} onChange={(e) => setPiliers(piliers.map(p => p.id === pilier.id ? { ...p, code: e.target.value } : p))} className="w-20" /></TableCell>
-                      <TableCell><Input value={pilier.label} onChange={(e) => setPiliers(piliers.map(p => p.id === pilier.id ? { ...p, label: e.target.value } : p))} /></TableCell>
-                      <TableCell><Input value={pilier.description} onChange={(e) => setPiliers(piliers.map(p => p.id === pilier.id ? { ...p, description: e.target.value } : p))} /></TableCell>
-                    </TableRow>
-                  ))}
+                  {localPiliers.map((pilier) => {
+                    const indicatorCount = indicators.filter(i => i.pillar === pilier.code).length;
+                    return (
+                      <TableRow key={pilier.id}>
+                        <TableCell><Input value={pilier.code} onChange={(e) => setLocalPiliers(localPiliers.map(p => p.id === pilier.id ? { ...p, code: e.target.value } : p))} className="w-20" /></TableCell>
+                        <TableCell><Input value={pilier.titre} onChange={(e) => setLocalPiliers(localPiliers.map(p => p.id === pilier.id ? { ...p, titre: e.target.value } : p))} /></TableCell>
+                        <TableCell><Input value={pilier.description} onChange={(e) => setLocalPiliers(localPiliers.map(p => p.id === pilier.id ? { ...p, description: e.target.value } : p))} /></TableCell>
+                        <TableCell>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                            {indicatorCount} indicateurs
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </CardContent>

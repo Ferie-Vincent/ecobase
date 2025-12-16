@@ -22,7 +22,7 @@ import {
   BanknoteIcon,
   Ship,
 } from "lucide-react";
-import { metadata, pillars } from "@/data/metadata";
+import { metadata } from "@/data/metadata";
 import { indicators } from "@/data/indicators";
 import integrationPolicyImage from "@/assets/integration-policy.jpg";
 import diasporaPolicyImage from "@/assets/diaspora-policy.jpg";
@@ -74,8 +74,9 @@ const partnerUrls: Record<string, string> = {
 };
 
 const Index = () => {
-  const { partners } = useData();
+  const { partners, piliers } = useData();
   
+  // Calculate indicator counts automatically from actual indicators
   const indicatorsByPillar = {
     INT: indicators.filter((i) => i.pillar === "INT").length,
     DIA: indicators.filter((i) => i.pillar === "DIA").length,
@@ -433,25 +434,23 @@ const Index = () => {
             Les Piliers Stratégiques
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
-            {pillars.map((pillar) => (
+            {piliers.map((pilier) => (
               <Card
-                key={pillar.id}
+                key={pilier.id}
                 className="transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/50 cursor-pointer group bg-card/60 backdrop-blur-sm border-border/50"
               >
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between transition-colors duration-300 group-hover:text-primary">
-                    {pillar.label}
+                    {pilier.titre}
                     <Badge
                       variant="secondary"
                       className="transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground"
                     >
-                      {indicatorsByPillar[pillar.id as keyof typeof indicatorsByPillar]} indicateurs
+                      {indicatorsByPillar[pilier.code as keyof typeof indicatorsByPillar]} indicateurs
                     </Badge>
                   </CardTitle>
                   <CardDescription className="transition-colors duration-300 group-hover:text-foreground">
-                    {pillar.id === "INT" && "Mesure de l'intégration régionale et du commerce intra-africain"}
-                    {pillar.id === "DIA" && "Suivi des Ivoiriens de l'extérieur et de la diaspora"}
-                    {pillar.id === "MACRO" && "Indicateurs macroéconomiques et transversaux"}
+                    {pilier.description}
                   </CardDescription>
                 </CardHeader>
               </Card>

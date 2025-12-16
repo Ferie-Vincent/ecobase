@@ -44,6 +44,7 @@ export interface ContentSection {
 
 export interface PilierStrategique {
   id: string;
+  code: string;
   titre: string;
   description: string;
   icone: string;
@@ -282,9 +283,9 @@ const initialPartners: Partner[] = [
 ];
 
 const initialPiliers: PilierStrategique[] = [
-  { id: "1", titre: "Intégration Africaine", description: "Suivi des politiques d'intégration régionale CEDEAO/UEMOA", icone: "Globe2" },
-  { id: "2", titre: "Ivoiriens de l'Extérieur", description: "Gestion et accompagnement de la diaspora", icone: "Users" },
-  { id: "3", titre: "Indicateurs Macro", description: "Données macro-économiques et statistiques", icone: "TrendingUp" }
+  { id: "1", code: "INT", titre: "Intégration régionale", description: "Mesure de l'intégration régionale et du commerce intra-africain", icone: "Globe2" },
+  { id: "2", code: "DIA", titre: "Diaspora & Ivoiriens de l'extérieur", description: "Suivi des Ivoiriens de l'extérieur et de la diaspora", icone: "Users" },
+  { id: "3", code: "MACRO", titre: "Macroéconomie & Transversal", description: "Indicateurs macroéconomiques et transversaux", icone: "TrendingUp" }
 ];
 
 const initialPoidsRegionaux: PoidsRegional[] = [
