@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { CreateStructureModal } from "@/components/admin/modals/CreateStructureModal";
 import { EditOrganisationModal } from "@/components/admin/modals/EditOrganisationModal";
 import { ViewOrganisationModal } from "@/components/admin/modals/ViewOrganisationModal";
+import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { Search, Plus, Eye, FileEdit, Trash2, Landmark, User } from "lucide-react";
 import { organisations as initialOrgs, Organisation } from "@/data/seedData";
 import { useAuth } from "@/contexts/AuthContext";
@@ -18,6 +19,7 @@ export default function StructuresNationales() {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedOrg, setSelectedOrg] = useState<Organisation | null>(null);
   const [organisations, setOrganisations] = useState<Organisation[]>(initialOrgs);
+  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; org: Organisation | null }>({ open: false, org: null });
   const { hasRole } = useAuth();
   const { toast } = useToast();
 
@@ -43,12 +45,19 @@ export default function StructuresNationales() {
     setOrganisations(organisations.map(o => o.id === updatedOrg.id ? updatedOrg : o));
   };
 
-  const handleDelete = (id: string) => {
-    setOrganisations(organisations.filter(o => o.id !== id));
-    toast({
-      title: "Structure supprimée",
-      description: "La structure a été supprimée avec succès.",
-    });
+  const confirmDelete = (org: Organisation) => {
+    setDeleteDialog({ open: true, org });
+  };
+
+  const handleDelete = () => {
+    if (deleteDialog.org) {
+      setOrganisations(organisations.filter(o => o.id !== deleteDialog.org!.id));
+      toast({
+        title: "Structure supprimée",
+        description: `${deleteDialog.org.nom} a été supprimée avec succès.`,
+      });
+      setDeleteDialog({ open: false, org: null });
+    }
   };
 
   return (
@@ -118,7 +127,7 @@ export default function StructuresNationales() {
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(structure)}>
                       <FileEdit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(structure.id)}>
+                    <Button variant="ghost" size="icon" onClick={() => confirmDelete(structure)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
@@ -141,6 +150,13 @@ export default function StructuresNationales() {
         onOpenChange={setIsViewModalOpen} 
         organisation={selectedOrg} 
         onEdit={() => handleEdit(selectedOrg!)}
+      />
+      <DeleteConfirmDialog
+        open={deleteDialog.open}
+        onOpenChange={(open) => setDeleteDialog({ open, org: null })}
+        title="Supprimer la structure"
+        description={`Êtes-vous sûr de vouloir supprimer "${deleteDialog.org?.nom}" ? Cette action est irréversible.`}
+        onConfirm={handleDelete}
       />
     </div>
   );

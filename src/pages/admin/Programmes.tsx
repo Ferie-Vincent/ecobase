@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { CreateProgrammeModal } from "@/components/admin/modals/CreateProgrammeModal";
 import { EditProgrammeModal } from "@/components/admin/modals/EditProgrammeModal";
 import { ViewProgrammeModal } from "@/components/admin/modals/ViewProgrammeModal";
+import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { programmes as initialProgrammes, Programme } from "@/data/seedData";
 import { Plus, Calendar, DollarSign, Search, Eye, FileEdit, Trash2 } from "lucide-react";
@@ -19,6 +20,7 @@ export default function Programmes() {
   const [selectedProgramme, setSelectedProgramme] = useState<Programme | null>(null);
   const [programmes, setProgrammes] = useState<Programme[]>(initialProgrammes);
   const [searchTerm, setSearchTerm] = useState("");
+  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; programme: Programme | null }>({ open: false, programme: null });
   const { hasRole } = useAuth();
   const { toast } = useToast();
 
@@ -51,12 +53,19 @@ export default function Programmes() {
     setProgrammes(programmes.map(p => p.id === updatedProgramme.id ? updatedProgramme : p));
   };
 
-  const handleDelete = (id: string) => {
-    setProgrammes(programmes.filter(p => p.id !== id));
-    toast({
-      title: "Programme supprimé",
-      description: "Le programme a été supprimé avec succès.",
-    });
+  const confirmDelete = (programme: Programme) => {
+    setDeleteDialog({ open: true, programme });
+  };
+
+  const handleDelete = () => {
+    if (deleteDialog.programme) {
+      setProgrammes(programmes.filter(p => p.id !== deleteDialog.programme!.id));
+      toast({
+        title: "Programme supprimé",
+        description: `${deleteDialog.programme.titre} a été supprimé avec succès.`,
+      });
+      setDeleteDialog({ open: false, programme: null });
+    }
   };
 
   return (
@@ -125,7 +134,7 @@ export default function Programmes() {
                           <Button variant="ghost" size="icon" onClick={() => handleEdit(programme)}>
                             <FileEdit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleDelete(programme.id)}>
+                          <Button variant="ghost" size="icon" onClick={() => confirmDelete(programme)}>
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         </>
@@ -151,6 +160,13 @@ export default function Programmes() {
         onOpenChange={setIsViewModalOpen} 
         programme={selectedProgramme} 
         onEdit={() => handleEdit(selectedProgramme!)}
+      />
+      <DeleteConfirmDialog
+        open={deleteDialog.open}
+        onOpenChange={(open) => setDeleteDialog({ open, programme: null })}
+        title="Supprimer le programme"
+        description={`Êtes-vous sûr de vouloir supprimer "${deleteDialog.programme?.titre}" ? Cette action est irréversible.`}
+        onConfirm={handleDelete}
       />
     </div>
   );

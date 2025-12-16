@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { CreateStructureModal } from "@/components/admin/modals/CreateStructureModal";
 import { EditStructureInterneModal } from "@/components/admin/modals/EditStructureInterneModal";
 import { ViewStructureInterneModal } from "@/components/admin/modals/ViewStructureInterneModal";
+import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { structures_internes as initialStructures, StructureInterne } from "@/data/seedData";
 import { Plus, Search, Eye, FileEdit, Trash2, Building2, Users } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -18,6 +19,7 @@ export default function StructuresInternes() {
   const [selectedStructure, setSelectedStructure] = useState<StructureInterne | null>(null);
   const [structures, setStructures] = useState<StructureInterne[]>(initialStructures);
   const [searchTerm, setSearchTerm] = useState("");
+  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; structure: StructureInterne | null }>({ open: false, structure: null });
   const { hasRole } = useAuth();
   const { toast } = useToast();
 
@@ -51,12 +53,19 @@ export default function StructuresInternes() {
     setStructures(structures.map(s => s.id === updatedStructure.id ? updatedStructure : s));
   };
 
-  const handleDelete = (id: string) => {
-    setStructures(structures.filter(s => s.id !== id));
-    toast({
-      title: "Structure supprimée",
-      description: "La structure a été supprimée avec succès.",
-    });
+  const confirmDelete = (structure: StructureInterne) => {
+    setDeleteDialog({ open: true, structure });
+  };
+
+  const handleDelete = () => {
+    if (deleteDialog.structure) {
+      setStructures(structures.filter(s => s.id !== deleteDialog.structure!.id));
+      toast({
+        title: "Structure supprimée",
+        description: `${deleteDialog.structure.nom} a été supprimée avec succès.`,
+      });
+      setDeleteDialog({ open: false, structure: null });
+    }
   };
 
   const handleCreate = (newStructure: StructureInterne) => {
@@ -127,7 +136,7 @@ export default function StructuresInternes() {
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(structure)}>
                       <FileEdit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(structure.id)}>
+                    <Button variant="ghost" size="icon" onClick={() => confirmDelete(structure)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
@@ -150,6 +159,13 @@ export default function StructuresInternes() {
         onOpenChange={setIsViewModalOpen} 
         structure={selectedStructure} 
         onEdit={() => handleEdit(selectedStructure!)}
+      />
+      <DeleteConfirmDialog
+        open={deleteDialog.open}
+        onOpenChange={(open) => setDeleteDialog({ open, structure: null })}
+        title="Supprimer la structure"
+        description={`Êtes-vous sûr de vouloir supprimer "${deleteDialog.structure?.nom}" ? Cette action est irréversible.`}
+        onConfirm={handleDelete}
       />
     </div>
   );
