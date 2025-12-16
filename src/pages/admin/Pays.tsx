@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CreatePaysModal } from "@/components/admin/modals/CreatePaysModal";
+import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { pays as initialPays, organisations, Pays as PaysType } from "@/data/seedData";
 import { Plus, Globe, Search, FileEdit, Trash2, Building } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -17,6 +18,7 @@ export default function Pays() {
   const [selectedPays, setSelectedPays] = useState<PaysType | null>(null);
   const [paysList, setPaysList] = useState<PaysType[]>(initialPays);
   const [searchTerm, setSearchTerm] = useState("");
+  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; pays: PaysType | null }>({ open: false, pays: null });
   const { hasRole } = useAuth();
   const { toast } = useToast();
 
@@ -47,12 +49,19 @@ export default function Pays() {
     }
   };
 
-  const handleDelete = (code: string) => {
-    setPaysList(paysList.filter(p => p.code !== code));
-    toast({
-      title: "Pays supprimé",
-      description: "Le pays a été supprimé avec succès.",
-    });
+  const confirmDelete = (pays: PaysType) => {
+    setDeleteDialog({ open: true, pays });
+  };
+
+  const handleDelete = () => {
+    if (deleteDialog.pays) {
+      setPaysList(paysList.filter(p => p.code !== deleteDialog.pays!.code));
+      toast({
+        title: "Pays supprimé",
+        description: `${deleteDialog.pays.nom} a été supprimé avec succès.`,
+      });
+      setDeleteDialog({ open: false, pays: null });
+    }
   };
 
   return (
@@ -120,7 +129,7 @@ export default function Pays() {
                       <Button variant="ghost" size="icon" onClick={() => handleEdit(p)}>
                         <FileEdit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" onClick={() => handleDelete(p.code)}>
+                      <Button variant="ghost" size="icon" onClick={() => confirmDelete(p)}>
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </>
@@ -170,6 +179,14 @@ export default function Pays() {
           )}
         </DialogContent>
       </Dialog>
+
+      <DeleteConfirmDialog
+        open={deleteDialog.open}
+        onOpenChange={(open) => setDeleteDialog({ open, pays: null })}
+        title="Supprimer le pays"
+        description={`Êtes-vous sûr de vouloir supprimer "${deleteDialog.pays?.nom}" ? Cette action est irréversible.`}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }

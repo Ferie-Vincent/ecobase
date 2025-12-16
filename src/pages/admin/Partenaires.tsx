@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { CreatePartenaireModal } from "@/components/admin/modals/CreatePartenaireModal";
 import { EditOrganisationModal } from "@/components/admin/modals/EditOrganisationModal";
 import { ViewOrganisationModal } from "@/components/admin/modals/ViewOrganisationModal";
+import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { Search, Plus, Eye, FileEdit, Trash2, CheckCircle, Globe, MapPin } from "lucide-react";
 import { Organisation } from "@/data/seedData";
 import { useAuth } from "@/contexts/AuthContext";
@@ -18,6 +19,7 @@ export default function Partenaires() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedOrg, setSelectedOrg] = useState<Organisation | null>(null);
+  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; org: Organisation | null }>({ open: false, org: null });
   const { hasRole } = useAuth();
   const { toast } = useToast();
   const { partners, updatePartner, removePartner } = useData();
@@ -66,12 +68,19 @@ export default function Partenaires() {
     });
   };
 
-  const handleDelete = (id: string) => {
-    removePartner(id);
-    toast({
-      title: "Partenaire supprimé",
-      description: "Le partenaire a été supprimé avec succès.",
-    });
+  const confirmDelete = (org: Organisation) => {
+    setDeleteDialog({ open: true, org });
+  };
+
+  const handleDelete = () => {
+    if (deleteDialog.org) {
+      removePartner(deleteDialog.org.id);
+      toast({
+        title: "Partenaire supprimé",
+        description: `${deleteDialog.org.nom} a été supprimé avec succès.`,
+      });
+      setDeleteDialog({ open: false, org: null });
+    }
   };
 
   const getTypeColor = (type: string) => {
@@ -158,7 +167,7 @@ export default function Partenaires() {
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(partenaire)}>
                       <FileEdit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(partenaire.id)}>
+                    <Button variant="ghost" size="icon" onClick={() => confirmDelete(partenaire)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
@@ -181,6 +190,13 @@ export default function Partenaires() {
         onOpenChange={setIsViewModalOpen} 
         organisation={selectedOrg} 
         onEdit={() => handleEdit(selectedOrg!)}
+      />
+      <DeleteConfirmDialog
+        open={deleteDialog.open}
+        onOpenChange={(open) => setDeleteDialog({ open, org: null })}
+        title="Supprimer le partenaire"
+        description={`Êtes-vous sûr de vouloir supprimer "${deleteDialog.org?.nom}" ? Cette action est irréversible.`}
+        onConfirm={handleDelete}
       />
     </div>
   );
