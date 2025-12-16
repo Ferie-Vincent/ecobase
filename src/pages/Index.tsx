@@ -42,10 +42,12 @@ import logoEnabel from "@/assets/logos/Enabel.png";
 import logoExpertiseFrance from "@/assets/logos/Expertise-France.png";
 import logoOfii from "@/assets/logos/OFII.png";
 import logoOim from "@/assets/logos/OIM.png";
+import logoUemoa from "@/assets/logos/UEMOA.png";
 
 // Mapping logos par sigle
 const partnerLogos: { [key: string]: string } = {
   CEDEAO: logoCedeao,
+  UEMOA: logoUemoa,
   BAD: logoBad,
   OIM: logoOim,
   CNPS: logoCnps,
