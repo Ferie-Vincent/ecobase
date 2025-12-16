@@ -26,6 +26,24 @@ interface DonneeCommerce {
   intraAfrique: string;
 }
 
+interface PilierStrategique {
+  id: string;
+  code: string;
+  label: string;
+  description: string;
+  icon: string;
+}
+
+interface PoidsRegional {
+  id: string;
+  nom: string;
+  pibUEMOA: string;
+  pibCEDEAO: string;
+  pibAfrica: string;
+  exportsCEDEAO: string;
+  popCEDEAO: string;
+}
+
 interface DocumentTelecharge {
   id: string;
   nom: string;
@@ -66,6 +84,22 @@ export default function PageAccueil() {
     { id: "2", nom: "Organigramme", description: "À télécharger", lien: "#" },
     { id: "3", nom: "Structure organisationnelle", description: "Cabinet, DGPI, DGIE, SPSE", lien: "#" }
   ]);
+
+  const [piliers, setPiliers] = useState<PilierStrategique[]>([
+    { id: "1", code: "INT", label: "Intégration Africaine", description: "Politiques d'intégration régionale et continentale", icon: "Globe2" },
+    { id: "2", code: "DIA", label: "Ivoiriens de l'Extérieur", description: "Gestion et accompagnement de la diaspora", icon: "Users2" },
+    { id: "3", code: "MACRO", label: "Indicateurs Macro-économiques", description: "Suivi des performances économiques globales", icon: "TrendingUp" }
+  ]);
+
+  const [poidsRegionaux, setPoidsRegionaux] = useState<PoidsRegional>({
+    id: "1",
+    nom: "Poids de la Côte d'Ivoire",
+    pibUEMOA: "40.2",
+    pibCEDEAO: "15.8",
+    pibAfrica: "2.1",
+    exportsCEDEAO: "28.5",
+    popCEDEAO: "8.2"
+  });
 
   const handleSave = () => {
     toast({ title: "Modifications enregistrées", description: `Les données pour ${selectedYear} ont été mises à jour.` });
@@ -131,9 +165,11 @@ export default function PageAccueil() {
         <TabsList className="flex-wrap">
           <TabsTrigger value="hero">Contenu Hero</TabsTrigger>
           <TabsTrigger value="missions">Missions</TabsTrigger>
-          <TabsTrigger value="documents">Documents à télécharger</TabsTrigger>
-          <TabsTrigger value="stats">Statistiques Clés</TabsTrigger>
-          <TabsTrigger value="commerce">Données Commerce</TabsTrigger>
+          <TabsTrigger value="documents">Documents</TabsTrigger>
+          <TabsTrigger value="stats">Statistiques</TabsTrigger>
+          <TabsTrigger value="piliers">Piliers Stratégiques</TabsTrigger>
+          <TabsTrigger value="poids">Poids Régionaux</TabsTrigger>
+          <TabsTrigger value="commerce">Commerce</TabsTrigger>
         </TabsList>
 
         <TabsContent value="hero" className="space-y-4">
@@ -282,6 +318,78 @@ export default function PageAccueil() {
                   ))}
                 </TableBody>
               </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="piliers" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Piliers Stratégiques</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">Les trois piliers affichés sur la page d'accueil</p>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Code</TableHead>
+                    <TableHead>Label</TableHead>
+                    <TableHead>Description</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {piliers.map((pilier) => (
+                    <TableRow key={pilier.id}>
+                      <TableCell><Input value={pilier.code} onChange={(e) => setPiliers(piliers.map(p => p.id === pilier.id ? { ...p, code: e.target.value } : p))} className="w-20" /></TableCell>
+                      <TableCell><Input value={pilier.label} onChange={(e) => setPiliers(piliers.map(p => p.id === pilier.id ? { ...p, label: e.target.value } : p))} /></TableCell>
+                      <TableCell><Input value={pilier.description} onChange={(e) => setPiliers(piliers.map(p => p.id === pilier.id ? { ...p, description: e.target.value } : p))} /></TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="poids" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Poids de la Côte d'Ivoire dans les Régions</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">Pourcentages affichés dans les graphiques de la page d'accueil</p>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h3 className="font-semibold">PIB Régional (%)</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label>UEMOA</Label>
+                      <Input value={poidsRegionaux.pibUEMOA} onChange={(e) => setPoidsRegionaux({ ...poidsRegionaux, pibUEMOA: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>CEDEAO</Label>
+                      <Input value={poidsRegionaux.pibCEDEAO} onChange={(e) => setPoidsRegionaux({ ...poidsRegionaux, pibCEDEAO: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>Afrique</Label>
+                      <Input value={poidsRegionaux.pibAfrica} onChange={(e) => setPoidsRegionaux({ ...poidsRegionaux, pibAfrica: e.target.value })} />
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <h3 className="font-semibold">Autres indicateurs (%)</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label>Exportations CEDEAO</Label>
+                      <Input value={poidsRegionaux.exportsCEDEAO} onChange={(e) => setPoidsRegionaux({ ...poidsRegionaux, exportsCEDEAO: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>Population CEDEAO</Label>
+                      <Input value={poidsRegionaux.popCEDEAO} onChange={(e) => setPoidsRegionaux({ ...poidsRegionaux, popCEDEAO: e.target.value })} />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
