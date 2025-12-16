@@ -161,6 +161,36 @@ export const organisations: Organisation[] = [
     convention: true
   },
   {
+    id: "ORG-ENABEL",
+    nom: "Agence belge de développement",
+    sigle: "ENABEL",
+    type: "Internationale",
+    siege: "Bruxelles",
+    statut: "Actif",
+    site_web: "https://www.enabel.be",
+    convention: true
+  },
+  {
+    id: "ORG-EF",
+    nom: "Expertise France",
+    sigle: "EXPERTISE FRANCE",
+    type: "Internationale",
+    siege: "Paris",
+    statut: "Actif",
+    site_web: "https://www.expertisefrance.fr",
+    convention: true
+  },
+  {
+    id: "ORG-OFII",
+    nom: "Office Français de l'Immigration et de l'Intégration",
+    sigle: "OFII",
+    type: "Internationale",
+    siege: "Paris",
+    statut: "Actif",
+    site_web: "https://www.ofii.fr",
+    convention: true
+  },
+  {
     id: "ORG-DBDES",
     nom: "Direction du Budget et du Développement Économique et Social",
     sigle: "DBDES",
