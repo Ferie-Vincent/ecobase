@@ -1,5 +1,4 @@
 import { IndicatorCard } from "@/components/IndicatorCard";
-import { integrationIndicatorsByYear } from "@/data/mockData";
 import { integrationIndicatorDescriptions } from "@/data/indicatorDescriptions";
 import { Card } from "@/components/ui/card";
 import { YearSelector } from "@/components/YearSelector";
@@ -8,14 +7,25 @@ import { Footer } from "@/components/Footer";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { ExportMenu } from "@/components/ExportMenu";
 import { useState, useMemo } from "react";
+import { useData } from "@/contexts/DataContext";
 
 const Integration = () => {
+  const { integrationIndicatorsByYear, slecDetailsByYear, availableYears } = useData();
+  
   const categories = ["Commerce", "Social", "CILSS"];
-  const availableYears = Object.keys(integrationIndicatorsByYear).sort().reverse();
-  const [selectedYear, setSelectedYear] = useState(availableYears[0]);
+  const sortedYears = [...availableYears].sort().reverse();
+  const [selectedYear, setSelectedYear] = useState(sortedYears[0] || "2024");
   const [selectedCategory, setSelectedCategory] = useState<string>("tous");
   
-  const integrationIndicators = integrationIndicatorsByYear[selectedYear];
+  const integrationIndicators = integrationIndicatorsByYear[selectedYear] || [];
+  const slecDetails = slecDetailsByYear[selectedYear] || {
+    entreprisesAgreees: 0,
+    entreprisesActives: 0,
+    tauxActivite: 0,
+    produitsAgrees: 0,
+    volumeExports: 0,
+    partSleIntraRegional: 0
+  };
   
   const filteredIndicators = useMemo(() => {
     if (selectedCategory === "tous") {
@@ -36,7 +46,7 @@ const Integration = () => {
         exportations: yearData.find(i => i.name === "Exportations SLEC")?.value || 0,
       };
     });
-  }, []);
+  }, [integrationIndicatorsByYear]);
   
   return (
     <div className="min-h-screen bg-background">
@@ -55,7 +65,7 @@ const Integration = () => {
           <YearSelector 
             selectedYear={selectedYear} 
             onYearChange={setSelectedYear} 
-            availableYears={availableYears}
+            availableYears={sortedYears}
           />
           <ExportMenu
             data={filteredIndicators}
@@ -130,15 +140,15 @@ const Integration = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm">Total agréées</span>
-                    <span className="text-lg font-bold text-primary">245</span>
+                    <span className="text-lg font-bold text-primary">{slecDetails.entreprisesAgreees.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm">Actives</span>
-                    <span className="text-lg font-bold text-secondary">189</span>
+                    <span className="text-lg font-bold text-secondary">{slecDetails.entreprisesActives.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm">Taux d'activité</span>
-                    <span className="text-lg font-bold text-accent">77.1%</span>
+                    <span className="text-lg font-bold text-accent">{slecDetails.tauxActivite}%</span>
                   </div>
                 </div>
               </div>
@@ -148,15 +158,15 @@ const Integration = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm">Produits agréés</span>
-                    <span className="text-lg font-bold text-primary">1,834</span>
+                    <span className="text-lg font-bold text-primary">{slecDetails.produitsAgrees.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm">Volume exports</span>
-                    <span className="text-lg font-bold text-secondary">45.6 Mds FCFA</span>
+                    <span className="text-lg font-bold text-secondary">{slecDetails.volumeExports} Mds FCFA</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm">Part SLE/Intra-régional</span>
-                    <span className="text-lg font-bold text-accent">34.2%</span>
+                    <span className="text-lg font-bold text-accent">{slecDetails.partSleIntraRegional}%</span>
                   </div>
                 </div>
               </div>
