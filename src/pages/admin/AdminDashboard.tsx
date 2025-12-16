@@ -17,12 +17,14 @@ import {
   Calendar
 } from "lucide-react";
 import { donnees, indicateurs, programmes, utilisateurs } from "@/data/seedData";
+import { indicators as indicatorsReferentiel } from "@/data/indicators";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 export default function AdminDashboard() {
   const stats = {
-    indicateursActifs: indicateurs.length,
+    indicateursReferentiel: indicatorsReferentiel.length, // Total au référentiel
+    indicateursActifs: indicateurs.length, // Avec données actives
     donneesEnAttente: donnees.filter(d => d.statut === "En validation").length,
     valideSPSE: Math.round((donnees.filter(d => d.statut === "Validé SPSE" || d.statut === "Publié").length / donnees.length) * 100),
     programmesSuivis: programmes.filter(p => p.statut === "En cours").length,
@@ -100,24 +102,32 @@ export default function AdminDashboard() {
         <Card className="relative overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Indicateurs actifs
+              Indicateurs
             </CardTitle>
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{stats.indicateursActifs}</div>
-            <div className="flex items-center gap-1 mt-2">
-              <div className="flex gap-1">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="w-6 h-8 bg-foreground/10 rounded-sm" style={{ height: `${20 + i * 8}px` }} />
-                ))}
-              </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-bold">{stats.indicateursActifs}</span>
+              <span className="text-sm text-muted-foreground">/ {stats.indicateursReferentiel}</span>
             </div>
-            <div className="flex items-center justify-between mt-3 text-xs">
-              <span className="text-muted-foreground">Ce mois</span>
+            <p className="text-xs text-muted-foreground mt-1">
+              {stats.indicateursActifs} avec données actives sur {stats.indicateursReferentiel} au référentiel
+            </p>
+            <div className="flex items-center gap-2 mt-3">
+              <div className="flex-1 bg-muted rounded-full h-2 overflow-hidden">
+                <div 
+                  className="bg-primary h-full rounded-full transition-all" 
+                  style={{ width: `${(stats.indicateursActifs / stats.indicateursReferentiel) * 100}%` }} 
+                />
+              </div>
+              <span className="text-xs font-medium">{Math.round((stats.indicateursActifs / stats.indicateursReferentiel) * 100)}%</span>
+            </div>
+            <div className="flex items-center justify-between mt-2 text-xs">
+              <span className="text-muted-foreground">Couverture</span>
               <span className="flex items-center gap-1 text-secondary">
                 <ArrowUpRight className="h-3 w-3" />
-                +2 nouveaux
+                +2 ce mois
               </span>
             </div>
           </CardContent>

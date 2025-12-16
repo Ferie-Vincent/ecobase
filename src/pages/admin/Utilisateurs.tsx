@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CreateUtilisateurModal } from "@/components/admin/modals/CreateUtilisateurModal";
+import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import {
   Table,
   TableBody,
@@ -13,13 +14,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Search, Plus, UserCog, Trash2 } from "lucide-react";
-import { utilisateurs, structures_internes } from "@/data/seedData";
+import { utilisateurs, structures_internes, Utilisateur } from "@/data/seedData";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Utilisateurs() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; user: Utilisateur | null }>({
+    open: false,
+    user: null,
+  });
   const { hasRole } = useAuth();
+  const { toast } = useToast();
 
   const filteredUtilisateurs = utilisateurs.filter(u =>
     u.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -133,7 +140,11 @@ export default function Utilisateurs() {
                         <Button variant="ghost" size="icon">
                           <UserCog className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon">
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          onClick={() => setDeleteDialog({ open: true, user })}
+                        >
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                       </div>
@@ -147,6 +158,20 @@ export default function Utilisateurs() {
       </Card>
 
       <CreateUtilisateurModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
+      
+      <DeleteConfirmDialog
+        open={deleteDialog.open}
+        onOpenChange={(open) => setDeleteDialog({ open, user: null })}
+        title="Supprimer l'utilisateur"
+        description={`Êtes-vous sûr de vouloir supprimer l'utilisateur "${deleteDialog.user?.nom}" ? Cette action est irréversible.`}
+        onConfirm={() => {
+          toast({
+            title: "Utilisateur supprimé",
+            description: `L'utilisateur ${deleteDialog.user?.nom} a été supprimé.`,
+          });
+          setDeleteDialog({ open: false, user: null });
+        }}
+      />
     </div>
   );
 }

@@ -97,14 +97,22 @@ export default function Indicateurs() {
             <TableBody>
               {filteredIndicateurs.map((indicateur) => (
                 <TableRow key={indicateur.id}>
-                  <TableCell className="font-mono text-xs">{indicateur.id}</TableCell>
-                  <TableCell className="font-medium">{indicateur.nom}</TableCell>
+                  <TableCell className="font-mono text-xs max-w-[120px] truncate" title={indicateur.id}>
+                    {indicateur.id}
+                  </TableCell>
+                  <TableCell className="font-medium max-w-[250px]">
+                    <span className="block whitespace-normal leading-tight" title={indicateur.nom}>
+                      {indicateur.nom}
+                    </span>
+                  </TableCell>
                   <TableCell>
                     <Badge variant="outline">{indicateur.type}</Badge>
                   </TableCell>
                   <TableCell>{indicateur.unite}</TableCell>
                   <TableCell>{indicateur.frequence}</TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{indicateur.source}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground max-w-[120px] truncate" title={indicateur.source}>
+                    {indicateur.source}
+                  </TableCell>
                   <TableCell>{getMethodeBadge(indicateur.methode)}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
