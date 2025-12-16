@@ -54,24 +54,86 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="container mx-auto px-4 py-12">
-        {/* Hero Section - Présentation du Ministère */}
-        <div className="text-center mb-16 space-y-4 bg-gradient-to-br from-orange-500/10 to-orange-600/5 p-8 rounded-xl border border-orange-500/20 backdrop-blur-sm">
-          <h1 className="text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">ECOBASE</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Plateforme de données pour le suivi et l'évaluation des politiques publiques
+    <div className="min-h-screen bg-background">
+      {/* Hero Section avec motif africain */}
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+        {/* Background pattern africain */}
+        <div 
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f97316' fill-opacity='0.3'%3E%3Cpath d='M40 0L60 20L40 40L20 20L40 0zM0 40L20 20L40 40L20 60L0 40zM40 40L60 20L80 40L60 60L40 40zM40 80L60 60L80 80L60 100L40 80zM40 40L60 60L40 80L20 60L40 40z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '80px 80px',
+          }}
+        />
+        {/* Overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-secondary/10 via-background/80 to-background" />
+        
+        {/* Décor cercles */}
+        <div className="absolute top-20 left-10 w-24 h-24 rounded-full bg-primary/20 blur-xl" />
+        <div className="absolute bottom-20 right-10 w-32 h-32 rounded-full bg-secondary/20 blur-xl" />
+        
+        {/* Contenu Hero */}
+        <div className="relative z-10 container mx-auto px-4 text-center space-y-8">
+          {/* Badge */}
+          <Badge className="bg-primary/90 text-primary-foreground px-4 py-2 text-sm font-medium rounded-full">
+            <span className="w-2 h-2 bg-secondary rounded-full inline-block mr-2 animate-pulse" />
+            Plateforme Officielle du Ministère
+          </Badge>
+          
+          {/* Titre principal */}
+          <div className="space-y-2">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold">
+              <span className="text-primary">Base de Données</span>
+              <br />
+              <span className="text-foreground">Socio-Économique</span>
+              <br />
+              <span className="text-secondary">ECOBASE</span>
+            </h1>
+          </div>
+          
+          {/* Description */}
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Plateforme officielle du Ministère Délégué chargé de l'Intégration Africaine 
+            et des Ivoiriens de l'Extérieur pour le suivi et l'évaluation des politiques publiques
           </p>
-          <div className="max-w-4xl mx-auto mb-6">
-            <p className="text-base text-foreground/90 leading-relaxed">
-              ECOBASE est la base de données officielle du{" "}
-              <strong>Ministère Délégué chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur</strong>. Elle
-              centralise les indicateurs socio-économiques et techniques permettant le suivi et l'évaluation de deux
-              politiques majeures : <strong>l'Intégration Africaine</strong> et la{" "}
-              <strong>Gestion des Ivoiriens de l'Extérieur</strong>.
-            </p>
+          
+          {/* Boutons CTA */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+            <a 
+              href="/integration" 
+              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-primary/30"
+            >
+              <TrendingUp className="w-5 h-5" />
+              Explorer l'Intégration
+            </a>
+            <a 
+              href="/diaspora" 
+              className="inline-flex items-center gap-2 bg-card text-foreground border border-border px-8 py-3 rounded-lg font-semibold hover:bg-muted transition-all duration-300 hover:scale-105"
+            >
+              <BarChart3 className="w-5 h-5" />
+              Analyser la Diaspora
+            </a>
+          </div>
+          
+          {/* Statistiques clés */}
+          <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-12">
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-primary">{indicators.length}+</div>
+              <div className="text-sm text-muted-foreground mt-1">Indicateurs<br />Suivis</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-secondary">{organisations.length}+</div>
+              <div className="text-sm text-muted-foreground mt-1">Partenaires<br />Techniques</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-foreground">3</div>
+              <div className="text-sm text-muted-foreground mt-1">Piliers<br />Stratégiques</div>
+            </div>
           </div>
         </div>
+      </section>
+
+      <div className="container mx-auto px-4 py-12">
 
         {/* Accordion: Missions + Documents + Structure */}
         <Card className="mb-12 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 bg-card/60 backdrop-blur-sm border-border/50">
