@@ -9,17 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Save, Plus, Trash2 } from "lucide-react";
 import YearSelectorAdmin from "@/components/admin/YearSelectorAdmin";
-import { useData, PilierStrategique } from "@/contexts/DataContext";
+import { useData, PilierStrategique, DashboardStat } from "@/contexts/DataContext";
 import { indicators } from "@/data/indicators";
-
-interface StatistiqueDashboard {
-  id: string;
-  nom: string;
-  unite: string;
-  tendance: string;
-  categorie: "Intégration" | "Diaspora" | "Circulation";
-  valeurs: Record<string, string>;
-}
 
 interface DonneeCommerce {
   annee: string;
@@ -47,15 +38,32 @@ interface DocumentTelecharge {
 
 export default function PageAccueil() {
   const { toast } = useToast();
-  const { piliers: contextPiliers, updatePiliers } = useData();
-  const [availableYears, setAvailableYears] = useState(["2024", "2023", "2022"]);
+  const { 
+    piliers: contextPiliers, 
+    updatePiliers, 
+    dashboardStatsByYear, 
+    updateDashboardStats,
+    availableYears: contextYears,
+    addYear,
+    removeYear
+  } = useData();
+  const [availableYears, setAvailableYears] = useState(contextYears);
   const [selectedYear, setSelectedYear] = useState("2024");
   const [localPiliers, setLocalPiliers] = useState<PilierStrategique[]>(contextPiliers);
+  const [statsData, setStatsData] = useState<DashboardStat[]>(dashboardStatsByYear[selectedYear] || []);
   
   // Sync with context
   useEffect(() => {
     setLocalPiliers(contextPiliers);
   }, [contextPiliers]);
+  
+  useEffect(() => {
+    setStatsData(dashboardStatsByYear[selectedYear] || []);
+  }, [selectedYear, dashboardStatsByYear]);
+  
+  useEffect(() => {
+    setAvailableYears(contextYears);
+  }, [contextYears]);
   
   const [formData, setFormData] = useState({
     titre: "ECOBASE",
@@ -64,13 +72,6 @@ export default function PageAccueil() {
     missionIntegration: "Promouvoir l'intégration régionale, harmoniser les politiques sectorielles, et renforcer la coopération économique et commerciale au sein de la CEDEAO et de l'UEMOA",
     missionDiaspora: "Accompagner et coordonner les initiatives visant le regroupement et l'organisation des Ivoiriens de l'extérieur, faciliter leur réinsertion et mobiliser leurs compétences"
   });
-
-  const [statsData, setStatsData] = useState<StatistiqueDashboard[]>([
-    { id: "1", nom: "Entreprises SLEC", unite: "entreprises", tendance: "+18", categorie: "Intégration", valeurs: { "2022": "227", "2023": "245", "2024": "342" } },
-    { id: "2", nom: "Ivoiriens Réinsérés", unite: "personnes", tendance: "+456", categorie: "Diaspora", valeurs: { "2022": "890", "2023": "1024", "2024": "1247" } },
-    { id: "3", nom: "Transferts d'argent / PIB", unite: "%", tendance: "+0.6%", categorie: "Diaspora", valeurs: { "2022": "7.9", "2023": "8.4", "2024": "9.2" } },
-    { id: "4", nom: "Trafic Routier CEDEAO", unite: "M voyageurs", tendance: "+234K", categorie: "Circulation", valeurs: { "2022": "3.2", "2023": "3.5", "2024": "3.9" } }
-  ]);
 
   const [commerceData, setCommerceData] = useState<DonneeCommerce[]>([
     { annee: "2020", exportations: "28.4", importations: "31.2", intraAfrique: "15.2" },
@@ -98,17 +99,18 @@ export default function PageAccueil() {
 
   const handleSave = () => {
     updatePiliers(localPiliers);
+    updateDashboardStats(selectedYear, statsData);
     toast({ title: "Modifications enregistrées", description: `Les données pour ${selectedYear} ont été mises à jour.` });
   };
 
   const addStat = () => {
-    const newStat: StatistiqueDashboard = {
+    const newStat: DashboardStat = {
       id: Date.now().toString(),
       nom: "Nouvelle statistique",
+      valeur: "",
       unite: "",
       tendance: "",
-      categorie: "Intégration",
-      valeurs: { "2022": "", "2023": "", "2024": "" }
+      categorie: "Intégration"
     };
     setStatsData([...statsData, newStat]);
   };
@@ -118,7 +120,6 @@ export default function PageAccueil() {
   const updateStat = (id: string, field: string, value: string) => {
     setStatsData(statsData.map(stat => {
       if (stat.id !== id) return stat;
-      if (field === "valeur") return { ...stat, valeurs: { ...stat.valeurs, [selectedYear]: value } };
       return { ...stat, [field]: value };
     }));
   };
@@ -263,7 +264,7 @@ export default function PageAccueil() {
                   {statsData.map((stat) => (
                     <TableRow key={stat.id}>
                       <TableCell><Input value={stat.nom} onChange={(e) => updateStat(stat.id, "nom", e.target.value)} /></TableCell>
-                      <TableCell><Input value={stat.valeurs[selectedYear] || ""} onChange={(e) => updateStat(stat.id, "valeur", e.target.value)} className="w-24" /></TableCell>
+                      <TableCell><Input value={stat.valeur} onChange={(e) => updateStat(stat.id, "valeur", e.target.value)} className="w-24" /></TableCell>
                       <TableCell><Input value={stat.unite} onChange={(e) => updateStat(stat.id, "unite", e.target.value)} placeholder="%, personnes..." className="w-28" /></TableCell>
                       <TableCell><Input value={stat.tendance} onChange={(e) => updateStat(stat.id, "tendance", e.target.value)} placeholder="+18, -5..." className="w-24" /></TableCell>
                       <TableCell>

@@ -57,6 +57,15 @@ export interface PoidsRegional {
   unite: string;
 }
 
+export interface DashboardStat {
+  id: string;
+  nom: string;
+  valeur: string;
+  unite: string;
+  tendance: string;
+  categorie: "Intégration" | "Diaspora" | "Circulation";
+}
+
 // État global des données
 interface DataState {
   // Indicateurs par année et par domaine
@@ -82,6 +91,9 @@ interface DataState {
   
   // Poids régionaux
   poidsRegionaux: PoidsRegional[];
+  
+  // Statistiques dashboard par année
+  dashboardStatsByYear: Record<string, DashboardStat[]>;
   
   // Années disponibles
   availableYears: string[];
@@ -115,6 +127,9 @@ interface DataActions {
   
   // Poids régionaux
   updatePoidsRegionaux: (poids: PoidsRegional[]) => void;
+  
+  // Dashboard stats
+  updateDashboardStats: (year: string, stats: DashboardStat[]) => void;
   
   // Années
   addYear: (year: string) => void;
@@ -298,6 +313,27 @@ const initialPoidsRegionaux: PoidsRegional[] = [
   { id: "7", nom: "Imports CEDEAO", valeur: 36.8, unite: "%" }
 ];
 
+const initialDashboardStats: Record<string, DashboardStat[]> = {
+  "2024": [
+    { id: "1", nom: "Entreprises SLEC", valeur: "342", unite: "entreprises", tendance: "+18", categorie: "Intégration" },
+    { id: "2", nom: "Ivoiriens Réinsérés", valeur: "1247", unite: "personnes", tendance: "+456", categorie: "Diaspora" },
+    { id: "3", nom: "Transferts d'argent / PIB", valeur: "9.2", unite: "%", tendance: "+0.6%", categorie: "Diaspora" },
+    { id: "4", nom: "Trafic Routier CEDEAO", valeur: "3.9", unite: "M voyageurs", tendance: "+234K", categorie: "Circulation" }
+  ],
+  "2023": [
+    { id: "1", nom: "Entreprises SLEC", valeur: "245", unite: "entreprises", tendance: "+18", categorie: "Intégration" },
+    { id: "2", nom: "Ivoiriens Réinsérés", valeur: "1024", unite: "personnes", tendance: "+380", categorie: "Diaspora" },
+    { id: "3", nom: "Transferts d'argent / PIB", valeur: "8.4", unite: "%", tendance: "+0.5%", categorie: "Diaspora" },
+    { id: "4", nom: "Trafic Routier CEDEAO", valeur: "3.5", unite: "M voyageurs", tendance: "+190K", categorie: "Circulation" }
+  ],
+  "2022": [
+    { id: "1", nom: "Entreprises SLEC", valeur: "227", unite: "entreprises", tendance: "+20", categorie: "Intégration" },
+    { id: "2", nom: "Ivoiriens Réinsérés", valeur: "890", unite: "personnes", tendance: "+310", categorie: "Diaspora" },
+    { id: "3", nom: "Transferts d'argent / PIB", valeur: "7.9", unite: "%", tendance: "+0.5%", categorie: "Diaspora" },
+    { id: "4", nom: "Trafic Routier CEDEAO", valeur: "3.2", unite: "M voyageurs", tendance: "+156K", categorie: "Circulation" }
+  ]
+};
+
 const initialStudentsData: Record<string, StudentData[]> = {
   "2020": [
     { region: "UEMOA", total: 38000, economie: 10000, droit: 12000, culture: 7000, autres: 9000 },
@@ -337,6 +373,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [diasporaContentSections, setDiasporaContentSections] = useState<ContentSection[]>([]);
   const [piliers, setPiliers] = useState(initialPiliers);
   const [poidsRegionaux, setPoidsRegionaux] = useState(initialPoidsRegionaux);
+  const [dashboardStatsByYear, setDashboardStatsByYear] = useState(initialDashboardStats);
   const [availableYears, setAvailableYears] = useState(["2024", "2023", "2022", "2021", "2020"]);
 
   // Actions
@@ -392,6 +429,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setPoidsRegionaux(poids);
   };
 
+  const updateDashboardStats = (year: string, stats: DashboardStat[]) => {
+    setDashboardStatsByYear(prev => ({ ...prev, [year]: stats }));
+  };
+
   const addYear = (year: string) => {
     if (!availableYears.includes(year)) {
       setAvailableYears(prev => [...prev, year].sort().reverse());
@@ -413,6 +454,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     diasporaContentSections,
     piliers,
     poidsRegionaux,
+    dashboardStatsByYear,
     availableYears,
     updateIntegrationIndicators,
     updateDiasporaIndicators,
@@ -427,6 +469,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     updateDiasporaContent,
     updatePiliers,
     updatePoidsRegionaux,
+    updateDashboardStats,
     addYear,
     removeYear
   };
