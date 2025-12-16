@@ -22,9 +22,18 @@ export interface Partner {
   id: string;
   nom: string;
   sigle: string;
-  type: "National" | "Régional" | "International";
+  type: "National" | "Régional" | "International" | "Nationale" | "Internationale" | "Régionale" | "PTF";
   url?: string;
   statut: "Actif" | "Inactif";
+}
+
+export interface StudentData {
+  region: string;
+  total: number;
+  economie: number;
+  droit: number;
+  culture: number;
+  autres: number;
 }
 
 export interface ContentSection {
@@ -57,6 +66,9 @@ interface DataState {
   // Détails SLEC par année
   slecDetailsByYear: Record<string, SlecDetails>;
   
+  // Données étudiants par année
+  studentsDataByYear: Record<string, StudentData[]>;
+  
   // Partenaires
   partners: Partner[];
   
@@ -84,10 +96,14 @@ interface DataActions {
   // SLEC
   updateSlecDetails: (year: string, details: SlecDetails) => void;
   
+  // Students
+  updateStudentsData: (year: string, data: StudentData[]) => void;
+  
   // Partenaires
   updatePartners: (partners: Partner[]) => void;
   addPartner: (partner: Partner) => void;
   removePartner: (id: string) => void;
+  updatePartner: (partner: Partner) => void;
   
   // Sections de contenu
   updateIntegrationContent: (sections: ContentSection[]) => void;
@@ -281,11 +297,40 @@ const initialPoidsRegionaux: PoidsRegional[] = [
   { id: "7", nom: "Imports CEDEAO", valeur: 36.8, unite: "%" }
 ];
 
+const initialStudentsData: Record<string, StudentData[]> = {
+  "2020": [
+    { region: "UEMOA", total: 38000, economie: 10000, droit: 12000, culture: 7000, autres: 9000 },
+    { region: "CEDEAO", total: 55000, economie: 15000, droit: 18000, culture: 10000, autres: 12000 },
+    { region: "UFM", total: 6500, economie: 1700, droit: 2500, culture: 1300, autres: 1000 }
+  ],
+  "2021": [
+    { region: "UEMOA", total: 40000, economie: 10500, droit: 13000, culture: 7500, autres: 9000 },
+    { region: "CEDEAO", total: 58000, economie: 16000, droit: 19000, culture: 10500, autres: 12500 },
+    { region: "UFM", total: 7000, economie: 1850, droit: 2700, culture: 1400, autres: 1050 }
+  ],
+  "2022": [
+    { region: "UEMOA", total: 42000, economie: 11000, droit: 14000, culture: 8000, autres: 9000 },
+    { region: "CEDEAO", total: 62000, economie: 17000, droit: 20000, culture: 11000, autres: 14000 },
+    { region: "UFM", total: 7500, economie: 2000, droit: 2900, culture: 1500, autres: 1100 }
+  ],
+  "2023": [
+    { region: "UEMOA", total: 44000, economie: 11800, droit: 14800, culture: 8400, autres: 9000 },
+    { region: "CEDEAO", total: 65000, economie: 18000, droit: 21200, culture: 11700, autres: 14100 },
+    { region: "UFM", total: 8200, economie: 2150, droit: 3150, culture: 1650, autres: 1250 }
+  ],
+  "2024": [
+    { region: "UEMOA", total: 45600, economie: 12300, droit: 15400, culture: 8900, autres: 9000 },
+    { region: "CEDEAO", total: 67800, economie: 18900, droit: 22400, culture: 12300, autres: 14200 },
+    { region: "UFM", total: 8900, economie: 2300, droit: 3400, culture: 1800, autres: 1400 }
+  ]
+};
+
 export function DataProvider({ children }: { children: ReactNode }) {
   const [integrationIndicatorsByYear, setIntegrationIndicatorsByYear] = useState(initialIntegrationIndicators);
   const [diasporaIndicatorsByYear, setDiasporaIndicatorsByYear] = useState(initialDiasporaIndicators);
   const [circulationIndicatorsByYear, setCirculationIndicatorsByYear] = useState(initialCirculationIndicators);
   const [slecDetailsByYear, setSlecDetailsByYear] = useState(initialSlecDetails);
+  const [studentsDataByYear, setStudentsDataByYear] = useState(initialStudentsData);
   const [partners, setPartners] = useState(initialPartners);
   const [integrationContentSections, setIntegrationContentSections] = useState<ContentSection[]>([]);
   const [diasporaContentSections, setDiasporaContentSections] = useState<ContentSection[]>([]);
@@ -310,6 +355,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setSlecDetailsByYear(prev => ({ ...prev, [year]: details }));
   };
 
+  const updateStudentsData = (year: string, data: StudentData[]) => {
+    setStudentsDataByYear(prev => ({ ...prev, [year]: data }));
+  };
+
   const updatePartners = (newPartners: Partner[]) => {
     setPartners(newPartners);
   };
@@ -320,6 +369,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   const removePartner = (id: string) => {
     setPartners(prev => prev.filter(p => p.id !== id));
+  };
+
+  const updatePartner = (partner: Partner) => {
+    setPartners(prev => prev.map(p => p.id === partner.id ? partner : p));
   };
 
   const updateIntegrationContent = (sections: ContentSection[]) => {
@@ -353,6 +406,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     diasporaIndicatorsByYear,
     circulationIndicatorsByYear,
     slecDetailsByYear,
+    studentsDataByYear,
     partners,
     integrationContentSections,
     diasporaContentSections,
@@ -363,9 +417,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
     updateDiasporaIndicators,
     updateCirculationIndicators,
     updateSlecDetails,
+    updateStudentsData,
     updatePartners,
     addPartner,
     removePartner,
+    updatePartner,
     updateIntegrationContent,
     updateDiasporaContent,
     updatePiliers,

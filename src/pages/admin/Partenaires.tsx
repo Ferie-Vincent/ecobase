@@ -7,9 +7,10 @@ import { CreatePartenaireModal } from "@/components/admin/modals/CreatePartenair
 import { EditOrganisationModal } from "@/components/admin/modals/EditOrganisationModal";
 import { ViewOrganisationModal } from "@/components/admin/modals/ViewOrganisationModal";
 import { Search, Plus, Eye, FileEdit, Trash2, CheckCircle, Globe, MapPin } from "lucide-react";
-import { organisations as initialOrgs, Organisation } from "@/data/seedData";
+import { Organisation } from "@/data/seedData";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useData, Partner } from "@/contexts/DataContext";
 
 export default function Partenaires() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,13 +18,22 @@ export default function Partenaires() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedOrg, setSelectedOrg] = useState<Organisation | null>(null);
-  const [organisations, setOrganisations] = useState<Organisation[]>(initialOrgs);
   const { hasRole } = useAuth();
   const { toast } = useToast();
+  const { partners, updatePartner, removePartner } = useData();
 
-  const partenaires = organisations.filter(org => 
-    org.type === "Internationale" || org.type === "PTF" || org.type === "Régionale"
-  );
+  // Convert Partner to Organisation for compatibility with existing modals
+  const partenaires = partners.filter(p => 
+    p.type === "International" || p.type === "Internationale" || p.type === "PTF" || p.type === "Régional"
+  ).map(p => ({
+    id: p.id,
+    nom: p.nom,
+    sigle: p.sigle,
+    type: p.type as Organisation["type"],
+    siege: "",
+    statut: p.statut,
+    convention: false
+  }));
   
   const filteredPartenaires = partenaires.filter(org =>
     org.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -42,11 +52,22 @@ export default function Partenaires() {
   };
 
   const handleSave = (updatedOrg: Organisation) => {
-    setOrganisations(organisations.map(o => o.id === updatedOrg.id ? updatedOrg : o));
+    const partner: Partner = {
+      id: updatedOrg.id,
+      nom: updatedOrg.nom,
+      sigle: updatedOrg.sigle,
+      type: updatedOrg.type as Partner["type"],
+      statut: updatedOrg.statut
+    };
+    updatePartner(partner);
+    toast({
+      title: "Partenaire mis à jour",
+      description: "Le partenaire a été mis à jour avec succès.",
+    });
   };
 
   const handleDelete = (id: string) => {
-    setOrganisations(organisations.filter(o => o.id !== id));
+    removePartner(id);
     toast({
       title: "Partenaire supprimé",
       description: "Le partenaire a été supprimé avec succès.",
@@ -55,8 +76,10 @@ export default function Partenaires() {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case "Internationale": return "bg-blue-500/10 text-blue-600";
-      case "Régionale": return "bg-primary/10 text-primary";
+      case "Internationale":
+      case "International": return "bg-blue-500/10 text-blue-600";
+      case "Régionale":
+      case "Régional": return "bg-primary/10 text-primary";
       case "PTF": return "bg-accent/10 text-accent-foreground";
       default: return "bg-muted";
     }
