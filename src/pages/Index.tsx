@@ -27,7 +27,7 @@ import { indicators } from "@/data/indicators";
 import integrationPolicyImage from "@/assets/integration-policy.jpg";
 import diasporaPolicyImage from "@/assets/diaspora-policy.jpg";
 import { StatCard } from "@/components/StatCard";
-import { dashboardStats, regionalWeights } from "@/data/mockData";
+import { regionalWeights } from "@/data/mockData";
 import { Footer } from "@/components/Footer";
 import { useData } from "@/contexts/DataContext";
 
@@ -74,7 +74,13 @@ const partnerUrls: Record<string, string> = {
 };
 
 const Index = () => {
-  const { partners, piliers } = useData();
+  const { partners, piliers, dashboardStatsByYear } = useData();
+  
+  // Get current year stats (default to 2024)
+  const currentStats = dashboardStatsByYear["2024"] || [];
+  
+  // Helper to get stat by name
+  const getStat = (nom: string) => currentStats.find(s => s.nom === nom);
   
   // Calculate indicator counts automatically from actual indicators
   const indicatorsByPillar = {
@@ -462,36 +468,21 @@ const Index = () => {
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-foreground mb-6">Statistiques Clés</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard
-              title="Entreprises SLEC"
-              value={dashboardStats.integration.slecEnterprises}
-              unit="entreprises"
-              trend="+18"
-              icon={<BarChart3 className="h-6 w-6 text-primary" />}
-              variant="primary"
-            />
-            <StatCard
-              title="Ivoiriens Réinsérés"
-              value={dashboardStats.diaspora.reinserted}
-              unit="personnes"
-              trend="+456"
-              icon={<Users2 className="h-6 w-6 text-secondary" />}
-              variant="secondary"
-            />
-            <StatCard
-              title="Transferts d'argent / PIB"
-              value={dashboardStats.diaspora.transfertsGDP}
-              unit="%"
-              trend="+0.6%"
-              icon={<TrendingUp className="h-6 w-6 text-primary" />}
-            />
-            <StatCard
-              title="Trafic Routier CEDEAO"
-              value={(dashboardStats.circulation.roadCEDEAO / 1000000).toFixed(1)}
-              unit="M voyageurs"
-              trend="+234K"
-              icon={<Globe2 className="h-6 w-6 text-secondary" />}
-            />
+            {currentStats.map((stat, index) => (
+              <StatCard
+                key={stat.id}
+                title={stat.nom}
+                value={stat.valeur}
+                unit={stat.unite}
+                trend={stat.tendance}
+                icon={
+                  stat.categorie === "Intégration" ? <BarChart3 className="h-6 w-6 text-primary" /> :
+                  stat.categorie === "Diaspora" ? <Users2 className="h-6 w-6 text-secondary" /> :
+                  <Globe2 className="h-6 w-6 text-secondary" />
+                }
+                variant={stat.categorie === "Intégration" ? "primary" : stat.categorie === "Diaspora" ? "secondary" : undefined}
+              />
+            ))}
           </div>
         </section>
 
