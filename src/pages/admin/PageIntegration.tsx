@@ -9,100 +9,101 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Save, Plus, Trash2 } from "lucide-react";
 import YearSelectorAdmin from "@/components/admin/YearSelectorAdmin";
-
-interface IntegrationIndicator {
-  id: string;
-  nom: string;
-  categorie: "Commerce" | "Social" | "CILSS";
-  unite: string;
-  valeurs: Record<string, string>; // { "2022": "64.1", "2023": "67.5", "2024": "70.8" }
-}
-
-interface SlecDetails {
-  entreprisesAgreees: string;
-  entreprisesActives: string;
-  tauxActivite: string;
-  produitsAgrees: string;
-  volumeExports: string;
-  partSleIntraRegional: string;
-}
-
-interface ContentSection {
-  id: number;
-  titre: string;
-  contenu: string;
-}
+import { useData, Indicator, SlecDetails, ContentSection } from "@/contexts/DataContext";
 
 export default function PageIntegration() {
   const { toast } = useToast();
-  const [availableYears, setAvailableYears] = useState(["2024", "2023", "2022"]);
-  const [selectedYear, setSelectedYear] = useState("2024");
+  const { 
+    integrationIndicatorsByYear, 
+    slecDetailsByYear, 
+    availableYears,
+    updateIntegrationIndicators,
+    updateSlecDetails,
+    addYear,
+    removeYear
+  } = useData();
   
-  // Indicateurs d'intégration avec valeurs par année
-  const [indicators, setIndicators] = useState<IntegrationIndicator[]>([
-    { id: "1", nom: "Résilience climatique", categorie: "CILSS", unite: "%", valeurs: { "2022": "64.1", "2023": "67.5", "2024": "70.8" } },
-    { id: "2", nom: "Développement Capital Humain", categorie: "Social", unite: "indice", valeurs: { "2022": "0.65", "2023": "0.68", "2024": "0.71" } },
-    { id: "3", nom: "Entreprises SLEC agréées", categorie: "Commerce", unite: "entreprises", valeurs: { "2022": "227", "2023": "245", "2024": "268" } },
-    { id: "4", nom: "Produits SLEC agréés", categorie: "Commerce", unite: "produits", valeurs: { "2022": "1707", "2023": "1834", "2024": "1978" } },
-    { id: "5", nom: "Exportations SLEC", categorie: "Commerce", unite: "Mds FCFA", valeurs: { "2022": "41.3", "2023": "45.6", "2024": "51.2" } },
-    { id: "6", nom: "Part exportations SLE", categorie: "Commerce", unite: "%", valeurs: { "2022": "31.1", "2023": "34.2", "2024": "37.6" } }
-  ]);
-
-  // Détails SLEC par année
-  const [slecDetailsByYear, setSlecDetailsByYear] = useState<Record<string, SlecDetails>>({
-    "2022": { entreprisesAgreees: "227", entreprisesActives: "175", tauxActivite: "77.1", produitsAgrees: "1707", volumeExports: "41.3", partSleIntraRegional: "31.1" },
-    "2023": { entreprisesAgreees: "245", entreprisesActives: "189", tauxActivite: "77.1", produitsAgrees: "1834", volumeExports: "45.6", partSleIntraRegional: "34.2" },
-    "2024": { entreprisesAgreees: "268", entreprisesActives: "207", tauxActivite: "77.2", produitsAgrees: "1978", volumeExports: "51.2", partSleIntraRegional: "37.6" }
-  });
-
-  const slecDetails = useMemo(() => slecDetailsByYear[selectedYear] || slecDetailsByYear["2024"], [slecDetailsByYear, selectedYear]);
-
+  const [localYears, setLocalYears] = useState(availableYears);
+  const [selectedYear, setSelectedYear] = useState(localYears[0] || "2024");
+  
+  // État local pour édition
+  const currentIndicators = integrationIndicatorsByYear[selectedYear] || [];
+  const [editingIndicators, setEditingIndicators] = useState<Indicator[]>(currentIndicators);
+  
+  const currentSlec = slecDetailsByYear[selectedYear] || {
+    entreprisesAgreees: 0,
+    entreprisesActives: 0,
+    tauxActivite: 0,
+    produitsAgrees: 0,
+    volumeExports: 0,
+    partSleIntraRegional: 0
+  };
+  const [editingSlec, setEditingSlec] = useState<SlecDetails>(currentSlec);
+  
   const [contentSections, setContentSections] = useState<ContentSection[]>([
-    { id: 1, titre: "Objectifs de l'intégration africaine", contenu: "Promouvoir l'intégration régionale et continentale à travers le renforcement de la coopération économique, politique et sociale." },
-    { id: 2, titre: "Programmes en cours", contenu: "Description des programmes et initiatives en matière d'intégration africaine." }
+    { id: "1", titre: "Objectifs de l'intégration africaine", contenu: "Promouvoir l'intégration régionale et continentale à travers le renforcement de la coopération économique, politique et sociale." },
+    { id: "2", titre: "Programmes en cours", contenu: "Description des programmes et initiatives en matière d'intégration africaine." }
   ]);
+
+  // Synchroniser quand l'année change
+  useMemo(() => {
+    setEditingIndicators(integrationIndicatorsByYear[selectedYear] || []);
+    setEditingSlec(slecDetailsByYear[selectedYear] || currentSlec);
+  }, [selectedYear, integrationIndicatorsByYear, slecDetailsByYear]);
 
   const handleSave = () => {
+    // Sauvegarder les indicateurs dans le contexte partagé
+    updateIntegrationIndicators(selectedYear, editingIndicators);
+    updateSlecDetails(selectedYear, editingSlec);
+    
     toast({
       title: "Modifications enregistrées",
-      description: `Les données de l'année ${selectedYear} ont été mises à jour.`,
+      description: `Les données de l'année ${selectedYear} ont été mises à jour et sont maintenant visibles dans le frontoffice.`,
     });
   };
 
-  const updateSlecDetails = (field: keyof SlecDetails, value: string) => {
-    setSlecDetailsByYear({
-      ...slecDetailsByYear,
-      [selectedYear]: { ...slecDetails, [field]: value }
+  const handleYearsChange = (newYears: string[]) => {
+    setLocalYears(newYears);
+    // Synchroniser avec le contexte
+    newYears.forEach(y => {
+      if (!availableYears.includes(y)) addYear(y);
     });
+    availableYears.forEach(y => {
+      if (!newYears.includes(y)) removeYear(y);
+    });
+  };
+
+  const updateSlecField = (field: keyof SlecDetails, value: string) => {
+    setEditingSlec(prev => ({ ...prev, [field]: parseFloat(value) || 0 }));
   };
 
   const addIndicator = () => {
-    const newIndicator: IntegrationIndicator = {
-      id: Date.now().toString(),
-      nom: "Nouvel indicateur",
-      categorie: "Commerce",
-      unite: "",
-      valeurs: { "2022": "", "2023": "", "2024": "" }
+    const newIndicator: Indicator = {
+      name: "Nouvel indicateur",
+      value: 0,
+      unit: "",
+      trend: "+0%",
+      category: "Commerce"
     };
-    setIndicators([...indicators, newIndicator]);
+    setEditingIndicators([...editingIndicators, newIndicator]);
   };
 
-  const removeIndicator = (id: string) => {
-    setIndicators(indicators.filter(ind => ind.id !== id));
+  const removeIndicator = (index: number) => {
+    setEditingIndicators(editingIndicators.filter((_, i) => i !== index));
   };
 
-  const updateIndicator = (id: string, field: keyof IntegrationIndicator | "valeur", value: string) => {
-    setIndicators(indicators.map(ind => {
-      if (ind.id !== id) return ind;
-      if (field === "valeur") {
-        return { ...ind, valeurs: { ...ind.valeurs, [selectedYear]: value } };
+  const updateIndicator = (index: number, field: keyof Indicator, value: string | number) => {
+    setEditingIndicators(editingIndicators.map((ind, i) => {
+      if (i !== index) return ind;
+      if (field === "value") {
+        return { ...ind, [field]: parseFloat(value as string) || 0 };
       }
       return { ...ind, [field]: value };
     }));
   };
 
   const addContentSection = () => {
-    const newSection: ContentSection = { id: Date.now(), titre: "Nouvelle section", contenu: "" };
+    const newSection: ContentSection = { id: Date.now().toString(), titre: "Nouvelle section", contenu: "" };
     setContentSections([...contentSections, newSection]);
   };
 
@@ -117,9 +118,9 @@ export default function PageIntegration() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Gestion - Intégration Africaine</h1>
-          <p className="text-muted-foreground">Gérez les indicateurs d'intégration et les données SLEC</p>
+          <p className="text-muted-foreground">Gérez les indicateurs d'intégration et les données SLEC - Les modifications seront visibles dans le frontoffice</p>
         </div>
-        <YearSelectorAdmin selectedYear={selectedYear} onYearChange={setSelectedYear} years={availableYears} onYearsChange={setAvailableYears} />
+        <YearSelectorAdmin selectedYear={selectedYear} onYearChange={setSelectedYear} years={localYears} onYearsChange={handleYearsChange} />
       </div>
 
       <Tabs defaultValue="indicateurs" className="space-y-6">
@@ -149,19 +150,20 @@ export default function PageIntegration() {
                     <TableHead>Catégorie</TableHead>
                     <TableHead>Unité</TableHead>
                     <TableHead>Valeur {selectedYear}</TableHead>
+                    <TableHead>Tendance</TableHead>
                     <TableHead className="w-[80px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {indicators.map((indicator) => (
-                    <TableRow key={indicator.id}>
+                  {editingIndicators.map((indicator, index) => (
+                    <TableRow key={index}>
                       <TableCell>
-                        <Input value={indicator.nom} onChange={(e) => updateIndicator(indicator.id, "nom", e.target.value)} />
+                        <Input value={indicator.name} onChange={(e) => updateIndicator(index, "name", e.target.value)} />
                       </TableCell>
                       <TableCell>
                         <select
-                          value={indicator.categorie}
-                          onChange={(e) => updateIndicator(indicator.id, "categorie", e.target.value)}
+                          value={indicator.category}
+                          onChange={(e) => updateIndicator(index, "category", e.target.value)}
                           className="w-full px-3 py-2 border rounded-md bg-background"
                         >
                           <option value="Commerce">Commerce</option>
@@ -170,13 +172,22 @@ export default function PageIntegration() {
                         </select>
                       </TableCell>
                       <TableCell>
-                        <Input value={indicator.unite} onChange={(e) => updateIndicator(indicator.id, "unite", e.target.value)} placeholder="%, Mds FCFA..." className="w-28" />
+                        <Input value={indicator.unit} onChange={(e) => updateIndicator(index, "unit", e.target.value)} placeholder="%, Mds FCFA..." className="w-28" />
                       </TableCell>
                       <TableCell>
-                        <Input value={indicator.valeurs[selectedYear] || ""} onChange={(e) => updateIndicator(indicator.id, "valeur", e.target.value)} className="w-28" />
+                        <Input 
+                          type="number"
+                          step="0.01"
+                          value={indicator.value} 
+                          onChange={(e) => updateIndicator(index, "value", e.target.value)} 
+                          className="w-28" 
+                        />
                       </TableCell>
                       <TableCell>
-                        <Button onClick={() => removeIndicator(indicator.id)} variant="ghost" size="sm">
+                        <Input value={indicator.trend} onChange={(e) => updateIndicator(index, "trend", e.target.value)} placeholder="+3.2%" className="w-24" />
+                      </TableCell>
+                      <TableCell>
+                        <Button onClick={() => removeIndicator(index)} variant="ghost" size="sm">
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                       </TableCell>
@@ -201,15 +212,15 @@ export default function PageIntegration() {
                   <div className="space-y-3">
                     <div>
                       <Label>Total agréées</Label>
-                      <Input value={slecDetails.entreprisesAgreees} onChange={(e) => updateSlecDetails("entreprisesAgreees", e.target.value)} type="number" />
+                      <Input value={editingSlec.entreprisesAgreees} onChange={(e) => updateSlecField("entreprisesAgreees", e.target.value)} type="number" />
                     </div>
                     <div>
                       <Label>Actives</Label>
-                      <Input value={slecDetails.entreprisesActives} onChange={(e) => updateSlecDetails("entreprisesActives", e.target.value)} type="number" />
+                      <Input value={editingSlec.entreprisesActives} onChange={(e) => updateSlecField("entreprisesActives", e.target.value)} type="number" />
                     </div>
                     <div>
                       <Label>Taux d'activité (%)</Label>
-                      <Input value={slecDetails.tauxActivite} onChange={(e) => updateSlecDetails("tauxActivite", e.target.value)} />
+                      <Input value={editingSlec.tauxActivite} onChange={(e) => updateSlecField("tauxActivite", e.target.value)} type="number" step="0.1" />
                     </div>
                   </div>
                 </div>
@@ -218,15 +229,15 @@ export default function PageIntegration() {
                   <div className="space-y-3">
                     <div>
                       <Label>Produits agréés</Label>
-                      <Input value={slecDetails.produitsAgrees} onChange={(e) => updateSlecDetails("produitsAgrees", e.target.value)} type="number" />
+                      <Input value={editingSlec.produitsAgrees} onChange={(e) => updateSlecField("produitsAgrees", e.target.value)} type="number" />
                     </div>
                     <div>
                       <Label>Volume exports (Mds FCFA)</Label>
-                      <Input value={slecDetails.volumeExports} onChange={(e) => updateSlecDetails("volumeExports", e.target.value)} />
+                      <Input value={editingSlec.volumeExports} onChange={(e) => updateSlecField("volumeExports", e.target.value)} type="number" step="0.1" />
                     </div>
                     <div>
                       <Label>Part SLE/Intra-régional (%)</Label>
-                      <Input value={slecDetails.partSleIntraRegional} onChange={(e) => updateSlecDetails("partSleIntraRegional", e.target.value)} />
+                      <Input value={editingSlec.partSleIntraRegional} onChange={(e) => updateSlecField("partSleIntraRegional", e.target.value)} type="number" step="0.1" />
                     </div>
                   </div>
                 </div>
