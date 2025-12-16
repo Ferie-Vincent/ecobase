@@ -1,5 +1,4 @@
 import { IndicatorCard } from "@/components/IndicatorCard";
-import { circulationIndicatorsByYear, studentsData } from "@/data/mockData";
 import { circulationIndicatorDescriptions } from "@/data/indicatorDescriptions";
 import { Card } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
@@ -9,14 +8,16 @@ import { Footer } from "@/components/Footer";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { ExportMenu } from "@/components/ExportMenu";
 import { useState, useMemo } from "react";
+import { useData } from "@/contexts/DataContext";
 
 const Circulation = () => {
+  const { circulationIndicatorsByYear, studentsDataByYear, availableYears } = useData();
   const categories = ["Population", "Transport"];
-  const availableYears = Object.keys(circulationIndicatorsByYear).sort().reverse();
   const [selectedYear, setSelectedYear] = useState(availableYears[0]);
   const [selectedCategory, setSelectedCategory] = useState<string>("tous");
   
-  const circulationIndicators = circulationIndicatorsByYear[selectedYear];
+  const circulationIndicators = circulationIndicatorsByYear[selectedYear] || [];
+  const studentsData = studentsDataByYear[selectedYear] || [];
   
   const filteredIndicators = useMemo(() => {
     if (selectedCategory === "tous") {
@@ -37,7 +38,7 @@ const Circulation = () => {
         routierCEDEAO: (yearData.find(i => i.name === "Trafic routier CEDEAO")?.value || 0) / 1000,
       };
     });
-  }, []);
+  }, [circulationIndicatorsByYear]);
   
   return (
     <div className="min-h-screen bg-background">
@@ -128,11 +129,11 @@ const Circulation = () => {
             <ResponsiveContainer width="100%" height={350}>
               <BarChart
                 data={[
-                  { mode: "Routier UEMOA", voyageurs: 2340000 },
-                  { mode: "Routier CEDEAO", voyageurs: 3450000 },
-                  { mode: "Aérien UEMOA", voyageurs: 342000 },
-                  { mode: "Aérien CEDEAO", voyageurs: 589000 },
-                  { mode: "Ferroviaire", voyageurs: 145000 }
+                  { mode: "Routier UEMOA", voyageurs: circulationIndicators.find(i => i.name === "Trafic routier UEMOA")?.value || 0 },
+                  { mode: "Routier CEDEAO", voyageurs: circulationIndicators.find(i => i.name === "Trafic routier CEDEAO")?.value || 0 },
+                  { mode: "Aérien UEMOA", voyageurs: circulationIndicators.find(i => i.name === "Voyageurs aériens UEMOA")?.value || 0 },
+                  { mode: "Aérien CEDEAO", voyageurs: circulationIndicators.find(i => i.name === "Voyageurs aériens CEDEAO")?.value || 0 },
+                  { mode: "Ferroviaire", voyageurs: circulationIndicators.find(i => i.name === "Trafic ferroviaire UEMOA")?.value || 0 }
                 ]}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />

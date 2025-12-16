@@ -24,12 +24,12 @@ import {
 } from "lucide-react";
 import { metadata, pillars } from "@/data/metadata";
 import { indicators } from "@/data/indicators";
-import { organisations } from "@/data/seedData";
 import integrationPolicyImage from "@/assets/integration-policy.jpg";
 import diasporaPolicyImage from "@/assets/diaspora-policy.jpg";
 import { StatCard } from "@/components/StatCard";
 import { dashboardStats, regionalWeights } from "@/data/mockData";
 import { Footer } from "@/components/Footer";
+import { useData } from "@/contexts/DataContext";
 
 // Logos partenaires
 import logoBad from "@/assets/logos/BAD.png";
@@ -74,6 +74,8 @@ const partnerUrls: Record<string, string> = {
 };
 
 const Index = () => {
+  const { partners } = useData();
+  
   const indicatorsByPillar = {
     INT: indicators.filter((i) => i.pillar === "INT").length,
     DIA: indicators.filter((i) => i.pillar === "DIA").length,
@@ -168,7 +170,7 @@ const Index = () => {
               </div>
             </div>
             <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-secondary">{organisations.length}+</div>
+              <div className="text-3xl md:text-4xl font-bold text-secondary">{partners.length}+</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Partenaires
                 <br />
@@ -628,14 +630,14 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {organisations
-                  .filter((org) => org.type === "Nationale")
-                  .map((org) => {
-                    const logo = partnerLogos[org.sigle];
-                    const url = partnerUrls[org.sigle];
+                {partners
+                  .filter((p) => p.type === "National" || p.type === "Nationale")
+                  .map((p) => {
+                    const logo = partnerLogos[p.sigle];
+                    const url = p.url || partnerUrls[p.sigle];
                     return (
                       <a
-                        key={org.id}
+                        key={p.id}
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -643,16 +645,16 @@ const Index = () => {
                       >
                         <div className="w-16 h-16 flex items-center justify-center mb-3">
                           {logo ? (
-                            <img src={logo} alt={org.sigle} className="max-w-full max-h-full object-contain" />
+                            <img src={logo} alt={p.sigle} className="max-w-full max-h-full object-contain" />
                           ) : (
                             <Building2 className="w-10 h-10 text-primary" />
                           )}
                         </div>
                         <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-primary">
-                          {org.sigle}
+                          {p.sigle}
                         </p>
                         <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground mt-1">
-                          {org.nom}
+                          {p.nom}
                         </p>
                       </a>
                     );
@@ -671,14 +673,14 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4">
-                {organisations
-                  .filter((org) => org.type === "Régionale")
-                  .map((org) => {
-                    const logo = partnerLogos[org.sigle];
-                    const url = partnerUrls[org.sigle];
+                {partners
+                  .filter((p) => p.type === "Régional" || p.type === "Régionale")
+                  .map((p) => {
+                    const logo = partnerLogos[p.sigle];
+                    const url = p.url || partnerUrls[p.sigle];
                     return (
                       <a
-                        key={org.id}
+                        key={p.id}
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -686,16 +688,16 @@ const Index = () => {
                       >
                         <div className="w-16 h-16 flex items-center justify-center mb-3">
                           {logo ? (
-                            <img src={logo} alt={org.sigle} className="max-w-full max-h-full object-contain" />
+                            <img src={logo} alt={p.sigle} className="max-w-full max-h-full object-contain" />
                           ) : (
                             <Network className="w-10 h-10 text-accent" />
                           )}
                         </div>
                         <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-accent">
-                          {org.sigle}
+                          {p.sigle}
                         </p>
                         <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground mt-1">
-                          {org.nom}
+                          {p.nom}
                         </p>
                       </a>
                     );
@@ -714,14 +716,14 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-4">
-                {organisations
-                  .filter((org) => org.type === "Internationale")
-                  .map((org) => {
-                    const logo = partnerLogos[org.sigle];
-                    const url = partnerUrls[org.sigle];
+                {partners
+                  .filter((p) => p.type === "International" || p.type === "Internationale")
+                  .map((p) => {
+                    const logo = partnerLogos[p.sigle];
+                    const url = p.url || partnerUrls[p.sigle];
                     return (
                       <a
-                        key={org.id}
+                        key={p.id}
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -729,16 +731,16 @@ const Index = () => {
                       >
                         <div className="w-16 h-16 flex items-center justify-center mb-3">
                           {logo ? (
-                            <img src={logo} alt={org.sigle} className="max-w-full max-h-full object-contain" />
+                            <img src={logo} alt={p.sigle} className="max-w-full max-h-full object-contain" />
                           ) : (
                             <Globe2 className="w-10 h-10 text-secondary" />
                           )}
                         </div>
                         <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-secondary">
-                          {org.sigle}
+                          {p.sigle}
                         </p>
                         <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground mt-1">
-                          {org.nom}
+                          {p.nom}
                         </p>
                       </a>
                     );
