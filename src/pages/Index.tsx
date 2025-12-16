@@ -31,6 +31,32 @@ import { StatCard } from "@/components/StatCard";
 import { dashboardStats, regionalWeights } from "@/data/mockData";
 import { Footer } from "@/components/Footer";
 
+// Logos partenaires
+import logoBad from "@/assets/logos/BAD.png";
+import logoCedeao from "@/assets/logos/cedeao.png";
+import logoCnps from "@/assets/logos/CNPS.png";
+import logoDgbf from "@/assets/logos/DGBF.png";
+import logoDgce from "@/assets/logos/DGCE.png";
+import logoDouanes from "@/assets/logos/Douanes.png";
+import logoEnabel from "@/assets/logos/Enabel.png";
+import logoExpertiseFrance from "@/assets/logos/Expertise-France.png";
+import logoOfii from "@/assets/logos/OFII.png";
+import logoOim from "@/assets/logos/OIM.png";
+
+// Mapping logos par sigle
+const partnerLogos: { [key: string]: string } = {
+  CEDEAO: logoCedeao,
+  BAD: logoBad,
+  OIM: logoOim,
+  CNPS: logoCnps,
+  DGCE: logoDgce,
+  DGD: logoDouanes,
+  DBDES: logoDgbf,
+  ENABEL: logoEnabel,
+  "EXPERTISE FRANCE": logoExpertiseFrance,
+  OFII: logoOfii,
+};
+
 const Index = () => {
   const indicatorsByPillar = {
     INT: indicators.filter((i) => i.pillar === "INT").length,
@@ -589,21 +615,23 @@ const Index = () => {
                 {organisations
                   .filter((org) => org.type === "Nationale")
                   .map((org) => {
-                    const IconComponent = getOrgIcon(org.sigle);
+                    const logo = partnerLogos[org.sigle];
                     return (
                       <div
                         key={org.id}
-                        className="p-4 rounded-lg bg-muted/50 hover:bg-primary/10 hover:border-primary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group"
+                        className="p-4 rounded-lg bg-background hover:bg-primary/5 hover:border-primary/30 border border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group flex flex-col items-center text-center"
                       >
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                            <IconComponent className="w-5 h-5 text-primary" />
-                          </div>
-                          <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-primary">
-                            {org.sigle}
-                          </p>
+                        <div className="w-16 h-16 flex items-center justify-center mb-3">
+                          {logo ? (
+                            <img src={logo} alt={org.sigle} className="max-w-full max-h-full object-contain" />
+                          ) : (
+                            <Building2 className="w-10 h-10 text-primary" />
+                          )}
                         </div>
-                        <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
+                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-primary">
+                          {org.sigle}
+                        </p>
+                        <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground mt-1">
                           {org.nom}
                         </p>
                       </div>
@@ -626,21 +654,23 @@ const Index = () => {
                 {organisations
                   .filter((org) => org.type === "Régionale")
                   .map((org) => {
-                    const IconComponent = getOrgIcon(org.sigle);
+                    const logo = partnerLogos[org.sigle];
                     return (
                       <div
                         key={org.id}
-                        className="p-4 rounded-lg bg-muted/50 hover:bg-accent/10 hover:border-accent/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group"
+                        className="p-4 rounded-lg bg-background hover:bg-accent/5 hover:border-accent/30 border border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group flex flex-col items-center text-center"
                       >
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="p-2 rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
-                            <IconComponent className="w-5 h-5 text-accent" />
-                          </div>
-                          <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-accent">
-                            {org.sigle}
-                          </p>
+                        <div className="w-16 h-16 flex items-center justify-center mb-3">
+                          {logo ? (
+                            <img src={logo} alt={org.sigle} className="max-w-full max-h-full object-contain" />
+                          ) : (
+                            <Network className="w-10 h-10 text-accent" />
+                          )}
                         </div>
-                        <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
+                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-accent">
+                          {org.sigle}
+                        </p>
+                        <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground mt-1">
                           {org.nom}
                         </p>
                       </div>
@@ -663,21 +693,23 @@ const Index = () => {
                 {organisations
                   .filter((org) => org.type === "Internationale")
                   .map((org) => {
-                    const IconComponent = getOrgIcon(org.sigle);
+                    const logo = partnerLogos[org.sigle];
                     return (
                       <div
                         key={org.id}
-                        className="p-4 rounded-lg bg-muted/50 hover:bg-secondary/10 hover:border-secondary/30 border border-transparent transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group"
+                        className="p-4 rounded-lg bg-background hover:bg-secondary/5 hover:border-secondary/30 border border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group flex flex-col items-center text-center"
                       >
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="p-2 rounded-lg bg-secondary/10 group-hover:bg-secondary/20 transition-colors">
-                            <IconComponent className="w-5 h-5 text-secondary" />
-                          </div>
-                          <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-secondary">
-                            {org.sigle}
-                          </p>
+                        <div className="w-16 h-16 flex items-center justify-center mb-3">
+                          {logo ? (
+                            <img src={logo} alt={org.sigle} className="max-w-full max-h-full object-contain" />
+                          ) : (
+                            <Globe2 className="w-10 h-10 text-secondary" />
+                          )}
                         </div>
-                        <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
+                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-secondary">
+                          {org.sigle}
+                        </p>
+                        <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground mt-1">
                           {org.nom}
                         </p>
                       </div>
