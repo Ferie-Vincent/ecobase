@@ -270,7 +270,7 @@ export default function PageAccueil() {
                       <TableCell>
                         <select value={stat.categorie} onChange={(e) => updateStat(stat.id, "categorie", e.target.value)} className="w-full px-3 py-2 border rounded-md bg-background">
                           <option value="Intégration">Intégration</option>
-                          <option value="Diaspora">Diaspora</option>
+                          <option value="Ivoiriens Extérieur">Ivoiriens Extérieur</option>
                           <option value="Circulation">Circulation</option>
                         </select>
                       </TableCell>

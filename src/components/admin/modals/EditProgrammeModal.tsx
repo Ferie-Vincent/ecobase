@@ -81,7 +81,7 @@ export function EditProgrammeModal({ open, onOpenChange, programme, onSave }: Ed
                 </SelectTrigger>
                 <SelectContent className="bg-background z-50">
                   <SelectItem value="Intégration">Intégration</SelectItem>
-                  <SelectItem value="Diaspora">Diaspora</SelectItem>
+                  <SelectItem value="Ivoiriens Extérieur">Ivoiriens Extérieur</SelectItem>
                   <SelectItem value="Économie">Économie</SelectItem>
                   <SelectItem value="Social">Social</SelectItem>
                 </SelectContent>

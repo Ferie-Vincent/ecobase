@@ -65,7 +65,7 @@ export default function AdminDashboard() {
 
   const indicateursSummary = [
     { type: "Intégration", count: 4, total: 156, moyenne: 39, dernier: "2025-12-07" },
-    { type: "Diaspora", count: 2, total: 89, moyenne: 44, dernier: "2025-12-06" },
+    { type: "Ivoiriens Extérieur", count: 2, total: 89, moyenne: 44, dernier: "2025-12-06" },
     { type: "Économie", count: 1, total: 45, moyenne: 45, dernier: "2025-12-05" },
     { type: "Social", count: 0, total: 23, moyenne: 23, dernier: "2025-12-04" }
   ];

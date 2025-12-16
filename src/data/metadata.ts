@@ -34,6 +34,6 @@ export const organizations = [
 
 export const pillars = [
   { id: "INT", label: "Intégration régionale" },
-  { id: "DIA", label: "Diaspora & Ivoiriens de l'extérieur" },
+  { id: "DIA", label: "Ivoiriens de l'Extérieur" },
   { id: "MACRO", label: "Macroéconomie & Transversal" }
 ];
