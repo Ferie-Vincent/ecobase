@@ -21,6 +21,16 @@ interface Section {
   indicateurs: Indicator[];
 }
 
+interface Projet {
+  id: number;
+  titre: string;
+  dateDebut: string;
+  dateFin: string;
+  leader: string;
+  niveau: string;
+  statut: string;
+}
+
 export default function PagePerformance() {
   const { toast } = useToast();
   const [availableYears, setAvailableYears] = useState(["2024", "2023", "2022"]);
@@ -93,6 +103,12 @@ export default function PagePerformance() {
         { id: 3, nom: "Nombre d'ivoiriens assistés à l'étranger", reference: "3120", valeurs: { "2022": "4050", "2023": "4560", "2024": "5120" } },
       ]
     }
+  ]);
+
+  const [projets, setProjets] = useState<Projet[]>([
+    { id: 1, titre: "Administration Générale", dateDebut: "2021-01-10", dateFin: "2021-12-31", leader: "Service Planification", niveau: "51", statut: "En cours" },
+    { id: 2, titre: "Intégration Régionale", dateDebut: "2021-01-10", dateFin: "2021-12-28", leader: "DGIA", niveau: "78", statut: "En cours" },
+    { id: 3, titre: "Mobilisation de la Diaspora", dateDebut: "2021-02-01", dateFin: "2021-11-30", leader: "Direction Mobilisation Compétences", niveau: "62", statut: "En cours" }
   ]);
 
   const handleSave = () => {
@@ -195,10 +211,11 @@ export default function PagePerformance() {
       </div>
 
       <Tabs defaultValue="admin" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="admin">Administration Générale</TabsTrigger>
-          <TabsTrigger value="integration">Intégration Africaine</TabsTrigger>
-          <TabsTrigger value="diaspora">Ivoiriens de l'Extérieur</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="admin">Administration</TabsTrigger>
+          <TabsTrigger value="integration">Intégration</TabsTrigger>
+          <TabsTrigger value="diaspora">Diaspora</TabsTrigger>
+          <TabsTrigger value="projets">Projets</TabsTrigger>
         </TabsList>
 
         <TabsContent value="admin" className="mt-6">
@@ -220,6 +237,58 @@ export default function PagePerformance() {
             <p className="text-sm text-muted-foreground">Modification des données pour l'année <strong className="text-foreground">{selectedYear}</strong></p>
           </div>
           {renderSectionForm(diasporaSections, setDiasporaSections)}
+        </TabsContent>
+
+        <TabsContent value="projets" className="mt-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Projets en Cours</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">Gérez les projets affichés sur la page Performance</p>
+              </div>
+              <Button onClick={() => setProjets([...projets, { id: Date.now(), titre: "Nouveau projet", dateDebut: "", dateFin: "", leader: "", niveau: "0", statut: "Planifié" }])} variant="outline" size="sm">
+                <Plus className="h-4 w-4 mr-2" />Ajouter
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Titre</TableHead>
+                    <TableHead>Date début</TableHead>
+                    <TableHead>Date fin</TableHead>
+                    <TableHead>Leader</TableHead>
+                    <TableHead>Progression (%)</TableHead>
+                    <TableHead>Statut</TableHead>
+                    <TableHead className="w-[50px]"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {projets.map((projet) => (
+                    <TableRow key={projet.id}>
+                      <TableCell><Input value={projet.titre} onChange={(e) => setProjets(projets.map(p => p.id === projet.id ? { ...p, titre: e.target.value } : p))} /></TableCell>
+                      <TableCell><Input type="date" value={projet.dateDebut} onChange={(e) => setProjets(projets.map(p => p.id === projet.id ? { ...p, dateDebut: e.target.value } : p))} className="w-36" /></TableCell>
+                      <TableCell><Input type="date" value={projet.dateFin} onChange={(e) => setProjets(projets.map(p => p.id === projet.id ? { ...p, dateFin: e.target.value } : p))} className="w-36" /></TableCell>
+                      <TableCell><Input value={projet.leader} onChange={(e) => setProjets(projets.map(p => p.id === projet.id ? { ...p, leader: e.target.value } : p))} /></TableCell>
+                      <TableCell><Input type="number" min="0" max="100" value={projet.niveau} onChange={(e) => setProjets(projets.map(p => p.id === projet.id ? { ...p, niveau: e.target.value } : p))} className="w-20" /></TableCell>
+                      <TableCell>
+                        <select value={projet.statut} onChange={(e) => setProjets(projets.map(p => p.id === projet.id ? { ...p, statut: e.target.value } : p))} className="px-3 py-2 border rounded-md bg-background">
+                          <option value="Planifié">Planifié</option>
+                          <option value="En cours">En cours</option>
+                          <option value="Terminé">Terminé</option>
+                        </select>
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="ghost" size="sm" onClick={() => setProjets(projets.filter(p => p.id !== projet.id))}>
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
 
