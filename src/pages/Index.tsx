@@ -59,6 +59,20 @@ const partnerLogos: { [key: string]: string } = {
   OFII: logoOfii,
 };
 
+const partnerUrls: Record<string, string> = {
+  DBDES: "https://www.dgbf.ci/",
+  DGCE: "https://www.gucecotedivoire.ci/",
+  DGD: "https://www.douanes.ci/",
+  CNPS: "https://www.cnps.ci/",
+  CEDEAO: "https://www.ecowas.int/?lang=fr",
+  UEMOA: "https://uemoa.switch-maker.net/",
+  BAD: "https://www.afdb.org/fr",
+  OIM: "https://rodakar.iom.int/fr/cote-divoire",
+  ENABEL: "https://www.enabel.be/fr/",
+  "EXPERTISE FRANCE": "https://www.expertisefrance.fr/fr",
+  OFII: "https://www.ofii.fr/",
+};
+
 const Index = () => {
   const indicatorsByPillar = {
     INT: indicators.filter((i) => i.pillar === "INT").length,
@@ -618,10 +632,14 @@ const Index = () => {
                   .filter((org) => org.type === "Nationale")
                   .map((org) => {
                     const logo = partnerLogos[org.sigle];
+                    const url = partnerUrls[org.sigle];
                     return (
-                      <div
+                      <a
                         key={org.id}
-                        className="p-4 rounded-lg bg-background hover:bg-primary/5 hover:border-primary/30 border border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group flex flex-col items-center text-center"
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-4 rounded-lg bg-background hover:bg-primary/5 hover:border-primary/30 border border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group flex flex-col items-center text-center no-underline"
                       >
                         <div className="w-16 h-16 flex items-center justify-center mb-3">
                           {logo ? (
@@ -636,7 +654,7 @@ const Index = () => {
                         <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground mt-1">
                           {org.nom}
                         </p>
-                      </div>
+                      </a>
                     );
                   })}
               </div>
@@ -657,10 +675,14 @@ const Index = () => {
                   .filter((org) => org.type === "Régionale")
                   .map((org) => {
                     const logo = partnerLogos[org.sigle];
+                    const url = partnerUrls[org.sigle];
                     return (
-                      <div
+                      <a
                         key={org.id}
-                        className="p-4 rounded-lg bg-background hover:bg-accent/5 hover:border-accent/30 border border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group flex flex-col items-center text-center"
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-4 rounded-lg bg-background hover:bg-accent/5 hover:border-accent/30 border border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group flex flex-col items-center text-center no-underline"
                       >
                         <div className="w-16 h-16 flex items-center justify-center mb-3">
                           {logo ? (
@@ -675,7 +697,7 @@ const Index = () => {
                         <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground mt-1">
                           {org.nom}
                         </p>
-                      </div>
+                      </a>
                     );
                   })}
               </div>
@@ -696,10 +718,14 @@ const Index = () => {
                   .filter((org) => org.type === "Internationale")
                   .map((org) => {
                     const logo = partnerLogos[org.sigle];
+                    const url = partnerUrls[org.sigle];
                     return (
-                      <div
+                      <a
                         key={org.id}
-                        className="p-4 rounded-lg bg-background hover:bg-secondary/5 hover:border-secondary/30 border border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group flex flex-col items-center text-center"
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-4 rounded-lg bg-background hover:bg-secondary/5 hover:border-secondary/30 border border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group flex flex-col items-center text-center no-underline"
                       >
                         <div className="w-16 h-16 flex items-center justify-center mb-3">
                           {logo ? (
@@ -714,7 +740,7 @@ const Index = () => {
                         <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground mt-1">
                           {org.nom}
                         </p>
-                      </div>
+                      </a>
                     );
                   })}
               </div>
