@@ -200,53 +200,89 @@ const Index = () => {
       </section>
 
       {/* Message du Ministre */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="bg-gradient-to-r from-muted/50 via-background to-muted/30 rounded-2xl p-8 md:p-12">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-            {/* Photo du Ministre */}
-            <div className="flex flex-col items-center md:items-start">
-              <div className="relative">
-                <div className="w-64 h-72 md:w-80 md:h-96 rounded-xl overflow-hidden shadow-2xl border-4 border-background">
-                  <img 
-                    src={ministreDossoAdama} 
-                    alt="Ministre DOSSO ADAMA" 
-                    className="w-full h-full object-cover object-top"
-                  />
+      <section className="py-20 relative overflow-hidden">
+        {/* Background décoratif */}
+        <div className="absolute inset-0 bg-gradient-to-br from-muted/30 via-background to-primary/5" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-5 gap-8 md:gap-16 items-center">
+              {/* Photo du Ministre - 2 colonnes */}
+              <div className="md:col-span-2 flex justify-center">
+                <div className="relative group">
+                  {/* Cadre décoratif arrière */}
+                  <div className="absolute -inset-3 bg-gradient-to-br from-primary/20 via-secondary/20 to-primary/20 rounded-2xl transform rotate-3 group-hover:rotate-1 transition-transform duration-500" />
+                  
+                  {/* Photo principale */}
+                  <div className="relative w-72 h-80 md:w-80 md:h-[420px] rounded-xl overflow-hidden shadow-2xl border-4 border-white dark:border-background">
+                    <img 
+                      src={ministreDossoAdama} 
+                      alt="Ministre DOSSO ADAMA" 
+                      className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    />
+                    {/* Overlay subtil */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                  </div>
+                  
+                  {/* Badge nom - style plus élégant */}
+                  <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-8 py-3 rounded-xl shadow-xl shadow-primary/30 transform hover:scale-105 transition-transform duration-300">
+                    <span className="font-bold text-base md:text-lg tracking-wide whitespace-nowrap">DOSSO ADAMA</span>
+                  </div>
                 </div>
-                {/* Badge nom */}
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-6 py-2 rounded-lg shadow-lg">
-                  <span className="font-bold text-sm md:text-base whitespace-nowrap">DOSSO ADAMA</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Message */}
-            <div className="space-y-6">
-              <div className="flex items-center gap-3">
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground">Message du Ministre</h2>
-              </div>
-              <div className="w-16 h-1 bg-primary rounded-full" />
-              
-              {/* Citation */}
-              <div className="relative pl-6 border-l-4 border-secondary">
-                <span className="absolute -left-3 -top-4 text-6xl text-secondary/50 font-serif">"</span>
-                <p className="text-lg md:text-xl text-muted-foreground italic leading-relaxed">
-                  L'intégration africaine et l'accompagnement de nos compatriotes de l'extérieur constituent des leviers 
-                  essentiels pour le développement de notre Nation. Ensemble, bâtissons une Côte d'Ivoire ouverte sur 
-                  l'Afrique et connectée à sa diaspora.
-                </p>
-                <span className="absolute -right-2 bottom-0 text-6xl text-secondary/50 font-serif">"</span>
               </div>
 
-              {/* Titre officiel */}
-              <div className="pt-4">
-                <p className="font-semibold text-foreground">
-                  Le Ministre Délégué auprès du Ministre des Affaires Étrangères,
-                </p>
-                <p className="font-semibold text-foreground">
-                  chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur
-                </p>
-                <p className="text-sm text-muted-foreground mt-2">RÉPUBLIQUE DE CÔTE D'IVOIRE</p>
+              {/* Message - 3 colonnes */}
+              <div className="md:col-span-3 space-y-8 pt-8 md:pt-0">
+                {/* Titre avec ligne décorative */}
+                <div>
+                  <h2 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight">
+                    Message du Ministre
+                  </h2>
+                  <div className="flex items-center gap-2 mt-4">
+                    <div className="w-12 h-1.5 bg-primary rounded-full" />
+                    <div className="w-6 h-1.5 bg-secondary rounded-full" />
+                  </div>
+                </div>
+                
+                {/* Citation avec guillemets stylisés */}
+                <div className="relative bg-card/50 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-border/50 shadow-lg">
+                  {/* Guillemet ouvrant */}
+                  <div className="absolute -top-4 left-6 flex">
+                    <span className="text-7xl font-serif text-primary leading-none">"</span>
+                  </div>
+                  
+                  {/* Barre latérale colorée */}
+                  <div className="absolute left-0 top-8 bottom-8 w-1 bg-gradient-to-b from-primary via-secondary to-primary rounded-full" />
+                  
+                  <p className="text-lg md:text-xl text-muted-foreground leading-relaxed pl-4 pt-4 italic">
+                    L'intégration africaine et l'accompagnement de nos compatriotes de l'extérieur constituent des leviers 
+                    essentiels pour le développement de notre Nation. Ensemble, bâtissons une Côte d'Ivoire ouverte sur 
+                    l'Afrique et connectée à sa diaspora.
+                  </p>
+                  
+                  {/* Guillemet fermant */}
+                  <div className="absolute -bottom-4 right-6 flex">
+                    <span className="text-7xl font-serif text-secondary leading-none">"</span>
+                  </div>
+                </div>
+
+                {/* Titre officiel - style amélioré */}
+                <div className="flex items-start gap-4 pl-4">
+                  <div className="w-1 h-full bg-gradient-to-b from-primary to-secondary rounded-full self-stretch min-h-[60px]" />
+                  <div>
+                    <p className="font-semibold text-foreground text-base md:text-lg">
+                      Le Ministre Délégué auprès du Ministre des Affaires Étrangères,
+                    </p>
+                    <p className="font-semibold text-foreground text-base md:text-lg">
+                      chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-3 uppercase tracking-widest font-medium">
+                      République de Côte d'Ivoire
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
