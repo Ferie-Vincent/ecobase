@@ -27,6 +27,7 @@ import { metadata } from "@/data/metadata";
 import { indicators } from "@/data/indicators";
 import integrationPolicyImage from "@/assets/integration-policy.jpg";
 import diasporaPolicyImage from "@/assets/diaspora-policy.jpg";
+import ministreDossoAdama from "@/assets/ministre-dosso-adama.png";
 import { StatCard } from "@/components/StatCard";
 import { regionalWeights } from "@/data/mockData";
 import { Footer } from "@/components/Footer";
@@ -192,6 +193,60 @@ const Index = () => {
                 Piliers
                 <br />
                 <span className="text-xs opacity-70">stratégiques</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Message du Ministre */}
+      <section className="container mx-auto px-4 py-16">
+        <div className="bg-gradient-to-r from-muted/50 via-background to-muted/30 rounded-2xl p-8 md:p-12">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            {/* Photo du Ministre */}
+            <div className="flex flex-col items-center md:items-start">
+              <div className="relative">
+                <div className="w-64 h-72 md:w-80 md:h-96 rounded-xl overflow-hidden shadow-2xl border-4 border-background">
+                  <img 
+                    src={ministreDossoAdama} 
+                    alt="Ministre DOSSO ADAMA" 
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+                {/* Badge nom */}
+                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-6 py-2 rounded-lg shadow-lg">
+                  <span className="font-bold text-sm md:text-base whitespace-nowrap">DOSSO ADAMA</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Message */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground">Message du Ministre</h2>
+              </div>
+              <div className="w-16 h-1 bg-primary rounded-full" />
+              
+              {/* Citation */}
+              <div className="relative pl-6 border-l-4 border-secondary">
+                <span className="absolute -left-3 -top-4 text-6xl text-secondary/50 font-serif">"</span>
+                <p className="text-lg md:text-xl text-muted-foreground italic leading-relaxed">
+                  L'intégration africaine et l'accompagnement de nos compatriotes de l'extérieur constituent des leviers 
+                  essentiels pour le développement de notre Nation. Ensemble, bâtissons une Côte d'Ivoire ouverte sur 
+                  l'Afrique et connectée à sa diaspora.
+                </p>
+                <span className="absolute -right-2 bottom-0 text-6xl text-secondary/50 font-serif">"</span>
+              </div>
+
+              {/* Titre officiel */}
+              <div className="pt-4">
+                <p className="font-semibold text-foreground">
+                  Le Ministre Délégué auprès du Ministre des Affaires Étrangères,
+                </p>
+                <p className="font-semibold text-foreground">
+                  chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur
+                </p>
+                <p className="text-sm text-muted-foreground mt-2">RÉPUBLIQUE DE CÔTE D'IVOIRE</p>
               </div>
             </div>
           </div>
