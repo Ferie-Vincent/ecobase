@@ -81,6 +81,7 @@ const partnerUrls: Record<string, string> = {
 const MinistereSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const { ministreInfo } = useData();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -122,8 +123,8 @@ const MinistereSection = () => {
                 {/* Photo principale */}
                 <div className="relative w-72 h-80 md:w-80 md:h-[420px] rounded-xl overflow-hidden shadow-2xl border-4 border-white dark:border-background">
                   <img 
-                    src={ministreDossoAdama} 
-                    alt="S.E.M ADAMA DOSSO" 
+                    src={ministreInfo.photoUrl || ministreDossoAdama} 
+                    alt={ministreInfo.nom} 
                     className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />
                   {/* Overlay subtil */}
@@ -132,7 +133,7 @@ const MinistereSection = () => {
                 
                 {/* Badge nom - style plus élégant */}
                 <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-8 py-3 rounded-xl shadow-xl shadow-primary/30 transform hover:scale-105 transition-transform duration-300">
-                  <span className="font-bold text-base md:text-lg tracking-wide whitespace-nowrap">S.E.M ADAMA DOSSO</span>
+                  <span className="font-bold text-base md:text-lg tracking-wide whitespace-nowrap">{ministreInfo.nom}</span>
                 </div>
               </div>
             </div>
@@ -169,9 +170,7 @@ const MinistereSection = () => {
                 <div className="absolute left-0 top-8 bottom-8 w-1 bg-gradient-to-b from-primary via-secondary to-primary rounded-full" />
                 
                 <p className="text-lg md:text-xl text-muted-foreground leading-relaxed pl-4 pt-4 italic">
-                  L'intégration africaine et l'accompagnement de nos compatriotes de l'extérieur constituent des leviers 
-                  essentiels pour le développement de notre Nation. Ensemble, bâtissons une Côte d'Ivoire ouverte sur 
-                  l'Afrique et connectée à sa diaspora.
+                  {ministreInfo.citation}
                 </p>
                 
                 {/* Guillemet fermant */}
@@ -189,10 +188,10 @@ const MinistereSection = () => {
                 <div className="w-1 h-full bg-gradient-to-b from-primary to-secondary rounded-full self-stretch min-h-[60px]" />
                 <div>
                   <p className="font-semibold text-foreground text-base md:text-lg">
-                    Le Ministre Délégué auprès du Ministre des Affaires Étrangères,
+                    {ministreInfo.titreComplet.split(",")[0]},
                   </p>
                   <p className="font-semibold text-foreground text-base md:text-lg">
-                    chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur
+                    {ministreInfo.titreComplet.split(",")[1] || ""}
                   </p>
                   <p className="text-sm text-muted-foreground mt-3 uppercase tracking-widest font-medium">
                     République de Côte d'Ivoire

@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Save, Plus, Trash2 } from "lucide-react";
 import YearSelectorAdmin from "@/components/admin/YearSelectorAdmin";
-import { useData, PilierStrategique, DashboardStat } from "@/contexts/DataContext";
+import { useData, PilierStrategique, DashboardStat, MinistreInfo } from "@/contexts/DataContext";
 import { indicators } from "@/data/indicators";
 
 interface DonneeCommerce {
@@ -45,12 +45,15 @@ export default function PageAccueil() {
     updateDashboardStats,
     availableYears: contextYears,
     addYear,
-    removeYear
+    removeYear,
+    ministreInfo: contextMinistreInfo,
+    updateMinistreInfo
   } = useData();
   const [availableYears, setAvailableYears] = useState(contextYears);
   const [selectedYear, setSelectedYear] = useState("2024");
   const [localPiliers, setLocalPiliers] = useState<PilierStrategique[]>(contextPiliers);
   const [statsData, setStatsData] = useState<DashboardStat[]>(dashboardStatsByYear[selectedYear] || []);
+  const [ministreData, setMinistreData] = useState<MinistreInfo>(contextMinistreInfo);
   
   // Sync with context
   useEffect(() => {
@@ -64,6 +67,10 @@ export default function PageAccueil() {
   useEffect(() => {
     setAvailableYears(contextYears);
   }, [contextYears]);
+
+  useEffect(() => {
+    setMinistreData(contextMinistreInfo);
+  }, [contextMinistreInfo]);
   
   const [formData, setFormData] = useState({
     titre: "ECOBASE",
@@ -100,6 +107,7 @@ export default function PageAccueil() {
   const handleSave = () => {
     updatePiliers(localPiliers);
     updateDashboardStats(selectedYear, statsData);
+    updateMinistreInfo(ministreData);
     toast({ title: "Modifications enregistrées", description: `Les données pour ${selectedYear} ont été mises à jour.` });
   };
 
@@ -160,6 +168,7 @@ export default function PageAccueil() {
 
       <Tabs defaultValue="hero" className="space-y-6">
         <TabsList className="flex-wrap">
+          <TabsTrigger value="ministre">Message du Ministre</TabsTrigger>
           <TabsTrigger value="hero">Contenu Hero</TabsTrigger>
           <TabsTrigger value="missions">Missions</TabsTrigger>
           <TabsTrigger value="documents">Documents</TabsTrigger>
@@ -168,6 +177,67 @@ export default function PageAccueil() {
           <TabsTrigger value="poids">Poids Régionaux</TabsTrigger>
           <TabsTrigger value="commerce">Commerce</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="ministre" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Message du Ministre</CardTitle>
+              <p className="text-sm text-muted-foreground">Modifiez les informations affichées dans la section "Message du Ministre" de la page d'accueil</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="ministreNom">Nom du Ministre</Label>
+                  <Input 
+                    id="ministreNom" 
+                    value={ministreData.nom} 
+                    onChange={(e) => setMinistreData({ ...ministreData, nom: e.target.value })} 
+                    placeholder="S.E.M ADAMA DOSSO"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="ministreTitre">Titre court</Label>
+                  <Input 
+                    id="ministreTitre" 
+                    value={ministreData.titre} 
+                    onChange={(e) => setMinistreData({ ...ministreData, titre: e.target.value })} 
+                    placeholder="Ministre Délégué"
+                  />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="ministreTitreComplet">Titre complet</Label>
+                <Input 
+                  id="ministreTitreComplet" 
+                  value={ministreData.titreComplet} 
+                  onChange={(e) => setMinistreData({ ...ministreData, titreComplet: e.target.value })} 
+                  placeholder="Le Ministre Délégué auprès du Ministre des Affaires Étrangères, chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur"
+                />
+                <p className="text-xs text-muted-foreground mt-1">Utilisez une virgule pour séparer les deux lignes du titre</p>
+              </div>
+              <div>
+                <Label htmlFor="ministreCitation">Citation / Message</Label>
+                <Textarea 
+                  id="ministreCitation" 
+                  rows={4} 
+                  value={ministreData.citation} 
+                  onChange={(e) => setMinistreData({ ...ministreData, citation: e.target.value })} 
+                  placeholder="Saisissez le message ou la citation du ministre..."
+                />
+              </div>
+              <div>
+                <Label htmlFor="ministrePhoto">URL de la photo (optionnel)</Label>
+                <Input 
+                  id="ministrePhoto" 
+                  value={ministreData.photoUrl} 
+                  onChange={(e) => setMinistreData({ ...ministreData, photoUrl: e.target.value })} 
+                  placeholder="https://exemple.com/photo.jpg (laisser vide pour utiliser la photo par défaut)"
+                />
+                <p className="text-xs text-muted-foreground mt-1">Laissez vide pour utiliser la photo par défaut du ministre</p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="hero" className="space-y-4">
           <Card>
