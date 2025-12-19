@@ -16,22 +16,35 @@ import { Badge } from "@/components/ui/badge";
 import { NotificationsDropdown } from "./NotificationsDropdown";
 
 export function AdminTopbar() {
-  const { user, logout } = useAuth();
+  const { user, logout, userDisplayName, role } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate("/");
   };
 
-  const getRoleBadgeVariant = (role: string) => {
-    switch (role) {
-      case "SPSE_ADMIN":
+  const getRoleBadgeVariant = (userRole: string | null) => {
+    switch (userRole) {
+      case "admin":
         return "default";
-      case "DIRECTION":
+      case "editor":
         return "secondary";
       default:
         return "outline";
+    }
+  };
+
+  const getRoleLabel = (userRole: string | null) => {
+    switch (userRole) {
+      case "admin":
+        return "Admin";
+      case "editor":
+        return "Éditeur";
+      case "viewer":
+        return "Lecteur";
+      default:
+        return userRole || "Invité";
     }
   };
 
@@ -60,9 +73,9 @@ export function AdminTopbar() {
                   <User className="h-4 w-4" />
                 </div>
                 <div className="hidden md:flex flex-col items-start">
-                  <span className="text-sm font-medium">{user?.nom}</span>
-                  <Badge variant={getRoleBadgeVariant(user?.role || "")} className="text-xs">
-                    {user?.role}
+                  <span className="text-sm font-medium">{userDisplayName || user?.email}</span>
+                  <Badge variant={getRoleBadgeVariant(role)} className="text-xs">
+                    {getRoleLabel(role)}
                   </Badge>
                 </div>
               </Button>

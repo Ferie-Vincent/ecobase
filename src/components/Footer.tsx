@@ -5,14 +5,14 @@ import { LogIn, LogOut } from "lucide-react";
 
 export const Footer = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout, userDisplayName } = useAuth();
 
   const handleAuth = () => {
     if (isAuthenticated) {
       logout();
       navigate("/");
     } else {
-      navigate("/login");
+      navigate("/auth");
     }
   };
 
@@ -28,9 +28,9 @@ export const Footer = () => {
           </div>
           
           <div className="flex items-center gap-4">
-            {isAuthenticated && user && (
+            {isAuthenticated && userDisplayName && (
               <div className="text-sm text-muted-foreground">
-                Connecté: <span className="font-medium text-foreground">{user.nom}</span>
+                Connecté: <span className="font-medium text-foreground">{userDisplayName}</span>
               </div>
             )}
             <Button onClick={handleAuth} variant={isAuthenticated ? "outline" : "default"} className="gap-2">
