@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -74,6 +75,136 @@ const partnerUrls: Record<string, string> = {
   ENABEL: "https://www.enabel.be/fr/",
   "EXPERTISE FRANCE": "https://www.expertisefrance.fr/fr",
   OFII: "https://www.ofii.fr/",
+};
+
+// Composant Section Ministre avec animation au scroll
+const MinistereSection = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section ref={sectionRef} className="py-20 relative overflow-hidden">
+      {/* Background décoratif */}
+      <div className="absolute inset-0 bg-gradient-to-br from-muted/30 via-background to-primary/5" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-5 gap-8 md:gap-16 items-center">
+            {/* Photo du Ministre - 2 colonnes */}
+            <div 
+              className={`md:col-span-2 flex justify-center transition-all duration-1000 ${
+                isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"
+              }`}
+            >
+              <div className="relative group">
+                {/* Cadre décoratif arrière */}
+                <div className="absolute -inset-3 bg-gradient-to-br from-primary/20 via-secondary/20 to-primary/20 rounded-2xl transform rotate-3 group-hover:rotate-1 transition-transform duration-500" />
+                
+                {/* Photo principale */}
+                <div className="relative w-72 h-80 md:w-80 md:h-[420px] rounded-xl overflow-hidden shadow-2xl border-4 border-white dark:border-background">
+                  <img 
+                    src={ministreDossoAdama} 
+                    alt="S.E.M ADAMA DOSSO" 
+                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {/* Overlay subtil */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                </div>
+                
+                {/* Badge nom - style plus élégant */}
+                <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-8 py-3 rounded-xl shadow-xl shadow-primary/30 transform hover:scale-105 transition-transform duration-300">
+                  <span className="font-bold text-base md:text-lg tracking-wide whitespace-nowrap">S.E.M ADAMA DOSSO</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Message - 3 colonnes */}
+            <div 
+              className={`md:col-span-3 space-y-8 pt-8 md:pt-0 transition-all duration-1000 delay-300 ${
+                isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"
+              }`}
+            >
+              {/* Titre avec ligne décorative */}
+              <div>
+                <h2 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight">
+                  Message du Ministre
+                </h2>
+                <div className="flex items-center gap-2 mt-4">
+                  <div className="w-12 h-1.5 bg-primary rounded-full" />
+                  <div className="w-6 h-1.5 bg-secondary rounded-full" />
+                </div>
+              </div>
+              
+              {/* Citation avec guillemets stylisés */}
+              <div 
+                className={`relative bg-card/50 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-border/50 shadow-lg transition-all duration-1000 delay-500 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+              >
+                {/* Guillemet ouvrant */}
+                <div className="absolute -top-4 left-6 flex">
+                  <span className="text-7xl font-serif text-primary leading-none">"</span>
+                </div>
+                
+                {/* Barre latérale colorée */}
+                <div className="absolute left-0 top-8 bottom-8 w-1 bg-gradient-to-b from-primary via-secondary to-primary rounded-full" />
+                
+                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed pl-4 pt-4 italic">
+                  L'intégration africaine et l'accompagnement de nos compatriotes de l'extérieur constituent des leviers 
+                  essentiels pour le développement de notre Nation. Ensemble, bâtissons une Côte d'Ivoire ouverte sur 
+                  l'Afrique et connectée à sa diaspora.
+                </p>
+                
+                {/* Guillemet fermant */}
+                <div className="absolute -bottom-4 right-6 flex">
+                  <span className="text-7xl font-serif text-secondary leading-none">"</span>
+                </div>
+              </div>
+
+              {/* Titre officiel - style amélioré */}
+              <div 
+                className={`flex items-start gap-4 pl-4 transition-all duration-1000 delay-700 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+              >
+                <div className="w-1 h-full bg-gradient-to-b from-primary to-secondary rounded-full self-stretch min-h-[60px]" />
+                <div>
+                  <p className="font-semibold text-foreground text-base md:text-lg">
+                    Le Ministre Délégué auprès du Ministre des Affaires Étrangères,
+                  </p>
+                  <p className="font-semibold text-foreground text-base md:text-lg">
+                    chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-3 uppercase tracking-widest font-medium">
+                    République de Côte d'Ivoire
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 const Index = () => {
@@ -200,94 +331,7 @@ const Index = () => {
       </section>
 
       {/* Message du Ministre */}
-      <section className="py-20 relative overflow-hidden">
-        {/* Background décoratif */}
-        <div className="absolute inset-0 bg-gradient-to-br from-muted/30 via-background to-primary/5" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-5 gap-8 md:gap-16 items-center">
-              {/* Photo du Ministre - 2 colonnes */}
-              <div className="md:col-span-2 flex justify-center">
-                <div className="relative group">
-                  {/* Cadre décoratif arrière */}
-                  <div className="absolute -inset-3 bg-gradient-to-br from-primary/20 via-secondary/20 to-primary/20 rounded-2xl transform rotate-3 group-hover:rotate-1 transition-transform duration-500" />
-                  
-                  {/* Photo principale */}
-                  <div className="relative w-72 h-80 md:w-80 md:h-[420px] rounded-xl overflow-hidden shadow-2xl border-4 border-white dark:border-background">
-                    <img 
-                      src={ministreDossoAdama} 
-                      alt="Ministre DOSSO ADAMA" 
-                      className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                    />
-                    {/* Overlay subtil */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                  </div>
-                  
-                  {/* Badge nom - style plus élégant */}
-                  <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-8 py-3 rounded-xl shadow-xl shadow-primary/30 transform hover:scale-105 transition-transform duration-300">
-                    <span className="font-bold text-base md:text-lg tracking-wide whitespace-nowrap">DOSSO ADAMA</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Message - 3 colonnes */}
-              <div className="md:col-span-3 space-y-8 pt-8 md:pt-0">
-                {/* Titre avec ligne décorative */}
-                <div>
-                  <h2 className="text-3xl md:text-5xl font-bold text-foreground tracking-tight">
-                    Message du Ministre
-                  </h2>
-                  <div className="flex items-center gap-2 mt-4">
-                    <div className="w-12 h-1.5 bg-primary rounded-full" />
-                    <div className="w-6 h-1.5 bg-secondary rounded-full" />
-                  </div>
-                </div>
-                
-                {/* Citation avec guillemets stylisés */}
-                <div className="relative bg-card/50 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-border/50 shadow-lg">
-                  {/* Guillemet ouvrant */}
-                  <div className="absolute -top-4 left-6 flex">
-                    <span className="text-7xl font-serif text-primary leading-none">"</span>
-                  </div>
-                  
-                  {/* Barre latérale colorée */}
-                  <div className="absolute left-0 top-8 bottom-8 w-1 bg-gradient-to-b from-primary via-secondary to-primary rounded-full" />
-                  
-                  <p className="text-lg md:text-xl text-muted-foreground leading-relaxed pl-4 pt-4 italic">
-                    L'intégration africaine et l'accompagnement de nos compatriotes de l'extérieur constituent des leviers 
-                    essentiels pour le développement de notre Nation. Ensemble, bâtissons une Côte d'Ivoire ouverte sur 
-                    l'Afrique et connectée à sa diaspora.
-                  </p>
-                  
-                  {/* Guillemet fermant */}
-                  <div className="absolute -bottom-4 right-6 flex">
-                    <span className="text-7xl font-serif text-secondary leading-none">"</span>
-                  </div>
-                </div>
-
-                {/* Titre officiel - style amélioré */}
-                <div className="flex items-start gap-4 pl-4">
-                  <div className="w-1 h-full bg-gradient-to-b from-primary to-secondary rounded-full self-stretch min-h-[60px]" />
-                  <div>
-                    <p className="font-semibold text-foreground text-base md:text-lg">
-                      Le Ministre Délégué auprès du Ministre des Affaires Étrangères,
-                    </p>
-                    <p className="font-semibold text-foreground text-base md:text-lg">
-                      chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-3 uppercase tracking-widest font-medium">
-                      République de Côte d'Ivoire
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <MinistereSection />
 
       {/* Aperçu Rapide - Mini Charts */}
       <section className="container mx-auto px-4 py-8">
