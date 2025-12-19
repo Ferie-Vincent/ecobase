@@ -14,7 +14,171 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      dashboard_stats: {
+        Row: {
+          annee: string
+          categorie: string
+          created_at: string
+          id: string
+          nom: string
+          tendance: string | null
+          unite: string | null
+          updated_at: string
+          valeur: string
+        }
+        Insert: {
+          annee: string
+          categorie: string
+          created_at?: string
+          id?: string
+          nom: string
+          tendance?: string | null
+          unite?: string | null
+          updated_at?: string
+          valeur: string
+        }
+        Update: {
+          annee?: string
+          categorie?: string
+          created_at?: string
+          id?: string
+          nom?: string
+          tendance?: string | null
+          unite?: string | null
+          updated_at?: string
+          valeur?: string
+        }
+        Relationships: []
+      }
+      ministre_info: {
+        Row: {
+          citation: string
+          created_at: string
+          id: string
+          nom: string
+          photo_url: string | null
+          titre: string
+          titre_complet: string
+          updated_at: string
+        }
+        Insert: {
+          citation?: string
+          created_at?: string
+          id?: string
+          nom?: string
+          photo_url?: string | null
+          titre?: string
+          titre_complet?: string
+          updated_at?: string
+        }
+        Update: {
+          citation?: string
+          created_at?: string
+          id?: string
+          nom?: string
+          photo_url?: string | null
+          titre?: string
+          titre_complet?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      partenaires: {
+        Row: {
+          created_at: string
+          id: string
+          logo_url: string | null
+          nom: string
+          sigle: string
+          statut: string
+          type: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          nom: string
+          sigle: string
+          statut?: string
+          type: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          nom?: string
+          sigle?: string
+          statut?: string
+          type?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
+      piliers_strategiques: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          icone: string
+          id: string
+          ordre: number
+          titre: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          icone?: string
+          id?: string
+          ordre?: number
+          titre: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          icone?: string
+          id?: string
+          ordre?: number
+          titre?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      poids_regionaux: {
+        Row: {
+          created_at: string
+          id: string
+          nom: string
+          unite: string
+          updated_at: string
+          valeur: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nom: string
+          unite?: string
+          updated_at?: string
+          valeur: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nom?: string
+          unite?: string
+          updated_at?: string
+          valeur?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
