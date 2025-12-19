@@ -12,7 +12,7 @@ import Diaspora from "./pages/Diaspora";
 import Circulation from "./pages/Circulation";
 import Performance from "./pages/Performance";
 import DocumentsRapports from "./pages/DocumentsRapports";
-import Login from "./pages/Login";
+import Auth from "./pages/Auth";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import PageAccueil from "./pages/admin/PageAccueil";
@@ -56,7 +56,8 @@ const App = () => {
                             <Route path="/circulation" element={<><Navigation /><Circulation /></>} />
                             <Route path="/performance" element={<><Navigation /><Performance /></>} />
                             <Route path="/documents-rapports" element={<><Navigation /><DocumentsRapports /></>} />
-                            <Route path="/login" element={<Login />} />
+                            <Route path="/auth" element={<Auth />} />
+                            <Route path="/login" element={<Auth />} />
                             
                             {/* Admin routes */}
                             <Route path="/admin" element={<AdminLayout />}>
