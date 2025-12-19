@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Building2, Loader2 } from "lucide-react";
 import { z } from "zod";
@@ -15,22 +14,13 @@ const loginSchema = z.object({
   password: z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères"),
 });
 
-const signupSchema = z.object({
-  email: z.string().email("Email invalide"),
-  password: z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères"),
-  fullName: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
-});
-
 export default function Auth() {
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [signupEmail, setSignupEmail] = useState("");
-  const [signupPassword, setSignupPassword] = useState("");
-  const [signupFullName, setSignupFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   
-  const { login, signup, isAuthenticated, loading } = useAuth();
+  const { login, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -45,13 +35,13 @@ export default function Auth() {
     setErrors({});
     
     try {
-      loginSchema.parse({ email: loginEmail, password: loginPassword });
+      loginSchema.parse({ email, password });
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {};
         error.errors.forEach((err) => {
           if (err.path[0]) {
-            fieldErrors[`login_${err.path[0]}`] = err.message;
+            fieldErrors[String(err.path[0])] = err.message;
           }
         });
         setErrors(fieldErrors);
@@ -60,7 +50,7 @@ export default function Auth() {
     }
 
     setIsLoading(true);
-    const { error } = await login(loginEmail, loginPassword);
+    const { error } = await login(email, password);
     setIsLoading(false);
 
     if (error) {
@@ -82,58 +72,6 @@ export default function Auth() {
         description: "Bienvenue dans le backoffice ECOBASE",
       });
       navigate("/admin");
-    }
-  };
-
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
-    
-    try {
-      signupSchema.parse({ 
-        email: signupEmail, 
-        password: signupPassword, 
-        fullName: signupFullName 
-      });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const fieldErrors: Record<string, string> = {};
-        error.errors.forEach((err) => {
-          if (err.path[0]) {
-            fieldErrors[`signup_${err.path[0]}`] = err.message;
-          }
-        });
-        setErrors(fieldErrors);
-        return;
-      }
-    }
-
-    setIsLoading(true);
-    const { error } = await signup(signupEmail, signupPassword, signupFullName);
-    setIsLoading(false);
-
-    if (error) {
-      let message = "Erreur lors de l'inscription";
-      if (error.message.includes("User already registered")) {
-        message = "Un compte existe déjà avec cet email";
-      } else if (error.message.includes("Password should")) {
-        message = "Le mot de passe doit contenir au moins 6 caractères";
-      }
-      
-      toast({
-        title: "Erreur d'inscription",
-        description: message,
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Inscription réussie",
-        description: "Vous pouvez maintenant vous connecter",
-      });
-      // Reset form and switch to login tab
-      setSignupEmail("");
-      setSignupPassword("");
-      setSignupFullName("");
     }
   };
 
@@ -160,118 +98,52 @@ export default function Auth() {
           </div>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Connexion</TabsTrigger>
-              <TabsTrigger value="signup">Inscription</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="login">
-              <form onSubmit={handleLogin} className="space-y-4 mt-4">
-                <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
-                  <Input
-                    id="login-email"
-                    type="email"
-                    placeholder="exemple@exemple.ci"
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                    required
-                  />
-                  {errors.login_email && (
-                    <p className="text-sm text-destructive">{errors.login_email}</p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="login-password">Mot de passe</Label>
-                  <Input
-                    id="login-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                    required
-                  />
-                  {errors.login_password && (
-                    <p className="text-sm text-destructive">{errors.login_password}</p>
-                  )}
-                </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Connexion...
-                    </>
-                  ) : (
-                    "Se connecter"
-                  )}
-                </Button>
-              </form>
-            </TabsContent>
-            
-            <TabsContent value="signup">
-              <form onSubmit={handleSignup} className="space-y-4 mt-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-name">Nom complet</Label>
-                  <Input
-                    id="signup-name"
-                    type="text"
-                    placeholder="Jean Dupont"
-                    value={signupFullName}
-                    onChange={(e) => setSignupFullName(e.target.value)}
-                    required
-                  />
-                  {errors.signup_fullName && (
-                    <p className="text-sm text-destructive">{errors.signup_fullName}</p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="exemple@exemple.ci"
-                    value={signupEmail}
-                    onChange={(e) => setSignupEmail(e.target.value)}
-                    required
-                  />
-                  {errors.signup_email && (
-                    <p className="text-sm text-destructive">{errors.signup_email}</p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Mot de passe</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={signupPassword}
-                    onChange={(e) => setSignupPassword(e.target.value)}
-                    required
-                  />
-                  {errors.signup_password && (
-                    <p className="text-sm text-destructive">{errors.signup_password}</p>
-                  )}
-                </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Inscription...
-                    </>
-                  ) : (
-                    "S'inscrire"
-                  )}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="exemple@exemple.ci"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              {errors.email && (
+                <p className="text-sm text-destructive">{errors.email}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Mot de passe</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              {errors.password && (
+                <p className="text-sm text-destructive">{errors.password}</p>
+              )}
+            </div>
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Connexion...
+                </>
+              ) : (
+                "Se connecter"
+              )}
+            </Button>
+          </form>
 
           <div className="mt-6 space-y-2 rounded-lg bg-muted p-4">
             <p className="text-sm font-medium text-muted-foreground">Information :</p>
             <p className="text-xs text-muted-foreground">
-              Les nouveaux comptes reçoivent le rôle "viewer" par défaut. 
-              Contactez un administrateur pour obtenir des permissions supplémentaires.
+              Les comptes sont créés par les administrateurs. 
+              Contactez votre administrateur si vous n'avez pas de compte.
             </p>
           </div>
         </CardContent>

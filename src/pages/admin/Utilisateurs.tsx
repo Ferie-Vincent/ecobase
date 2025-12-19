@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,40 +13,85 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, Plus, UserCog, Trash2 } from "lucide-react";
-import { utilisateurs, structures_internes, Utilisateur } from "@/data/seedData";
+import { Search, Plus, UserCog, Trash2, RefreshCw } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+
+interface UserWithRole {
+  id: string;
+  email: string;
+  full_name: string | null;
+  role: string | null;
+  created_at: string;
+}
 
 export default function Utilisateurs() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; user: Utilisateur | null }>({
+  const [users, setUsers] = useState<UserWithRole[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; user: UserWithRole | null }>({
     open: false,
     user: null,
   });
   const { hasRole } = useAuth();
   const { toast } = useToast();
 
-  const filteredUtilisateurs = utilisateurs.filter(u =>
-    u.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const fetchUsers = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const { data: profiles, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, email, full_name, created_at');
+
+      if (profilesError) throw profilesError;
+
+      const { data: roles, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('user_id, role');
+
+      if (rolesError) throw rolesError;
+
+      const usersWithRoles: UserWithRole[] = (profiles || []).map(profile => ({
+        ...profile,
+        role: roles?.find(r => r.user_id === profile.id)?.role || null
+      }));
+
+      setUsers(usersWithRoles);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de charger les utilisateurs",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [toast]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  const filteredUsers = users.filter(u =>
+    (u.full_name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
     u.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const getRoleBadge = (role: string) => {
-    const variants: Record<string, "default" | "secondary" | "outline"> = {
-      "SPSE_ADMIN": "default",
-      "DIRECTION": "secondary",
-      "POINT_FOCAL": "outline",
-      "LECTEUR": "outline"
+  const getRoleBadge = (role: string | null) => {
+    const roleConfig: Record<string, { label: string; variant: "default" | "secondary" | "outline" }> = {
+      "admin": { label: "Admin", variant: "default" },
+      "editor": { label: "Éditeur", variant: "secondary" },
+      "viewer": { label: "Lecteur", variant: "outline" }
     };
-    return <Badge variant={variants[role] || "outline"}>{role}</Badge>;
+    const config = roleConfig[role || ""] || { label: role || "Non défini", variant: "outline" as const };
+    return <Badge variant={config.variant}>{config.label}</Badge>;
   };
 
-  const getStructureName = (structureId: string) => {
-    const structure = structures_internes.find(s => s.id === structureId);
-    return structure?.nom || structureId;
-  };
+  const statsAdmin = users.filter(u => u.role === 'admin').length;
+  const statsEditor = users.filter(u => u.role === 'editor').length;
 
   return (
     <div className="space-y-6">
@@ -55,38 +100,44 @@ export default function Utilisateurs() {
           <h1 className="text-3xl font-bold text-foreground">Utilisateurs & Rôles</h1>
           <p className="text-muted-foreground">Gestion des accès au backoffice</p>
         </div>
-        {hasRole("SPSE_ADMIN") && (
-          <Button onClick={() => setIsCreateModalOpen(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Nouvel utilisateur
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={fetchUsers} disabled={isLoading}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            Actualiser
           </Button>
-        )}
+          {hasRole("admin") && (
+            <Button onClick={() => setIsCreateModalOpen(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Nouvel utilisateur
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Stats rapides */}
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold">{utilisateurs.length}</div>
+            <div className="text-2xl font-bold">{users.length}</div>
             <p className="text-sm text-muted-foreground">Total utilisateurs</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold">{utilisateurs.filter(u => u.role === "SPSE_ADMIN").length}</div>
+            <div className="text-2xl font-bold">{statsAdmin}</div>
             <p className="text-sm text-muted-foreground">Administrateurs</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold">{utilisateurs.filter(u => u.role === "DIRECTION").length}</div>
-            <p className="text-sm text-muted-foreground">Directions</p>
+            <div className="text-2xl font-bold">{statsEditor}</div>
+            <p className="text-sm text-muted-foreground">Éditeurs</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold">{utilisateurs.filter(u => u.statut === "Actif").length}</div>
-            <p className="text-sm text-muted-foreground">Actifs</p>
+            <div className="text-2xl font-bold">{users.filter(u => u.role === 'viewer').length}</div>
+            <p className="text-sm text-muted-foreground">Lecteurs</p>
           </CardContent>
         </Card>
       </div>
@@ -103,7 +154,7 @@ export default function Utilisateurs() {
                 className="pl-9"
               />
             </div>
-            <Badge variant="outline">{filteredUtilisateurs.length} résultats</Badge>
+            <Badge variant="outline">{filteredUsers.length} résultats</Badge>
           </div>
         </CardHeader>
         <CardContent>
@@ -112,62 +163,72 @@ export default function Utilisateurs() {
               <TableRow>
                 <TableHead>Nom</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead>Structure</TableHead>
                 <TableHead>Rôle</TableHead>
-                <TableHead>Statut</TableHead>
-                <TableHead>Dernière activité</TableHead>
+                <TableHead>Date d'inscription</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUtilisateurs.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.nom}</TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{user.email}</TableCell>
-                  <TableCell className="text-sm">{getStructureName(user.structure_id)}</TableCell>
-                  <TableCell>{getRoleBadge(user.role)}</TableCell>
-                  <TableCell>
-                    <Badge variant={user.statut === "Actif" ? "default" : "outline"}>
-                      {user.statut}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {user.derniere_activite ? new Date(user.derniere_activite).toLocaleDateString('fr-FR') : "-"}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {hasRole("SPSE_ADMIN") && (
-                      <div className="flex justify-end gap-2">
-                        <Button variant="ghost" size="icon">
-                          <UserCog className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="icon"
-                          onClick={() => setDeleteDialog({ open: true, user })}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </div>
-                    )}
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                    Chargement...
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : filteredUsers.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                    Aucun utilisateur trouvé
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredUsers.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell className="font-medium">{user.full_name || "-"}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{user.email}</TableCell>
+                    <TableCell>{getRoleBadge(user.role)}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {new Date(user.created_at).toLocaleDateString('fr-FR')}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {hasRole("admin") && (
+                        <div className="flex justify-end gap-2">
+                          <Button variant="ghost" size="icon">
+                            <UserCog className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            onClick={() => setDeleteDialog({ open: true, user })}
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
 
-      <CreateUtilisateurModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
+      <CreateUtilisateurModal 
+        open={isCreateModalOpen} 
+        onOpenChange={setIsCreateModalOpen}
+        onUserCreated={fetchUsers}
+      />
       
       <DeleteConfirmDialog
         open={deleteDialog.open}
         onOpenChange={(open) => setDeleteDialog({ open, user: null })}
         title="Supprimer l'utilisateur"
-        description={`Êtes-vous sûr de vouloir supprimer l'utilisateur "${deleteDialog.user?.nom}" ? Cette action est irréversible.`}
+        description={`Êtes-vous sûr de vouloir supprimer l'utilisateur "${deleteDialog.user?.full_name || deleteDialog.user?.email}" ? Cette action est irréversible.`}
         onConfirm={() => {
           toast({
-            title: "Utilisateur supprimé",
-            description: `L'utilisateur ${deleteDialog.user?.nom} a été supprimé.`,
+            title: "Fonctionnalité à venir",
+            description: "La suppression d'utilisateurs sera disponible prochainement.",
           });
           setDeleteDialog({ open: false, user: null });
         }}
