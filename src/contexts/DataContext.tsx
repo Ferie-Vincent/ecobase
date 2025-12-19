@@ -57,6 +57,14 @@ export interface PoidsRegional {
   unite: string;
 }
 
+export interface MinistreInfo {
+  nom: string;
+  titre: string;
+  titreComplet: string;
+  citation: string;
+  photoUrl: string;
+}
+
 export interface DashboardStat {
   id: string;
   nom: string;
@@ -95,6 +103,9 @@ interface DataState {
   // Statistiques dashboard par année
   dashboardStatsByYear: Record<string, DashboardStat[]>;
   
+  // Infos Ministre
+  ministreInfo: MinistreInfo;
+  
   // Années disponibles
   availableYears: string[];
 }
@@ -130,6 +141,9 @@ interface DataActions {
   
   // Dashboard stats
   updateDashboardStats: (year: string, stats: DashboardStat[]) => void;
+  
+  // Ministre
+  updateMinistreInfo: (info: MinistreInfo) => void;
   
   // Années
   addYear: (year: string) => void;
@@ -362,6 +376,14 @@ const initialStudentsData: Record<string, StudentData[]> = {
   ]
 };
 
+const initialMinistreInfo: MinistreInfo = {
+  nom: "S.E.M ADAMA DOSSO",
+  titre: "Ministre Délégué",
+  titreComplet: "Le Ministre Délégué auprès du Ministre des Affaires Étrangères, chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur",
+  citation: "L'intégration africaine et l'accompagnement de nos compatriotes de l'extérieur constituent des leviers essentiels pour le développement de notre Nation. Ensemble, bâtissons une Côte d'Ivoire ouverte sur l'Afrique et connectée à sa diaspora.",
+  photoUrl: ""
+};
+
 export function DataProvider({ children }: { children: ReactNode }) {
   const [integrationIndicatorsByYear, setIntegrationIndicatorsByYear] = useState(initialIntegrationIndicators);
   const [diasporaIndicatorsByYear, setDiasporaIndicatorsByYear] = useState(initialDiasporaIndicators);
@@ -374,6 +396,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [piliers, setPiliers] = useState(initialPiliers);
   const [poidsRegionaux, setPoidsRegionaux] = useState(initialPoidsRegionaux);
   const [dashboardStatsByYear, setDashboardStatsByYear] = useState(initialDashboardStats);
+  const [ministreInfo, setMinistreInfo] = useState(initialMinistreInfo);
   const [availableYears, setAvailableYears] = useState(["2024", "2023", "2022", "2021", "2020"]);
 
   // Actions
@@ -433,6 +456,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setDashboardStatsByYear(prev => ({ ...prev, [year]: stats }));
   };
 
+  const updateMinistreInfo = (info: MinistreInfo) => {
+    setMinistreInfo(info);
+  };
+
   const addYear = (year: string) => {
     if (!availableYears.includes(year)) {
       setAvailableYears(prev => [...prev, year].sort().reverse());
@@ -455,6 +482,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     piliers,
     poidsRegionaux,
     dashboardStatsByYear,
+    ministreInfo,
     availableYears,
     updateIntegrationIndicators,
     updateDiasporaIndicators,
@@ -470,6 +498,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     updatePiliers,
     updatePoidsRegionaux,
     updateDashboardStats,
+    updateMinistreInfo,
     addYear,
     removeYear
   };
