@@ -13,6 +13,7 @@ import Circulation from "./pages/Circulation";
 import Performance from "./pages/Performance";
 import DocumentsRapports from "./pages/DocumentsRapports";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import PageAccueil from "./pages/admin/PageAccueil";
@@ -58,6 +59,7 @@ const App = () => {
                             <Route path="/documents-rapports" element={<><Navigation /><DocumentsRapports /></>} />
                             <Route path="/auth" element={<Auth />} />
                             <Route path="/login" element={<Auth />} />
+                            <Route path="/reset-password" element={<ResetPassword />} />
                             
                             {/* Admin routes */}
                             <Route path="/admin" element={<AdminLayout />}>

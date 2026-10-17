@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { Building2, Loader2 } from "lucide-react";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 
 const loginSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -19,6 +20,7 @@ export default function Auth() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [forgotMode, setForgotMode] = useState(false);
   
   const { login, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
@@ -75,10 +77,96 @@ export default function Auth() {
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+
+    if (!email || !z.string().email().safeParse(email).success) {
+      setErrors({ email: "Email invalide" });
+      return;
+    }
+
+    setIsLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setIsLoading(false);
+
+    if (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible d'envoyer l'email de réinitialisation. Réessayez dans quelques instants.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Email envoyé",
+        description: "Si un compte existe avec cet email, vous recevrez un lien pour définir un nouveau mot de passe.",
+      });
+      setForgotMode(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (forgotMode) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <Building2 className="h-6 w-6" />
+              </div>
+              <div>
+                <CardTitle className="text-2xl">Mot de passe oublié</CardTitle>
+                <CardDescription>Recevez un lien de réinitialisation par email</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleForgotPassword} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="reset-email">Email</Label>
+                <Input
+                  id="reset-email"
+                  type="email"
+                  placeholder="exemple@exemple.ci"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                {errors.email && (
+                  <p className="text-sm text-destructive">{errors.email}</p>
+                )}
+              </div>
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Envoi...
+                  </>
+                ) : (
+                  "Envoyer le lien de réinitialisation"
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full"
+                onClick={() => { setForgotMode(false); setErrors({}); }}
+              >
+                Retour à la connexion
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     );
   }
