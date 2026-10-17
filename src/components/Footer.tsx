@@ -113,7 +113,7 @@ export const Footer = () => {
               </div>
 
               <div className="w-full max-w-md">
-                <form onSubmit={subscribe} className="flex flex-col gap-3 sm:flex-row">
+                <form onSubmit={subscribe} noValidate className="flex flex-col gap-3 sm:flex-row">
                   <div className="relative flex-1">
                     <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-footer-foreground/60" />
                     <input
