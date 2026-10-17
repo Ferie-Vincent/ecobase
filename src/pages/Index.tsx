@@ -889,7 +889,7 @@ const Index = () => {
                         <ArrowUpRight className="absolute top-3 right-3 w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                         <div className="h-16 w-full flex items-center justify-center mb-3">
                           {logo ? (
-                            <img src={logo} alt={p.sigle} className="max-h-full max-w-[80%] object-contain grayscale opacity-80 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100" />
+                            <img src={logo} alt={p.sigle} className="max-h-full max-w-[80%] object-contain transition-transform duration-300 group-hover:scale-110" />
                           ) : (
                             <g.icon className="w-10 h-10 text-muted-foreground" />
                           )}
