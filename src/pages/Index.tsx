@@ -889,7 +889,7 @@ const Index = () => {
                         className={`group relative rounded-2xl border border-border bg-background p-5 flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-soft hover:border-foreground/20 ${g.itemClass?.(i) ?? ""}`}
                       >
                         <ArrowUpRight className="absolute top-3 right-3 w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <div className="h-28 w-full flex items-center justify-center">
+                        <div className={`w-full flex items-center justify-center ${g.logoH}`}>
                           {logo ? (
                             <img src={logo} alt={p.sigle} className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105" />
                           ) : (
