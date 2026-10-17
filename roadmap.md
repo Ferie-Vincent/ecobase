@@ -1,7 +1,7 @@
 # Roadmap
 
 ## En cours
-- (rien)
+- [ ] Menu de navigation : redesign (état actif, bouton Espace administration, menu mobile burger)
 
 ## Terminé
 - [x] Pied de page : bannière newsletter (inscriptions enregistrées en base), bandeau tricolore, corps sombre 4 colonnes, barre copyright, bouton retour en haut
