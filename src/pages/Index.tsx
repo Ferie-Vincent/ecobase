@@ -237,6 +237,14 @@ const Index = () => {
     return iconMap[sigle] || Building2;
   };
 
+  const byType = (...t: string[]) => partners.filter((p) => t.includes(p.type));
+  const groups = [
+    { key: "nat", label: "Nationales", icon: Building2, tone: "bg-primary/10 text-primary", dot: "bg-primary", span: "lg:col-span-12", grid: "grid-cols-2 md:grid-cols-4", items: byType("National", "Nationale") },
+    { key: "reg", label: "Régionales", icon: Network, tone: "bg-foreground/5 text-foreground", dot: "bg-foreground", span: "lg:col-span-4", grid: "grid-cols-2 lg:grid-cols-1", items: byType("Régional", "Régionale") },
+    { key: "int", label: "Internationales", icon: Globe2, tone: "bg-secondary/10 text-secondary", dot: "bg-secondary", span: "lg:col-span-8", grid: "grid-cols-2 md:grid-cols-6", items: byType("International", "Internationale"),
+      itemClass: (i: number) => "md:col-span-2" + (i === 3 ? " md:col-start-2" : "") },
+  ] as { key: string; label: string; icon: any; tone: string; dot: string; span: string; grid: string; items: typeof partners; itemClass?: (i: number) => string }[];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Bento */}
@@ -833,25 +841,40 @@ const Index = () => {
         </section>
 
         {/* Partenaires Techniques Section */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-            <Users className="w-8 h-8 text-primary transition-transform duration-300 hover:scale-110" />
-            Partenaires Techniques
-          </h2>
+        <section className="mb-16">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground mb-3">
+                <Users className="w-3.5 h-3.5" /> Écosystème
+              </span>
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">Partenaires Techniques</h2>
+              <p className="text-muted-foreground mt-2 max-w-xl">Les institutions qui alimentent et accompagnent ECOBASE. Cliquez sur un logo pour visiter leur site.</p>
+            </div>
+            <div className="flex gap-2 text-sm">
+              {groups.map((g) => (
+                <span key={g.key} className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5">
+                  <span className={`w-2 h-2 rounded-full ${g.dot}`} />
+                  <span className="font-semibold text-foreground">{g.items.length}</span>
+                  <span className="text-muted-foreground">{g.label}</span>
+                </span>
+              ))}
+            </div>
+          </div>
 
-          {/* Nationales */}
-          <Card className="mb-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 bg-card/60 backdrop-blur-sm border-border/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-xl">
-                <Building2 className="w-6 h-6 text-primary transition-transform duration-300 hover:scale-110" />
-                Nationales
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {partners
-                  .filter((p) => p.type === "National" || p.type === "Nationale")
-                  .map((p) => {
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            {groups.map((g) => (
+              <div key={g.key} className={`rounded-3xl border border-border bg-card p-6 ${g.span}`}>
+                <div className="flex items-center gap-3 mb-5">
+                  <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${g.tone}`}>
+                    <g.icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-foreground">{g.label}</h3>
+                    <p className="text-xs text-muted-foreground">{g.items.length} partenaire{g.items.length > 1 ? "s" : ""}</p>
+                  </div>
+                </div>
+                <div className={`grid gap-3 ${g.grid}`}>
+                  {g.items.map((p, i) => {
                     const logo = partnerLogos[p.sigle];
                     const url = p.url || partnerUrls[p.sigle];
                     return (
@@ -860,114 +883,27 @@ const Index = () => {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-4 rounded-lg bg-background hover:bg-primary/5 hover:border-primary/30 border border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group flex flex-col items-center text-center no-underline"
+                        title={p.nom}
+                        className={`group relative rounded-2xl border border-border bg-background p-4 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-soft hover:border-foreground/20 ${g.itemClass?.(i) ?? ""}`}
                       >
-                        <div className="w-16 h-16 flex items-center justify-center mb-3">
+                        <ArrowUpRight className="absolute top-3 right-3 w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="h-16 w-full flex items-center justify-center mb-3">
                           {logo ? (
-                            <img src={logo} alt={p.sigle} className="max-w-full max-h-full object-contain" />
+                            <img src={logo} alt={p.sigle} className="max-h-full max-w-[80%] object-contain transition-transform duration-300 group-hover:scale-110" />
                           ) : (
-                            <Building2 className="w-10 h-10 text-primary" />
+                            <g.icon className="w-10 h-10 text-muted-foreground" />
                           )}
                         </div>
-                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-primary">
-                          {p.sigle}
-                        </p>
-                        <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground mt-1">
-                          {p.nom}
-                        </p>
+                        <p className="font-semibold text-sm text-foreground">{p.sigle}</p>
+                        <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{p.nom}</p>
                       </a>
                     );
                   })}
+                </div>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Régionales */}
-          <Card className="mb-6 transition-all duration-300 hover:shadow-xl hover:shadow-accent/10 bg-card/60 backdrop-blur-sm border-border/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-xl">
-                <Network className="w-6 h-6 text-accent transition-transform duration-300 hover:scale-110" />
-                Régionales
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4">
-                {partners
-                  .filter((p) => p.type === "Régional" || p.type === "Régionale")
-                  .map((p) => {
-                    const logo = partnerLogos[p.sigle];
-                    const url = p.url || partnerUrls[p.sigle];
-                    return (
-                      <a
-                        key={p.id}
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-4 rounded-lg bg-background hover:bg-accent/5 hover:border-accent/30 border border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group flex flex-col items-center text-center no-underline"
-                      >
-                        <div className="w-16 h-16 flex items-center justify-center mb-3">
-                          {logo ? (
-                            <img src={logo} alt={p.sigle} className="max-w-full max-h-full object-contain" />
-                          ) : (
-                            <Network className="w-10 h-10 text-accent" />
-                          )}
-                        </div>
-                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-accent">
-                          {p.sigle}
-                        </p>
-                        <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground mt-1">
-                          {p.nom}
-                        </p>
-                      </a>
-                    );
-                  })}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Internationales */}
-          <Card className="transition-all duration-300 hover:shadow-xl hover:shadow-secondary/10 bg-card/60 backdrop-blur-sm border-border/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-xl">
-                <Globe2 className="w-6 h-6 text-secondary transition-transform duration-300 hover:rotate-180" />
-                Internationales
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-4">
-                {partners
-                  .filter((p) => p.type === "International" || p.type === "Internationale")
-                  .map((p) => {
-                    const logo = partnerLogos[p.sigle];
-                    const url = p.url || partnerUrls[p.sigle];
-                    return (
-                      <a
-                        key={p.id}
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-4 rounded-lg bg-background hover:bg-secondary/5 hover:border-secondary/30 border border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-pointer group flex flex-col items-center text-center no-underline"
-                      >
-                        <div className="w-16 h-16 flex items-center justify-center mb-3">
-                          {logo ? (
-                            <img src={logo} alt={p.sigle} className="max-w-full max-h-full object-contain" />
-                          ) : (
-                            <Globe2 className="w-10 h-10 text-secondary" />
-                          )}
-                        </div>
-                        <p className="font-semibold text-sm transition-colors duration-300 group-hover:text-secondary">
-                          {p.sigle}
-                        </p>
-                        <p className="text-xs text-muted-foreground transition-colors duration-300 group-hover:text-foreground mt-1">
-                          {p.nom}
-                        </p>
-                      </a>
-                    );
-                  })}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+            ))}
+          </div>
+        </section>
       </div>
 
       <Footer />
