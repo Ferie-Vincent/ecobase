@@ -672,7 +672,7 @@ const Index = () => {
             {piliers.map((pilier) => (
               <Card
                 key={pilier.id}
-                className="transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/50 cursor-pointer group bg-card/60 backdrop-blur-sm border-border/50"
+                className="rounded-3xl transition-all duration-300 hover:-translate-y-1 hover:shadow-soft hover:border-primary/40 cursor-pointer group bg-card border-border"
               >
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between transition-colors duration-300 group-hover:text-primary">
