@@ -141,15 +141,17 @@ export const Footer = () => {
                   className={`mt-2 flex items-center gap-1.5 text-xs ${
                     status === "ok"
                       ? "text-footer-foreground"
-                      : status === "error"
+                      : status === "invalid" || status === "error"
                         ? "text-primary"
                         : "text-footer-foreground/70"
                   }`}
                 >
                   {status === "ok" ? (
                     <>Merci, votre inscription est bien enregistrée.</>
-                  ) : status === "error" ? (
+                  ) : status === "invalid" ? (
                     <>Merci de saisir une adresse e-mail valide.</>
+                  ) : status === "error" ? (
+                    <>Une erreur est survenue. Merci de réessayer dans un instant.</>
                   ) : (
                     <>
                       <ShieldCheck className="h-3.5 w-3.5" />
@@ -157,6 +159,7 @@ export const Footer = () => {
                     </>
                   )}
                 </p>
+
               </div>
             </div>
           </div>
