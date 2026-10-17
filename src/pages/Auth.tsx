@@ -115,6 +115,62 @@ export default function Auth() {
     );
   }
 
+  if (forgotMode) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <Building2 className="h-6 w-6" />
+              </div>
+              <div>
+                <CardTitle className="text-2xl">Mot de passe oublié</CardTitle>
+                <CardDescription>Recevez un lien de réinitialisation par email</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleForgotPassword} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="reset-email">Email</Label>
+                <Input
+                  id="reset-email"
+                  type="email"
+                  placeholder="exemple@exemple.ci"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                {errors.email && (
+                  <p className="text-sm text-destructive">{errors.email}</p>
+                )}
+              </div>
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Envoi...
+                  </>
+                ) : (
+                  "Envoyer le lien de réinitialisation"
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full"
+                onClick={() => { setForgotMode(false); setErrors({}); }}
+              >
+                Retour à la connexion
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
       <Card className="w-full max-w-md">
