@@ -278,7 +278,7 @@ export const Footer = () => {
 
           {/* Barre inférieure */}
           <div className="border-t border-footer-border">
-            <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 py-5 text-center md:flex-row md:text-left">
+            <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 py-5 pb-24 text-center md:flex-row md:items-center md:pb-5 md:pr-24 md:text-left">
               <p className="text-xs text-footer-muted">
                 © Copyright ECOBASE – {new Date().getFullYear()} | Base de données socioéconomique et technique |
                 Tous droits réservés
