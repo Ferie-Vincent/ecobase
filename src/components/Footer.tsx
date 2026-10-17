@@ -78,7 +78,10 @@ export const Footer = () => {
       return;
     }
     setStatus("sending");
-    const { error } = await supabase.from("newsletter_subscribers").insert({ email: value });
+    const { error } = await supabase
+      .from("newsletter_subscribers")
+      .upsert({ email: value }, { onConflict: "email" });
+
     if (error) {
       setStatus("error");
       return;
