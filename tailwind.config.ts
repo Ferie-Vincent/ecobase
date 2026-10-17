@@ -47,8 +47,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        footer: {
+          DEFAULT: "hsl(var(--footer-bg))",
+          foreground: "hsl(var(--footer-fg))",
+          muted: "hsl(var(--footer-muted))",
+          border: "hsl(var(--footer-border))",
+          surface: "hsl(var(--footer-surface))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
+
           foreground: "hsl(var(--sidebar-foreground))",
           primary: "hsl(var(--sidebar-primary))",
           "primary-foreground": "hsl(var(--sidebar-primary-foreground))",

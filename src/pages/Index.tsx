@@ -239,11 +239,12 @@ const Index = () => {
 
   const byType = (...t: string[]) => partners.filter((p) => t.includes(p.type));
   const groups = [
-    { key: "nat", label: "Nationales", icon: Building2, tone: "bg-primary/10 text-primary", dot: "bg-primary", span: "lg:col-span-12", grid: "grid-cols-2 md:grid-cols-4", items: byType("National", "Nationale") },
-    { key: "reg", label: "Régionales", icon: Network, tone: "bg-foreground/5 text-foreground", dot: "bg-foreground", span: "lg:col-span-4", grid: "grid-cols-2 lg:grid-cols-1", items: byType("Régional", "Régionale") },
-    { key: "int", label: "Internationales", icon: Globe2, tone: "bg-secondary/10 text-secondary", dot: "bg-secondary", span: "lg:col-span-8", grid: "grid-cols-2 md:grid-cols-6", items: byType("International", "Internationale"),
+    { key: "nat", label: "Nationales", icon: Building2, tone: "bg-primary/10 text-primary", dot: "bg-primary", span: "lg:col-span-12", grid: "grid-cols-2 md:grid-cols-4", logoH: "h-44", items: byType("National", "Nationale") },
+    { key: "reg", label: "Régionales", icon: Network, tone: "bg-foreground/5 text-foreground", dot: "bg-foreground", span: "lg:col-span-4", grid: "grid-cols-2 lg:grid-cols-1", logoH: "h-36", items: byType("Régional", "Régionale") },
+    { key: "int", label: "Internationales", icon: Globe2, tone: "bg-secondary/10 text-secondary", dot: "bg-secondary", span: "lg:col-span-8", grid: "grid-cols-2 md:grid-cols-6", logoH: "h-36", items: byType("International", "Internationale"),
       itemClass: (i: number) => "md:col-span-2" + (i === 3 ? " md:col-start-2" : "") },
-  ] as { key: string; label: string; icon: any; tone: string; dot: string; span: string; grid: string; items: typeof partners; itemClass?: (i: number) => string }[];
+  ] as { key: string; label: string; icon: any; tone: string; dot: string; span: string; grid: string; logoH: string; items: typeof partners; itemClass?: (i: number) => string }[];
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -884,19 +885,19 @@ const Index = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         title={p.nom}
-                        className={`group relative rounded-2xl border border-border bg-background p-4 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-soft hover:border-foreground/20 ${g.itemClass?.(i) ?? ""}`}
+                        aria-label={`${p.sigle} — site officiel`}
+                        className={`group relative rounded-2xl border border-border bg-background p-5 flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-soft hover:border-foreground/20 ${g.itemClass?.(i) ?? ""}`}
                       >
                         <ArrowUpRight className="absolute top-3 right-3 w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <div className="h-16 w-full flex items-center justify-center mb-3">
+                        <div className={`w-full flex items-center justify-center ${g.logoH}`}>
                           {logo ? (
-                            <img src={logo} alt={p.sigle} className="max-h-full max-w-[80%] object-contain transition-transform duration-300 group-hover:scale-110" />
+                            <img src={logo} alt={p.sigle} className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105" />
                           ) : (
-                            <g.icon className="w-10 h-10 text-muted-foreground" />
+                            <g.icon className="w-16 h-16 text-muted-foreground" />
                           )}
                         </div>
-                        <p className="font-semibold text-sm text-foreground">{p.sigle}</p>
-                        <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{p.nom}</p>
                       </a>
+
                     );
                   })}
                 </div>
