@@ -51,7 +51,7 @@ export const Footer = () => {
   const navigate = useNavigate();
   const { isAuthenticated, logout, userDisplayName } = useAuth();
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "ok" | "invalid" | "error">("idle");
   const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
@@ -74,20 +74,19 @@ export const Footer = () => {
     e.preventDefault();
     const value = email.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
-      setStatus("error");
+      setStatus("invalid");
       return;
     }
     setStatus("sending");
-    const { error } = await supabase
-      .from("newsletter_subscribers")
-      .upsert({ email: value }, { onConflict: "email" });
-
-    if (error) {
+    const { error } = await supabase.from("newsletter_subscribers").insert({ email: value });
+    // 23505 = adresse déjà inscrite : on confirme sans exposer l'existence d'un compte
+    if (error && error.code !== "23505") {
       setStatus("error");
       return;
     }
     setStatus("ok");
     setEmail("");
+
   };
 
   return (
