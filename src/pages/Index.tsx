@@ -884,19 +884,19 @@ const Index = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         title={p.nom}
-                        className={`group relative rounded-2xl border border-border bg-background p-4 flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-soft hover:border-foreground/20 ${g.itemClass?.(i) ?? ""}`}
+                        aria-label={`${p.sigle} — site officiel`}
+                        className={`group relative rounded-2xl border border-border bg-background p-5 flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-soft hover:border-foreground/20 ${g.itemClass?.(i) ?? ""}`}
                       >
                         <ArrowUpRight className="absolute top-3 right-3 w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <div className="h-16 w-full flex items-center justify-center mb-3">
+                        <div className="h-28 w-full flex items-center justify-center">
                           {logo ? (
-                            <img src={logo} alt={p.sigle} className="max-h-full max-w-[80%] object-contain transition-transform duration-300 group-hover:scale-110" />
+                            <img src={logo} alt={p.sigle} className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105" />
                           ) : (
-                            <g.icon className="w-10 h-10 text-muted-foreground" />
+                            <g.icon className="w-16 h-16 text-muted-foreground" />
                           )}
                         </div>
-                        <p className="font-semibold text-sm text-foreground">{p.sigle}</p>
-                        <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{p.nom}</p>
                       </a>
+
                     );
                   })}
                 </div>
