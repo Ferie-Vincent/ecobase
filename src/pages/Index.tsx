@@ -239,11 +239,12 @@ const Index = () => {
 
   const byType = (...t: string[]) => partners.filter((p) => t.includes(p.type));
   const groups = [
-    { key: "nat", label: "Nationales", icon: Building2, tone: "bg-primary/10 text-primary", dot: "bg-primary", span: "lg:col-span-12", grid: "grid-cols-2 md:grid-cols-4", items: byType("National", "Nationale") },
-    { key: "reg", label: "Régionales", icon: Network, tone: "bg-foreground/5 text-foreground", dot: "bg-foreground", span: "lg:col-span-4", grid: "grid-cols-2 lg:grid-cols-1", items: byType("Régional", "Régionale") },
-    { key: "int", label: "Internationales", icon: Globe2, tone: "bg-secondary/10 text-secondary", dot: "bg-secondary", span: "lg:col-span-8", grid: "grid-cols-2 md:grid-cols-6", items: byType("International", "Internationale"),
+    { key: "nat", label: "Nationales", icon: Building2, tone: "bg-primary/10 text-primary", dot: "bg-primary", span: "lg:col-span-12", grid: "grid-cols-2 md:grid-cols-4", logoH: "h-44", items: byType("National", "Nationale") },
+    { key: "reg", label: "Régionales", icon: Network, tone: "bg-foreground/5 text-foreground", dot: "bg-foreground", span: "lg:col-span-4", grid: "grid-cols-2 lg:grid-cols-1", logoH: "h-36", items: byType("Régional", "Régionale") },
+    { key: "int", label: "Internationales", icon: Globe2, tone: "bg-secondary/10 text-secondary", dot: "bg-secondary", span: "lg:col-span-8", grid: "grid-cols-2 md:grid-cols-6", logoH: "h-36", items: byType("International", "Internationale"),
       itemClass: (i: number) => "md:col-span-2" + (i === 3 ? " md:col-start-2" : "") },
-  ] as { key: string; label: string; icon: any; tone: string; dot: string; span: string; grid: string; items: typeof partners; itemClass?: (i: number) => string }[];
+  ] as { key: string; label: string; icon: any; tone: string; dot: string; span: string; grid: string; logoH: string; items: typeof partners; itemClass?: (i: number) => string }[];
+
 
   return (
     <div className="min-h-screen bg-background">
