@@ -239,90 +239,88 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section avec motif africain */}
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-        {/* Background pattern africain */}
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f97316' fill-opacity='0.3'%3E%3Cpath d='M40 0L60 20L40 40L20 20L40 0zM0 40L20 20L40 40L20 60L0 40zM40 40L60 20L80 40L60 60L40 40zM40 80L60 60L80 80L60 100L40 80zM40 40L60 60L40 80L20 60L40 40z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            backgroundSize: "80px 80px",
-          }}
-        />
-        {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-secondary/10 via-background/80 to-background" />
+      {/* Hero Bento */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-soft pointer-events-none" />
+        <div className="absolute -top-32 -right-32 w-[28rem] h-[28rem] rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute -bottom-40 -left-32 w-[28rem] h-[28rem] rounded-full bg-secondary/10 blur-3xl" />
 
-        {/* Décor cercles */}
-        <div className="absolute top-20 left-10 w-24 h-24 rounded-full bg-primary/20 blur-xl" />
-        <div className="absolute bottom-20 right-10 w-32 h-32 rounded-full bg-secondary/20 blur-xl" />
-
-        {/* Contenu Hero */}
-        <div className="relative z-10 container mx-auto px-4 text-center space-y-8">
-          {/* Badge */}
-          <Badge className="bg-primary/90 text-primary-foreground px-4 py-2 text-sm font-medium rounded-full">
-            <span className="w-2 h-2 bg-secondary rounded-full inline-block mr-2 animate-pulse" />
-            Plateforme Officielle du Ministère
-          </Badge>
-
-          {/* Titre principal */}
-          <div className="space-y-2">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold">
-              <span className="text-primary">Base de Données</span>
-              <br />
-              <span className="text-foreground">Socio-Économique</span>
-              <br />
-              <span className="text-secondary">ECOBASE</span>
-            </h1>
-          </div>
-
-          {/* Description */}
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Plateforme officielle du Ministère Délégué chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur
-            pour le suivi et l'évaluation des politiques publiques
-          </p>
-
-          {/* Boutons CTA */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-            <a
-              href="/integration"
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-primary/30"
-            >
-              <TrendingUp className="w-5 h-5" />
-              Explorer l'Intégration
-            </a>
-            <a
-              href="/diaspora"
-              className="inline-flex items-center gap-2 bg-card text-foreground border border-border px-8 py-3 rounded-lg font-semibold hover:bg-muted transition-all duration-300 hover:scale-105"
-            >
-              <BarChart3 className="w-5 h-5" />
-              Analyser la Diaspora
-            </a>
-          </div>
-
-          {/* Statistiques clés avec tooltips explicatifs */}
-          <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-12">
-            <div className="text-center group cursor-help" title="Total des indicateurs définis dans le référentiel ECOBASE">
-              <div className="text-3xl md:text-4xl font-bold text-primary">{indicators.length}</div>
-              <div className="text-sm text-muted-foreground mt-1">
-                Indicateurs
-                <br />
-                <span className="text-xs opacity-70">au référentiel</span>
+        <div className="relative container mx-auto px-4 pt-12 pb-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 auto-rows-[minmax(150px,auto)] gap-4">
+            {/* Grande tuile titre */}
+            <div className="md:col-span-3 md:row-span-2 rounded-3xl border border-border bg-card p-8 md:p-12 shadow-soft flex flex-col justify-between animate-fade-in">
+              <div className="space-y-6">
+                <span className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+                  <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+                  Plateforme Officielle du Ministère
+                </span>
+                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.05] text-foreground">
+                  Base de Données
+                  <br />
+                  Socio-Économique{" "}
+                  <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">ECOBASE</span>
+                </h1>
+                <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">
+                  Plateforme officielle du Ministère Délégué chargé de l'Intégration Africaine et des Ivoiriens de l'Extérieur
+                  pour le suivi et l'évaluation des politiques publiques
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 pt-8">
+                <a href="/integration" className="inline-flex items-center justify-center gap-2 rounded-full bg-foreground text-background px-6 py-3 font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5">
+                  <TrendingUp className="w-4 h-4" />
+                  Explorer l'Intégration
+                </a>
+                <a href="/diaspora" className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card px-6 py-3 font-semibold text-foreground transition-all hover:bg-muted hover:-translate-y-0.5">
+                  <BarChart3 className="w-4 h-4" />
+                  Analyser la Diaspora
+                </a>
               </div>
             </div>
-            <div className="text-center group cursor-help" title="Organisations partenaires techniques et financiers">
-              <div className="text-3xl md:text-4xl font-bold text-secondary">{partners.length}</div>
-              <div className="text-sm text-muted-foreground mt-1">
-                Partenaires
-                <br />
-                <span className="text-xs opacity-70">techniques</span>
+
+            {/* Indicateurs */}
+            <div className="rounded-3xl bg-primary text-primary-foreground p-6 flex flex-col justify-between shadow-soft animate-fade-in" title="Total des indicateurs définis dans le référentiel ECOBASE">
+              <Database className="w-6 h-6 opacity-90" />
+              <div>
+                <div className="text-5xl font-extrabold tracking-tight">{indicators.length}</div>
+                <div className="text-sm opacity-90">Indicateurs au référentiel</div>
               </div>
             </div>
-            <div className="text-center group cursor-help" title="Piliers stratégiques : Intégration, Diaspora, Macroéconomie">
-              <div className="text-3xl md:text-4xl font-bold text-foreground">{piliers.length}</div>
-              <div className="text-sm text-muted-foreground mt-1">
-                Piliers
-                <br />
-                <span className="text-xs opacity-70">stratégiques</span>
+
+            {/* Partenaires */}
+            <div className="rounded-3xl bg-secondary text-secondary-foreground p-6 flex flex-col justify-between shadow-soft animate-fade-in" title="Organisations partenaires techniques et financiers">
+              <Network className="w-6 h-6 opacity-90" />
+              <div>
+                <div className="text-5xl font-extrabold tracking-tight">{partners.length}</div>
+                <div className="text-sm opacity-90">Partenaires techniques</div>
+              </div>
+            </div>
+
+            {/* Tuiles d'accès rapide */}
+            {[
+              { href: "/integration", icon: Globe2, label: "Intégration africaine", sub: "CEDEAO · UEMOA · ZLECAf", tone: "text-primary bg-primary/10" },
+              { href: "/diaspora", icon: Users2, label: "Ivoiriens de l'Extérieur", sub: "Transferts · Retours · Consulats", tone: "text-secondary bg-secondary/10" },
+              { href: "/circulation", icon: Plane, label: "Libre circulation", sub: "Voyageurs · Frontières", tone: "text-primary bg-primary/10" },
+            ].map((t) => (
+              <a key={t.href} href={t.href} className="group rounded-3xl border border-border bg-card p-6 flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-soft">
+                <div className="flex items-start justify-between">
+                  <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${t.tone}`}>
+                    <t.icon className="w-5 h-5" />
+                  </div>
+                  <ArrowUpRight className="w-5 h-5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground" />
+                </div>
+                <div className="pt-6">
+                  <div className="font-semibold text-foreground">{t.label}</div>
+                  <div className="text-sm text-muted-foreground">{t.sub}</div>
+                </div>
+              </a>
+            ))}
+
+            {/* Piliers */}
+            <div className="rounded-3xl border border-border bg-muted p-6 flex flex-col justify-between" title="Piliers stratégiques">
+              <Target className="w-6 h-6 text-foreground" />
+              <div>
+                <div className="text-5xl font-extrabold tracking-tight text-foreground">{piliers.length}</div>
+                <div className="text-sm text-muted-foreground">Piliers stratégiques</div>
               </div>
             </div>
           </div>
